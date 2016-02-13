@@ -51,7 +51,7 @@
 
 	<jpa:repositories base-package="pl.karolkolarczyk.lgs.repository" />
 	
-
+	<import resource="security.xml" />
 
 </beans>
 

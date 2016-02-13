@@ -42,7 +42,8 @@
 							class="icon-bar"></span> <span class="icon-bar"></span> <span
 							class="icon-bar"></span>
 					</button>
-					<a class="navbar-brand" href="<spring:url value="/" />  ">System Rozgrywek Ligowych</a>
+					<a class="navbar-brand" href="<spring:url value="/" />  ">System
+						Rozgrywek Ligowych</a>
 				</div>
 				<div id="navbar" class="navbar-collapse collapse">
 					<ul class="nav navbar-nav">
@@ -50,6 +51,8 @@
 							href='<spring:url value="/" />'>Strona Główna</a></li>
 						<li class="${current == 'users' ? 'active' : ' ' }"><a
 							href='<spring:url value="/users.html" />'>Zawodnicy</a></li>
+						<li class="${current == 'login' ? 'active' : ' ' }"><a
+							href='<spring:url value="/login.html" />'>Zaloguj</a></li>
 					</ul>
 				</div>
 				<!--/.nav-collapse -->

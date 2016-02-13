@@ -4,11 +4,12 @@ import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 
-@Entity
+@Entity(name="Rola_uzytkownika")
 public class Role {
 	
 	@Id
@@ -18,7 +19,7 @@ public class Role {
 	@Column(nullable = false)
 	private String name;
 	
-	@ManyToMany(mappedBy="roles")
+	@ManyToMany(mappedBy="roles",fetch=FetchType.EAGER)
 	private List<User> users;
 	
 	public int getId() {
