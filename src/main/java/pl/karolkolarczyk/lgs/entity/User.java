@@ -3,15 +3,12 @@ package pl.karolkolarczyk.lgs.entity;
 import java.util.Date;
 import java.util.List;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
-import javax.persistence.OneToOne;
 import javax.persistence.PrePersist;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -47,17 +44,56 @@ public class User {
 	@ManyToMany(fetch=FetchType.EAGER)
 	@JoinTable(name = "uzytkownik_mecz")
 	private List<Match> matches;
-
-	@OneToOne(fetch=FetchType.EAGER)
-	@JoinColumn(name = "userStatistic_id")
-	UserStatistic userStatistic;
 	
 	private boolean enabled;
+
+	private Integer wonSmallPoints;
+
+	private Integer wonSets;
+
+	private Integer lostSmallPoints;
+
+	private Integer lostSets;
+
+	private Integer wonMatches;
+
+	private Integer lostMatches;
+
+	private Integer balanceMatches;
+
+	private Integer balanceSets;
+
+	private Integer balanceSmallPoints;
 
 	@PrePersist
 	public void triggers() {
 		createDate = new Date();
 	}
+
+	public Integer getBalanceMatches() {
+		return balanceMatches;
+	}
+
+	public void setBalanceMatches(Integer balanceMatches) {
+		this.balanceMatches = balanceMatches;
+	}
+
+	public Integer getBalanceSets() {
+		return balanceSets;
+	}
+
+	public void setBalanceSets(Integer balanceSets) {
+		this.balanceSets = balanceSets;
+	}
+
+	public Integer getBalanceSmallPoints() {
+		return balanceSmallPoints;
+	}
+
+	public void setBalanceSmallPoints(Integer balanceSmallPoints) {
+		this.balanceSmallPoints = balanceSmallPoints;
+	}
+
 
 	public boolean isEnabled() {
 		return enabled;
@@ -65,14 +101,6 @@ public class User {
 
 	public void setEnabled(boolean enabled) {
 		this.enabled = enabled;
-	}
-
-	public UserStatistic getUserStatistic() {
-		return userStatistic;
-	}
-
-	public void setUserStatistic(UserStatistic userStatistic) {
-		this.userStatistic = userStatistic;
 	}
 
 	public List<Role> getRoles() {
@@ -145,6 +173,54 @@ public class User {
 
 	public void setCreateDate(Date createDate) {
 		this.createDate = createDate;
+	}
+
+	public Integer getWonSmallPoints() {
+		return wonSmallPoints;
+	}
+
+	public void setWonSmallPoints(Integer wonSmallPoints) {
+		this.wonSmallPoints = wonSmallPoints;
+	}
+
+	public Integer getLostSmallPoints() {
+		return lostSmallPoints;
+	}
+
+	public void setLostSmallPoints(Integer lostSmallPoints) {
+		this.lostSmallPoints = lostSmallPoints;
+	}
+
+	public Integer getWonSets() {
+		return wonSets;
+	}
+
+	public void setWonSets(Integer wonSets) {
+		this.wonSets = wonSets;
+	}
+
+	public Integer getLostSets() {
+		return lostSets;
+	}
+
+	public void setLostSets(Integer lostSets) {
+		this.lostSets = lostSets;
+	}
+
+	public Integer getWonMatches() {
+		return wonMatches;
+	}
+
+	public void setWonMatches(Integer wonMatches) {
+		this.wonMatches = wonMatches;
+	}
+
+	public Integer getLostMatches() {
+		return lostMatches;
+	}
+
+	public void setLostMatches(Integer lostMatches) {
+		this.lostMatches = lostMatches;
 	}
 
 }

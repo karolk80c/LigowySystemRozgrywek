@@ -13,25 +13,56 @@
 		<put-attribute name="body" value="/WEB-INF/jsp/index.jsp" />
 		<put-attribute name="current" value="index" />
 	</definition>
-	
+
+	<definition name="draw" extends="common">
+		<put-attribute name="title" value="Losowanie" />
+		<put-attribute name="body" value="/WEB-INF/jsp/draw.jsp" />
+		<put-attribute name="current" value="draw" />
+	</definition>
+
 	<definition name="login" extends="common">
-		<put-attribute name="title" value="Login" />
+		<put-attribute name="title" value="Logowanie" />
 		<put-attribute name="body" value="/WEB-INF/jsp/login.jsp" />
 		<put-attribute name="current" value="login" />
 	</definition>
-	
+
 	<definition name="users" extends="common">
 		<put-attribute name="title" value="Zawodnicy" />
 		<put-attribute name="body" value="/WEB-INF/jsp/users.jsp" />
 		<put-attribute name="current" value="users" />
 	</definition>
-	
+
 	<definition name="user-detail" extends="common">
 		<put-attribute name="title" value="Zawodnik" />
 		<put-attribute name="body" value="/WEB-INF/jsp/user-detail.jsp" />
 		<put-attribute name="current" value="users" />
 	</definition>
+
+	<definition name="account" extends="common">
+		<put-attribute name="title" value="Moje konto" />
+		<put-attribute name="body" value="/WEB-INF/jsp/account.jsp" />
+		<put-attribute name="current" value="detail" />
+	</definition>
+
+	<definition name="user-register" extends="common">
+		<put-attribute name="title" value="Rejestracja" />
+		<put-attribute name="body" value="/WEB-INF/jsp/user-register.jsp" />
+		<put-attribute name="current" value="user-register" />
+	</definition>
 	
+	<definition name="table" extends="common">
+		<put-attribute name="title" value="Tabela" />
+		<put-attribute name="body" value="/WEB-INF/jsp/table.jsp" />
+		<put-attribute name="current" value="table" />
+	</definition>
 	
+		<definition name="timetable" extends="common">
+		<put-attribute name="title" value="Tabela" />
+		<put-attribute name="body" value="/WEB-INF/jsp/timetable.jsp" />
+		<put-attribute name="current" value="timetable" />
+	</definition>
 	
+
+
+
 </tiles-definitions>

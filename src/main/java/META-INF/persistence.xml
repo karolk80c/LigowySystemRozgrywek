@@ -5,6 +5,5 @@
 	<class>pl.karolkolarczyk.lgs.entity.Match</class>
 	<class>pl.karolkolarczyk.lgs.entity.Role</class>
 	<class>pl.karolkolarczyk.lgs.entity.Set</class>
-	<class>pl.karolkolarczyk.lgs.entity.UserStatistic</class>
 	</persistence-unit>
 </persistence>

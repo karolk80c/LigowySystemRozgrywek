@@ -45,6 +45,8 @@
 }
 </style>
 
+<div class="alert alert-info"> Użytkownik który założył konto w serwisie oraz został potwierdzony przez administratora ma możliwośc zalogowania się do serwisu.</div>
+
 <form class="form-signin" action="/league-game-system/j_spring_security_check" method="POST">
 	<h2 class="form-signin-heading">Please sign in</h2>
 	<label for="username" class="sr-only">Login</label> <input

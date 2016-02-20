@@ -49,10 +49,32 @@
 					<ul class="nav navbar-nav">
 						<li class="${current == 'index' ? 'active' : ' ' }"><a
 							href='<spring:url value="/" />'>Strona Główna</a></li>
-						<li class="${current == 'users' ? 'active' : ' ' }"><a
-							href='<spring:url value="/users.html" />'>Zawodnicy</a></li>
-						<li class="${current == 'login' ? 'active' : ' ' }"><a
-							href='<spring:url value="/login.html" />'>Zaloguj</a></li>
+						<security:authorize access="hasRole('ROLE_ADMIN')">
+							<li class="${current == 'users' ? 'active' : ' ' }"><a
+								href='<spring:url value="/users.html" />'>Zawodnicy</a></li>
+						</security:authorize>
+						<security:authorize access="hasRole('ROLE_ADMIN')">
+							<li class="${current == 'draw' ? 'active' : ' ' }"><a
+								href='<spring:url value="/draw.html" />'>Losowanie</a></li>
+						</security:authorize>
+							<li class="${current == 'table' ? 'active' : ' ' }"><a
+								href='<spring:url value="/table.html" />'>Tabela</a></li>
+									<li class="${current == 'timetable' ? 'active' : ' ' }"><a
+								href='<spring:url value="/timetable.html" />'>Terminarz</a></li>
+						<security:authorize
+							access="hasRole('ROLE_USER') ||  hasRole('ROLE_ADMIN')">
+							<li class="${current == 'detail' ? 'active' : ' ' }"><a
+								href='<spring:url value="/account.html" />'>Moje konto</a></li>
+						</security:authorize>
+						<security:authorize access="! isAuthenticated()">
+							<li class="${current == 'login' ? 'active' : ' ' }"><a
+								href='<spring:url value="/login.html" />'>Zaloguj</a></li>
+							<li class="${current == 'user-register' ? 'active' : ' ' }"><a
+								href='<spring:url value="/register.html" />'>Zarejestruj</a></li>
+						</security:authorize>
+						<security:authorize access="isAuthenticated()">
+							<li><a href='<spring:url value="/logout.html" />'>Wyloguj</a></li>
+						</security:authorize>
 					</ul>
 				</div>
 				<!--/.nav-collapse -->
