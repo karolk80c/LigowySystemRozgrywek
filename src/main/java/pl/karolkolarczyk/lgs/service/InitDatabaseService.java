@@ -55,13 +55,6 @@ public class InitDatabaseService {
 		List<Role> testUserRolesList = new ArrayList<Role>();
 		testUserRolesList.add(roleUser);
 
-		Match match = new Match();
-		match.setMatchDate(new Date());
-		matchRepository.save(match);
-
-		List<Match> matches = new ArrayList<>();
-		matches.add(match);
-
 		User userAdmin = new User();
 		userAdmin.setRoles(rolesList);
 		userAdmin.setContactNumber("790215666");
@@ -87,7 +80,6 @@ public class InitDatabaseService {
 		userTest.setRoles(testUserRolesList);
 		userTest.setLogin("supertestowy");
 		userTest.setPassword("Kolakola1");
-		userTest.setMatches(matches);
 		userTest.setEnabled(true);
 		userRepository.save(userTest);
 
@@ -105,13 +97,84 @@ public class InitDatabaseService {
 		userTest2.setRoles(testUserRolesList);
 		userTest2.setLogin("supertestowy2");
 		userTest2.setPassword("Kolakola1");
-		userTest2.setMatches(matches);
 		userTest2.setEnabled(true);
 		userRepository.save(userTest2);
 
+		User userTest3 = new User();
+		userTest3.setLostSets(5);
+		userTest3.setLostSmallPoints(10);
+		userTest3.setWonSmallPoints(5);
+		userTest3.setWonSets(10);
+		userTest3.setWonMatches(12);
+		userTest3.setLostMatches(11);
+		userTest3.setContactNumber("999999999");
+		userTest3.setEmailAdress("supertestowy5@gmail.com");
+		userTest3.setFirstName("Michal");
+		userTest3.setLastName("Aniol");
+		userTest3.setRoles(testUserRolesList);
+		userTest3.setLogin("supertestowy3");
+		userTest3.setPassword("Kolakola1");
+		userTest3.setEnabled(true);
+		userRepository.save(userTest3);
+
+		User userTest4 = new User();
+		userTest4.setContactNumber("999999999");
+		userTest4.setEmailAdress("supertestowy5@gmail.com");
+		userTest4.setFirstName("Adam");
+		userTest4.setLastName("Wojcik");
+		userTest4.setRoles(testUserRolesList);
+		userTest4.setLogin("supertestowy4");
+		userTest4.setPassword("Kolakola1");
+		userTest4.setEnabled(true);
+		userRepository.save(userTest4);
+
+		User userTest5 = new User();
+		userTest5.setContactNumber("999999999");
+		userTest5.setEmailAdress("supertestowy5@gmail.com");
+		userTest5.setFirstName("Jan");
+		userTest5.setLastName("Gracz");
+		userTest5.setRoles(testUserRolesList);
+		userTest5.setLogin("supertestowy5");
+		userTest5.setPassword("Kolakola1");
+		userTest5.setEnabled(true);
+		userRepository.save(userTest5);
+
+		User userTest6 = new User();
+		userTest6.setContactNumber("999999999");
+		userTest6.setEmailAdress("supertestowy5@gmail.com");
+		userTest6.setFirstName("Lcujan");
+		userTest6.setLastName("Pasta");
+		userTest6.setRoles(testUserRolesList);
+		userTest6.setLogin("supertestowy6");
+		userTest6.setPassword("Kolakola1");
+		userTest6.setEnabled(true);
+		userRepository.save(userTest6);
+
 		List<User> userMatchList = new ArrayList<>();
-		userMatchList.add(userTest);
+		userMatchList.add(userTest3);
 		userMatchList.add(userTest2);
+
+		List<User> userMatchList2 = new ArrayList<>();
+		userMatchList2.add(userTest);
+		userMatchList2.add(userTest2);
+
+		Match match = new Match();
+		match.setMatchDate(new Date());
+		match.setFirstName(userMatchList.get(0).getFirstName());
+		match.setSecondName(userMatchList.get(1).getFirstName());
+		match.setUsers(userMatchList);
+		matchRepository.save(match);
+
+		Match match2 = new Match();
+		match2.setMatchDate(new Date());
+		match2.setFirstName(userMatchList2.get(1).getFirstName());
+		match2.setSecondName(userMatchList2.get(1).getFirstName());
+		match.setUsers(userMatchList2);
+		matchRepository.save(match2);
+
+		List<Match> matches = new ArrayList<>();
+		matches.add(match);
+		matches.add(match2);
 
 		Set firstSet = new Set();
 		firstSet.setFirstPlayerScore(5);
