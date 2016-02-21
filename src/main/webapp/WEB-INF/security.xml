@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans:beans xmlns="http://www.springframework.org/schema/security"
+	xmlns:beans="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+		http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+		http://www.springframework.org/schema/security
+		http://www.springframework.org/schema/security/spring-security.xsd">
+
+	<http use-expressions="true">
+		<form-login login-page="/login.html" />
+		<logout logout-url="/logout.html" />
+
+		<intercept-url pattern="/users**" access="hasRole('ROLE_ADMIN')" />
+		<intercept-url pattern="/users/**" access="hasRole('ROLE_ADMIN')" />
+	</http>
+
+	<authentication-manager>
+		<authentication-provider>
+			<jdbc-user-service data-source-ref="datasource"
+				authorities-by-username-query="SELECT uzytkownik.login, rola_uzytkownika.name from uzytkownik,uzytkownik_rola_uzytkownika,rola_uzytkownika
+				where uzytkownik_rola_uzytkownika.users_login=uzytkownik.login and rola_uzytkownika.id = uzytkownik_rola_uzytkownika.roles_id and uzytkownik.login=?"
+				users-by-username-query="select login,password,enabled from uzytkownik where login = ?" />
+		</authentication-provider>
+	</authentication-manager>
+
+</beans:beans>
