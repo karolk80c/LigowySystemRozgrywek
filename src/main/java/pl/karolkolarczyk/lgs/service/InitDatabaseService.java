@@ -12,10 +12,12 @@ import org.springframework.transaction.annotation.Transactional;
 
 import pl.karolkolarczyk.lgs.entity.Match;
 import pl.karolkolarczyk.lgs.entity.Role;
+import pl.karolkolarczyk.lgs.entity.Round;
 import pl.karolkolarczyk.lgs.entity.Set;
 import pl.karolkolarczyk.lgs.entity.User;
 import pl.karolkolarczyk.lgs.repository.MatchRepository;
 import pl.karolkolarczyk.lgs.repository.RoleRepository;
+import pl.karolkolarczyk.lgs.repository.RoundRepository;
 import pl.karolkolarczyk.lgs.repository.SetRepository;
 import pl.karolkolarczyk.lgs.repository.UserRepository;
 
@@ -34,6 +36,9 @@ public class InitDatabaseService {
 
 	@Autowired
 	private SetRepository setRepository;
+
+	@Autowired
+	RoundRepository roundRepository;
 
 	@PostConstruct
 	public void init() {
@@ -158,23 +163,34 @@ public class InitDatabaseService {
 		userMatchList2.add(userTest);
 		userMatchList2.add(userTest2);
 
+		Round round = new Round();
+		round.setNumber(1);
+		roundRepository.save(round);
+
 		Match match = new Match();
 		match.setMatchDate(new Date());
 		match.setFirstName(userMatchList.get(0).getFirstName());
 		match.setSecondName(userMatchList.get(1).getFirstName());
 		match.setUsers(userMatchList);
+		match.setFirstPoints(3);
+		match.setSecondPoints(2);
+		match.setRound(round);
 		matchRepository.save(match);
 
 		Match match2 = new Match();
 		match2.setMatchDate(new Date());
 		match2.setFirstName(userMatchList2.get(1).getFirstName());
 		match2.setSecondName(userMatchList2.get(1).getFirstName());
-		match.setUsers(userMatchList2);
+		match2.setUsers(userMatchList2);
+		match2.setRound(round);
 		matchRepository.save(match2);
 
 		List<Match> matches = new ArrayList<>();
 		matches.add(match);
 		matches.add(match2);
+
+		round.setMatches(matches);
+		roundRepository.save(round);
 
 		Set firstSet = new Set();
 		firstSet.setFirstPlayerScore(5);
@@ -185,7 +201,7 @@ public class InitDatabaseService {
 		Set secondSet = new Set();
 		secondSet.setFirstPlayerScore(15);
 		secondSet.setSecondPlayerScore(10);
-		secondSet.setMatch(match);
+		secondSet.setMatch(match2);
 		setRepository.save(secondSet);
 
 	}

@@ -8,6 +8,16 @@
 <!DOCTYPE html>
 <html>
 <head>
+<style>
+.center {
+	text-align: center;
+}
+.footer{
+text-align:center;
+margin-bottom:2%;
+}
+</style>
+
 
 <link rel="stylesheet"
 	href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
@@ -29,66 +39,69 @@
 
 </head>
 <body>
-	<div class="container">
+	<div class="imgdiv">
+		<div class="container">
 
-		<!-- Static navbar -->
-		<nav class="navbar navbar-default">
-			<div class="container-fluid">
-				<div class="navbar-header">
-					<button type="button" class="navbar-toggle collapsed"
-						data-toggle="collapse" data-target="#navbar" aria-expanded="false"
-						aria-controls="navbar">
-						<span class="sr-only">Toggle navigation</span> <span
-							class="icon-bar"></span> <span class="icon-bar"></span> <span
-							class="icon-bar"></span>
-					</button>
-					<a class="navbar-brand" href="<spring:url value="/" />  ">System
-						Rozgrywek Ligowych</a>
-				</div>
-				<div id="navbar" class="navbar-collapse collapse">
-					<ul class="nav navbar-nav">
-						<li class="${current == 'index' ? 'active' : ' ' }"><a
-							href='<spring:url value="/" />'>Strona Główna</a></li>
-						<security:authorize access="hasRole('ROLE_ADMIN')">
-							<li class="${current == 'users' ? 'active' : ' ' }"><a
-								href='<spring:url value="/users.html" />'>Zawodnicy</a></li>
-						</security:authorize>
-						<security:authorize access="hasRole('ROLE_ADMIN')">
-							<li class="${current == 'draw' ? 'active' : ' ' }"><a
-								href='<spring:url value="/draw.html" />'>Losowanie</a></li>
-						</security:authorize>
+			<!-- Static navbar -->
+			<nav class="navbar navbar-default">
+				<div class="container-fluid">
+					<div class="navbar-header">
+						<button type="button" class="navbar-toggle collapsed"
+							data-toggle="collapse" data-target="#navbar"
+							aria-expanded="false" aria-controls="navbar">
+							<span class="sr-only">Toggle navigation</span> <span
+								class="icon-bar"></span> <span class="icon-bar"></span> <span
+								class="icon-bar"></span>
+						</button>
+						<a class="navbar-brand" href="<spring:url value="/" />  ">System
+							Rozgrywek Ligowych</a>
+					</div>
+					<div id="navbar" class="navbar-collapse collapse">
+						<ul class="nav navbar-nav">
+							<li class="${current == 'index' ? 'active' : ' ' }"><a
+								href='<spring:url value="/" />'>Strona Główna</a></li>
+							<security:authorize access="hasRole('ROLE_ADMIN')">
+								<li class="${current == 'users' ? 'active' : ' ' }"><a
+									href='<spring:url value="/users.html" />'>Zawodnicy</a></li>
+							</security:authorize>
+							<security:authorize access="hasRole('ROLE_ADMIN')">
+								<li class="${current == 'draw' ? 'active' : ' ' }"><a
+									href='<spring:url value="/draw.html" />'>Losowanie</a></li>
+							</security:authorize>
 							<li class="${current == 'table' ? 'active' : ' ' }"><a
 								href='<spring:url value="/table.html" />'>Tabela</a></li>
-									<li class="${current == 'timetable' ? 'active' : ' ' }"><a
+							<li class="${current == 'timetable' ? 'active' : ' ' }"><a
 								href='<spring:url value="/timetable.html" />'>Terminarz</a></li>
-						<security:authorize
-							access="hasRole('ROLE_USER') ||  hasRole('ROLE_ADMIN')">
-							<li class="${current == 'detail' ? 'active' : ' ' }"><a
-								href='<spring:url value="/account.html" />'>Moje konto</a></li>
-						</security:authorize>
-						<security:authorize access="! isAuthenticated()">
-							<li class="${current == 'login' ? 'active' : ' ' }"><a
-								href='<spring:url value="/login.html" />'>Zaloguj</a></li>
-							<li class="${current == 'user-register' ? 'active' : ' ' }"><a
-								href='<spring:url value="/register.html" />'>Zarejestruj</a></li>
-						</security:authorize>
-						<security:authorize access="isAuthenticated()">
-							<li><a href='<spring:url value="/logout.html" />'>Wyloguj</a></li>
-						</security:authorize>
-					</ul>
+							<security:authorize
+								access="hasRole('ROLE_USER') ||  hasRole('ROLE_ADMIN')">
+								<li class="${current == 'detail' ? 'active' : ' ' }"><a
+									href='<spring:url value="/account.html" />'>Moje konto</a></li>
+							</security:authorize>
+							<security:authorize access="! isAuthenticated()">
+								<li class="${current == 'login' ? 'active' : ' ' }"><a
+									href='<spring:url value="/login.html" />'>Zaloguj</a></li>
+								<li class="${current == 'user-register' ? 'active' : ' ' }"><a
+									href='<spring:url value="/register.html" />'>Zarejestruj</a></li>
+							</security:authorize>
+							<security:authorize access="isAuthenticated()">
+								<li><a href='<spring:url value="/logout.html" />'>Wyloguj</a></li>
+							</security:authorize>
+						</ul>
+					</div>
+					<!--/.nav-collapse -->
 				</div>
-				<!--/.nav-collapse -->
+				<!--/.container-fluid -->
+			</nav>
+
+			<tiles:insertAttribute name="body"></tiles:insertAttribute>
+
+			<br> <br>
+
+			<div class="footer">
+				<tiles:insertAttribute name="footer"></tiles:insertAttribute>
 			</div>
-			<!--/.container-fluid -->
-		</nav>
 
-		<tiles:insertAttribute name="body"></tiles:insertAttribute>
-
-		<br> <br>
-
-		<center>
-			<tiles:insertAttribute name="footer"></tiles:insertAttribute>
-		</center>
+		</div>
 	</div>
 </body>
 </html>

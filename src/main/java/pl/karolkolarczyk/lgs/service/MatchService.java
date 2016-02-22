@@ -19,4 +19,8 @@ public class MatchService {
 		return matchRepository.findAll();
 	}
 
+	public Match findOne(Integer id) {
+		return matchRepository.findOne(id);
+	}
+
 }

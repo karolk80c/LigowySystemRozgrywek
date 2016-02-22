@@ -49,19 +49,29 @@
 		<put-attribute name="body" value="/WEB-INF/jsp/user-register.jsp" />
 		<put-attribute name="current" value="user-register" />
 	</definition>
-	
+
 	<definition name="table" extends="common">
 		<put-attribute name="title" value="Tabela" />
 		<put-attribute name="body" value="/WEB-INF/jsp/table.jsp" />
 		<put-attribute name="current" value="table" />
 	</definition>
-	
-		<definition name="timetable" extends="common">
+
+	<definition name="timetable" extends="common">
 		<put-attribute name="title" value="Tabela" />
 		<put-attribute name="body" value="/WEB-INF/jsp/timetable.jsp" />
 		<put-attribute name="current" value="timetable" />
 	</definition>
 	
+	<definition name="addmatch" extends="common">
+		<put-attribute name="title" value="Aktualizacja spotkania" />
+		<put-attribute name="body" value="/WEB-INF/jsp/addmatch.jsp" />
+		<put-attribute name="current" value="timetable" />
+	</definition>
+	
+	
+	
+	
+
 
 
 

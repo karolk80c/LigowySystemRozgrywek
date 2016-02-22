@@ -4,35 +4,58 @@
 	<b>Terminarz spotkan</b>
 </h1>
 
+<br>
+
+<script type="text/javascript">
+	$(document).ready(function() {
+		$('.nav-tabs a:first').tab('show');
+	});
+</script>
 
 
-<table class="table table-bordered table-hover table-striped">
-	<thead>
-		<tr>
-			<th>Data spotkania</th>
-			<th>Zawodnik</th>
-			<th>Wynik</th>
-			<th>Wynik</th>
-			<th>Zawodnik</th>
-			<th>Wynik</th>
-		</tr>
-	</thead>
-	<tbody>
+<!-- Nav tabs -->
+<ul class="nav nav-tabs">
+	<c:forEach items="${round}" var="round">
+		<li><a href="#round${round.id}" data-toggle="tab">Kolejka ${round.id }</a></li>
+	</c:forEach>
+</ul>
 
-		<c:forEach items="${match}" var="match">
+<!-- Tab panes -->
+<div class="tab-content">
+	<c:forEach items="${round}" var="round">
+		<div class="tab-pane" id="round${round.id}">
+			<table class="table table-bordered table-hover table-striped">
+				<thead>
+					<tr>
+						<th>Data spotkania</th>
+						<th>Zawodnik</th>
+						<th>Wynik</th>
+						<th>Wynik</th>
+						<th>Zawodnik</th>
+						<th class="center">Wynik</th>
+					</tr>
+				</thead>
+				<tbody>
+					<c:forEach items="${round.matches}" var="match">
+						<tr>
+							<td>${match.matchDate }</td>
+							<td>${match.firstName}</td>
+							<td>${match.firstPoints}</td>
+							<td>${match.secondPoints }</td>
+							<td>${match.secondName}</td>
+							<td class="center"><a class="btn btn-primary btn-lg"
+								href='<spring:url value="/timetable/${match.id}.html" />'>Uaktualnij</a>
+							</td>
+						</tr>
+					</c:forEach>
+				</tbody>
+			</table>
+		</div>
+	</c:forEach>
+</div>
 
-			<tr>
-				<td>${match.matchDate }</td>
-				<td>${match.firstName}</td>
-				<td>3</td>
-				<td>1</td>
-				<td>${match.secondName}</td>
-				<td><a class="btn btn-lg btn-primary"
-					href='<spring:url value="/" />'>Dodaj</a></td>
-			</tr>
-
-		</c:forEach>
 
 
-	</tbody>
-</table>
+
+
+

@@ -36,7 +36,9 @@ public class Match {
 
 	String firstName;
 	String secondName;
-	String firstPoints;
+
+	Integer secondPoints;
+	Integer firstPoints;
 
 	public String getSecondName() {
 		return secondName;
@@ -46,23 +48,21 @@ public class Match {
 		this.secondName = secondName;
 	}
 
-	public String getFirstPoints() {
+	public Integer getFirstPoints() {
 		return firstPoints;
 	}
 
-	public void setFirstPoints(String firstPoints) {
+	public void setFirstPoints(Integer firstPoints) {
 		this.firstPoints = firstPoints;
 	}
 
-	public String getSecondPoints() {
+	public Integer getSecondPoints() {
 		return secondPoints;
 	}
 
-	public void setSecondPoints(String secondPoints) {
+	public void setSecondPoints(Integer secondPoints) {
 		this.secondPoints = secondPoints;
 	}
-
-	String secondPoints;
 
 	public String getFirstName() {
 		return firstName;

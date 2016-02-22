@@ -4,11 +4,11 @@
 	<b>Tabela Sezonu 2016</b>
 	<br>
 </h1>
-
+<br>
 <table class="table table-bordered table-hover table-striped">
 	<thead>
 		<tr>
-			<th>Poz</a></th>
+			<th>Poz</th>
 			<th><a
 				href='<spring:url value="/table.html?properties=firstName&order=${order}" />'>Zawodnik</a></th>
 			<th>Mecze</th>

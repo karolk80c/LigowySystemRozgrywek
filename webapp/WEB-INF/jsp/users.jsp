@@ -1,10 +1,5 @@
 <%@ include file="../layout/taglib.jsp"%>
 
-<style>
-.center {
-	text-align: center;
-}
-</style>
 
 <table class="table table-bordered table-hover table-striped">
 	<thead>
