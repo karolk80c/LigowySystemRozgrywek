@@ -4,7 +4,7 @@
 	<class>pl.karolkolarczyk.lgs.entity.User</class>
 	<class>pl.karolkolarczyk.lgs.entity.Match</class>
 	<class>pl.karolkolarczyk.lgs.entity.Role</class>
-	<class>pl.karolkolarczyk.lgs.entity.Set</class>
+	<class>pl.karolkolarczyk.lgs.entity.Cokolwiek</class>
 	<class>pl.karolkolarczyk.lgs.entity.Round</class>
 	<class>pl.karolkolarczyk.lgs.entity.Season</class>
 	</persistence-unit>

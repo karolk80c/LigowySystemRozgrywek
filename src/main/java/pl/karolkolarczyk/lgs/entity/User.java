@@ -38,85 +38,36 @@ public class User {
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date createDate;
 
-	@ManyToMany(fetch=FetchType.EAGER)
+	@ManyToMany(fetch = FetchType.EAGER)
 	private List<Role> roles;
 
-	@ManyToMany(fetch=FetchType.EAGER)
+	@ManyToMany(fetch = FetchType.EAGER)
 	@JoinTable(name = "uzytkownik_mecz")
 	private List<Match> matches;
 	
 	private boolean enabled;
 
-	private Integer wonSmallPoints;
+	private int wonSmallPoints;
 
-	private Integer wonSets;
+	private int wonSets;
 
-	private Integer lostSmallPoints;
+	private int lostSmallPoints;
 
-	private Integer lostSets;
+	private int lostSets;
 
-	private Integer wonMatches;
+	private int wonMatches;
 
-	private Integer lostMatches;
+	private int lostMatches;
 
-	private Integer balanceMatches;
+	private int balanceMatches;
 
-	private Integer balanceSets;
+	private int balanceSets;
 
-	private Integer balanceSmallPoints;
+	private int balanceSmallPoints;
 
 	@PrePersist
 	public void triggers() {
 		createDate = new Date();
-	}
-
-	public Integer getBalanceMatches() {
-		return balanceMatches;
-	}
-
-	public void setBalanceMatches(Integer balanceMatches) {
-		this.balanceMatches = balanceMatches;
-	}
-
-	public Integer getBalanceSets() {
-		return balanceSets;
-	}
-
-	public void setBalanceSets(Integer balanceSets) {
-		this.balanceSets = balanceSets;
-	}
-
-	public Integer getBalanceSmallPoints() {
-		return balanceSmallPoints;
-	}
-
-	public void setBalanceSmallPoints(Integer balanceSmallPoints) {
-		this.balanceSmallPoints = balanceSmallPoints;
-	}
-
-
-	public boolean isEnabled() {
-		return enabled;
-	}
-
-	public void setEnabled(boolean enabled) {
-		this.enabled = enabled;
-	}
-
-	public List<Role> getRoles() {
-		return roles;
-	}
-
-	public void setRoles(List<Role> roles) {
-		this.roles = roles;
-	}
-
-	public List<Match> getMatches() {
-		return matches;
-	}
-
-	public void setMatches(List<Match> matches) {
-		this.matches = matches;
 	}
 
 	public String getLogin() {
@@ -175,52 +126,101 @@ public class User {
 		this.createDate = createDate;
 	}
 
-	public Integer getWonSmallPoints() {
+	public List<Role> getRoles() {
+		return roles;
+	}
+
+	public void setRoles(List<Role> roles) {
+		this.roles = roles;
+	}
+
+	public List<Match> getMatches() {
+		return matches;
+	}
+
+	public void setMatches(List<Match> matches) {
+		this.matches = matches;
+	}
+
+	public boolean isEnabled() {
+		return enabled;
+	}
+
+	public void setEnabled(boolean enabled) {
+		this.enabled = enabled;
+	}
+
+	public int getWonSmallPoints() {
 		return wonSmallPoints;
 	}
 
-	public void setWonSmallPoints(Integer wonSmallPoints) {
+	public void setWonSmallPoints(int wonSmallPoints) {
 		this.wonSmallPoints = wonSmallPoints;
 	}
 
-	public Integer getLostSmallPoints() {
-		return lostSmallPoints;
-	}
-
-	public void setLostSmallPoints(Integer lostSmallPoints) {
-		this.lostSmallPoints = lostSmallPoints;
-	}
-
-	public Integer getWonSets() {
+	public int getWonSets() {
 		return wonSets;
 	}
 
-	public void setWonSets(Integer wonSets) {
+	public void setWonSets(int wonSets) {
 		this.wonSets = wonSets;
 	}
 
-	public Integer getLostSets() {
+	public int getLostSmallPoints() {
+		return lostSmallPoints;
+	}
+
+	public void setLostSmallPoints(int lostSmallPoints) {
+		this.lostSmallPoints = lostSmallPoints;
+	}
+
+	public int getLostSets() {
 		return lostSets;
 	}
 
-	public void setLostSets(Integer lostSets) {
+	public void setLostSets(int lostSets) {
 		this.lostSets = lostSets;
 	}
 
-	public Integer getWonMatches() {
+	public int getWonMatches() {
 		return wonMatches;
 	}
 
-	public void setWonMatches(Integer wonMatches) {
+	public void setWonMatches(int wonMatches) {
 		this.wonMatches = wonMatches;
 	}
 
-	public Integer getLostMatches() {
+	public int getLostMatches() {
 		return lostMatches;
 	}
 
-	public void setLostMatches(Integer lostMatches) {
+	public void setLostMatches(int lostMatches) {
 		this.lostMatches = lostMatches;
 	}
+
+	public int getBalanceMatches() {
+		return wonMatches - lostMatches;
+	}
+
+	public void setBalanceMatches(int balanceMatches) {
+		this.balanceMatches = balanceMatches;
+	}
+
+	public int getBalanceSets() {
+		return wonSets - lostSets;
+	}
+
+	public void setBalanceSets(int balanceSets) {
+		this.balanceSets = balanceSets;
+	}
+
+	public int getBalanceSmallPoints() {
+		return wonSmallPoints - lostSmallPoints;
+	}
+
+	public void setBalanceSmallPoints(int balanceSmallPoints) {
+		this.balanceSmallPoints = balanceSmallPoints;
+	}
+
 
 }

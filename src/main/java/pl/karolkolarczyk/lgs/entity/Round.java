@@ -26,6 +26,52 @@ public class Round {
 	@JoinColumn(name = "season_id")
 	Season season;
 
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + id;
+		result = prime * result + ((matches == null) ? 0 : matches.hashCode());
+		result = prime * result + number;
+		result = prime * result + ((season == null) ? 0 : season.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj) {
+			return true;
+		}
+		if (obj == null) {
+			return false;
+		}
+		if (getClass() != obj.getClass()) {
+			return false;
+		}
+		Round other = (Round) obj;
+		if (id != other.id) {
+			return false;
+		}
+		if (matches == null) {
+			if (other.matches != null) {
+				return false;
+			}
+		} else if (!matches.equals(other.matches)) {
+			return false;
+		}
+		if (number != other.number) {
+			return false;
+		}
+		if (season == null) {
+			if (other.season != null) {
+				return false;
+			}
+		} else if (!season.equals(other.season)) {
+			return false;
+		}
+		return true;
+	}
+
 	int number;
 
 	public int getNumber() {

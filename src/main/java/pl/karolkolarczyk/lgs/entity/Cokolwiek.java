@@ -2,28 +2,40 @@ package pl.karolkolarczyk.lgs.entity;
 
 
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
-
 @Entity(name="Runda")
-public class Set {
+public class Cokolwiek {
 
 	@Id
 	@GeneratedValue
-	private int id;
+	private Integer id;
 
 	private int firstPlayerScore;
 	
 	private int secondPlayerScore;
 	
-	@ManyToOne(fetch=FetchType.EAGER)
+
+	private String name;
+
+
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	@ManyToOne
 	@JoinColumn(name="match_id")
 	private Match match;
 	
+
 	public int getFirstPlayerScore() {
 		return firstPlayerScore;
 	}
@@ -48,12 +60,13 @@ public class Set {
 		this.match = match;
 	}
 
-	public int getId() {
+	public Integer getId() {
 		return id;
 	}
 
-	public void setId(int id) {
+	public void setId(Integer id) {
 		this.id = id;
 	}
+
 
 }

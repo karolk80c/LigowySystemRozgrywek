@@ -7,6 +7,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import pl.karolkolarczyk.lgs.service.MatchService;
 import pl.karolkolarczyk.lgs.service.UserService;
 
 @Controller
@@ -14,6 +15,9 @@ public class UserController {
 
 	@Autowired
 	private UserService userService;
+
+	@Autowired
+	private MatchService matchService;
 
 	@RequestMapping("/users")
 	public String users(Model model) {
@@ -28,6 +32,8 @@ public class UserController {
 		model.addAttribute("user", userService.findOne(name));
 		return "account";
 	}
+
+
 
 
 }

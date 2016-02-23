@@ -16,7 +16,8 @@
 <!-- Nav tabs -->
 <ul class="nav nav-tabs">
 	<c:forEach items="${round}" var="round">
-		<li><a href="#round${round.id}" data-toggle="tab">Kolejka ${round.id }</a></li>
+		<li><a href="#round${round.id}" data-toggle="tab">Kolejka
+				${round.id }</a></li>
 	</c:forEach>
 </ul>
 
@@ -32,7 +33,6 @@
 						<th>Wynik</th>
 						<th>Wynik</th>
 						<th>Zawodnik</th>
-						<th class="center">Wynik</th>
 					</tr>
 				</thead>
 				<tbody>
@@ -43,9 +43,6 @@
 							<td>${match.firstPoints}</td>
 							<td>${match.secondPoints }</td>
 							<td>${match.secondName}</td>
-							<td class="center"><a class="btn btn-primary btn-lg"
-								href='<spring:url value="/timetable/${match.id}.html" />'>Uaktualnij</a>
-							</td>
 						</tr>
 					</c:forEach>
 				</tbody>

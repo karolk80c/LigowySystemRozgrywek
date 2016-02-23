@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import pl.karolkolarczyk.lgs.entity.Role;
 import pl.karolkolarczyk.lgs.entity.User;
+import pl.karolkolarczyk.lgs.repository.MatchRepository;
 import pl.karolkolarczyk.lgs.repository.RoleRepository;
 import pl.karolkolarczyk.lgs.repository.UserRepository;
 
@@ -26,6 +27,9 @@ public class UserService {
 	@Autowired
 	private RoleRepository roleRepository;
 	
+	@Autowired
+	MatchRepository matchRepository;
+
 	public List<User> findAll() {
 		return userRepository.findAll();
 	}
@@ -57,5 +61,6 @@ public class UserService {
 	public Page<User> findAllWithStatistics(String properties, Direction order) {
 		return userRepository.findAll(new PageRequest(0, 30, order, properties));
 	}
+
 
 }

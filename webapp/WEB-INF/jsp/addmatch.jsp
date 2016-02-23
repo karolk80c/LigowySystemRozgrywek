@@ -12,14 +12,13 @@
 			<th class="center">Set</th>
 			<th class="center">${match.firstName}</th>
 			<th class="center">${match.secondName}</th>
-			<th class="center">Edycja</th>
 		</tr>
 	</thead>
 	<tbody>
 		<%
 			int i = 1;
 		%>
-		<c:forEach items="${match.sets}" var="set">
+		<c:forEach items="${match.cokolwieks}" var="cokolwiek">
 			<tr>
 				<td class="center">
 					<%
@@ -27,11 +26,8 @@
 							i++;
 					%>
 				</td>
-				<td class="center">${set.firstPlayerScore }</td>
-				<td class="center">${set.secondPlayerScore }</td>
-				<td class="center"><a class="btn btn-primary btn-lg"
-					href='<spring:url value="/timetable/${match.id}.html" />'>Edytuj</a>
-				</td>
+				<td class="center">${cokolwiek.firstPlayerScore }</td>
+				<td class="center">${cokolwiek.secondPlayerScore }</td>
 			</tr>
 		</c:forEach>
 	</tbody>
@@ -42,12 +38,13 @@
 <br>
 <br>
 <!-- Trigger the modal with a button -->
-<button type="button" class="btn btn-info btn-lg" data-toggle="modal"
+
+<button class="btn btn-info btn-lg" data-toggle="modal"
 	data-target="#myModal">Dodaj Set</button>
+<a class="btn btn-info btn-lg"
+	href='<spring:url value="/matches.html" />'>Wroc</a>
 
-<button type="button" class="btn btn-info btn-lg">Zapisz</button>
-
-<form:form commandName="set" cssClass="form-horizontal">
+<form:form commandName="cokolwiek" cssClass="form-horizontal">
 	<!-- Modal -->
 	<div class="modal fade" id="myModal" tabindex="-1" role="dialog"
 		aria-labelledby="myModalLabel">
@@ -60,31 +57,27 @@
 					</button>
 					<h4 class="modal-title" id="myModalLabel">Aktualizacja meczu</h4>
 				</div>
-
 				<div class="modal-body">
-
-
 					<div class="form-group">
-						<label for="firstPlayerScore" class="col-sm-2 control-label">Zdobyte
-							Punkty:</label>
+						<label for="firstPlayerScore" class="col-sm-2 control-label">${match.firstName}:
+						</label>
 						<div class="col-sm-10">
 							<form:input path="firstPlayerScore" cssClass="form-control" />
 						</div>
 					</div>
 					<div class="form-group">
-						<label for="secondPlayerScore" class="col-sm-2 control-label">Stracone
-							Punkty:</label>
+						<label for="secondPlayerScore" class="col-sm-2 control-label">${match.secondName}:
+						</label>
 						<div class="col-sm-10">
 							<form:input path="secondPlayerScore" cssClass="form-control" />
 						</div>
 					</div>
-
-
 				</div>
-
+				<form:hidden path="id" />
 				<div class="modal-footer">
 					<button type="button" class="btn btn-default" data-dismiss="modal">Zamknij</button>
-					<input type="submit" class="btn btn-primary" value="Zapisz" />
+					<input type="submit" formmethod="post" class="btn btn-primary"
+						value="Zapisz" />
 				</div>
 			</div>
 		</div>

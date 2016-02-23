@@ -3,6 +3,7 @@ package pl.karolkolarczyk.lgs.entity;
 import java.util.Date;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -24,10 +25,100 @@ public class Match {
 	@Temporal(TemporalType.DATE)
 	private Date matchDate;
 
-	@OneToMany(mappedBy = "match", fetch = FetchType.EAGER)
-	private List<Set> sets;
+	@OneToMany(mappedBy = "match", cascade = CascadeType.ALL)
+	private List<Cokolwiek> cokolwieks;
 
-	@ManyToMany(mappedBy = "matches", fetch = FetchType.EAGER)
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((firstName == null) ? 0 : firstName.hashCode());
+		result = prime * result + ((firstPoints == null) ? 0 : firstPoints.hashCode());
+		result = prime * result + id;
+		result = prime * result + ((matchDate == null) ? 0 : matchDate.hashCode());
+		result = prime * result + ((round == null) ? 0 : round.hashCode());
+		result = prime * result + ((secondName == null) ? 0 : secondName.hashCode());
+		result = prime * result + ((secondPoints == null) ? 0 : secondPoints.hashCode());
+		result = prime * result + ((cokolwieks == null) ? 0 : cokolwieks.hashCode());
+		result = prime * result + ((users == null) ? 0 : users.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj) {
+			return true;
+		}
+		if (obj == null) {
+			return false;
+		}
+		if (getClass() != obj.getClass()) {
+			return false;
+		}
+		Match other = (Match) obj;
+		if (firstName == null) {
+			if (other.firstName != null) {
+				return false;
+			}
+		} else if (!firstName.equals(other.firstName)) {
+			return false;
+		}
+		if (firstPoints == null) {
+			if (other.firstPoints != null) {
+				return false;
+			}
+		} else if (!firstPoints.equals(other.firstPoints)) {
+			return false;
+		}
+		if (id != other.id) {
+			return false;
+		}
+		if (matchDate == null) {
+			if (other.matchDate != null) {
+				return false;
+			}
+		} else if (!matchDate.equals(other.matchDate)) {
+			return false;
+		}
+		if (round == null) {
+			if (other.round != null) {
+				return false;
+			}
+		} else if (!round.equals(other.round)) {
+			return false;
+		}
+		if (secondName == null) {
+			if (other.secondName != null) {
+				return false;
+			}
+		} else if (!secondName.equals(other.secondName)) {
+			return false;
+		}
+		if (secondPoints == null) {
+			if (other.secondPoints != null) {
+				return false;
+			}
+		} else if (!secondPoints.equals(other.secondPoints)) {
+			return false;
+		}
+		if (cokolwieks == null) {
+			if (other.cokolwieks != null) {
+				return false;
+			}
+		} else if (!cokolwieks.equals(other.cokolwieks)) {
+			return false;
+		}
+		if (users == null) {
+			if (other.users != null) {
+				return false;
+			}
+		} else if (!users.equals(other.users)) {
+			return false;
+		}
+		return true;
+	}
+
+	@ManyToMany(mappedBy = "matches")
 	private List<User> users;
 
 	@ManyToOne(fetch = FetchType.EAGER)
@@ -96,13 +187,6 @@ public class Match {
 		this.users = users;
 	}
 
-	public List<Set> getSets() {
-		return sets;
-	}
-
-	public void setSets(List<Set> sets) {
-		this.sets = sets;
-	}
 
 	public int getId() {
 		return id;
@@ -110,6 +194,14 @@ public class Match {
 
 	public void setId(int id) {
 		this.id = id;
+	}
+
+	public List<Cokolwiek> getCokolwieks() {
+		return cokolwieks;
+	}
+
+	public void setCokolwieks(List<Cokolwiek> cokolwieks) {
+		this.cokolwieks = cokolwieks;
 	}
 
 }

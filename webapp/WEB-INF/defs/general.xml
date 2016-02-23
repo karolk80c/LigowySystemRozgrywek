@@ -61,16 +61,23 @@
 		<put-attribute name="body" value="/WEB-INF/jsp/timetable.jsp" />
 		<put-attribute name="current" value="timetable" />
 	</definition>
-	
+
 	<definition name="addmatch" extends="common">
 		<put-attribute name="title" value="Aktualizacja spotkania" />
 		<put-attribute name="body" value="/WEB-INF/jsp/addmatch.jsp" />
-		<put-attribute name="current" value="timetable" />
+		<put-attribute name="current" value="user-matches" />
 	</definition>
-	
-	
-	
-	
+
+	<definition name="user-matches" extends="common">
+		<put-attribute name="title" value="Moje spotkania" />
+		<put-attribute name="body" value="/WEB-INF/jsp/user-matches.jsp" />
+		<put-attribute name="current" value="user-matches" />
+	</definition>
+
+
+
+
+
 
 
 

@@ -73,9 +73,14 @@ margin-bottom:2%;
 							<li class="${current == 'timetable' ? 'active' : ' ' }"><a
 								href='<spring:url value="/timetable.html" />'>Terminarz</a></li>
 							<security:authorize
-								access="hasRole('ROLE_USER') ||  hasRole('ROLE_ADMIN')">
+								access="hasRole('ROLE_USER')">
 								<li class="${current == 'detail' ? 'active' : ' ' }"><a
 									href='<spring:url value="/account.html" />'>Moje konto</a></li>
+							</security:authorize>
+							<security:authorize
+								access="hasRole('ROLE_USER')">
+								<li class="${current == 'user-matches' ? 'active' : ' ' }"><a
+									href='<spring:url value="/matches.html" />'>Moje mecze</a></li>
 							</security:authorize>
 							<security:authorize access="! isAuthenticated()">
 								<li class="${current == 'login' ? 'active' : ' ' }"><a

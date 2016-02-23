@@ -1,7 +1,6 @@
 package pl.karolkolarczyk.lgs.service;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -79,9 +78,9 @@ public class DrawService {
 					usersList.add(user2);
 					Match match = new Match();
 					match.setUsers(usersList);
-					match.setMatchDate(new Date());
 					match.setFirstName(user1.getFirstName() + " " + user1.getLastName());
 					match.setSecondName(user2.getFirstName() + " " + user2.getLastName());
+					match.setRound(round);
 					matchRepository.save(match);
 					matches.add(match);
 					List<Match> user1Matches = user1.getMatches();
@@ -109,7 +108,7 @@ public class DrawService {
 						match.setFirstName(user1.getFirstName() + " " + user1.getLastName());
 						match.setSecondName(user2.getFirstName() + " " + user2.getLastName());
 						match.setUsers(usersList);
-						match.setMatchDate(new Date());
+						match.setRound(round);
 						matchRepository.save(match);
 						matches.add(match);
 						List<Match> user1Matches = user1.getMatches();
@@ -146,6 +145,7 @@ public class DrawService {
 				}
 			}
 		}
+
 		return userListLogin;
 	}
 
