@@ -12,9 +12,18 @@
 .center {
 	text-align: center;
 }
-.footer{
-text-align:center;
-margin-bottom:2%;
+
+.footer {
+	text-align: center;
+	margin-bottom: 2%;
+}
+
+tr {
+	text-align: center;
+}
+
+tr th {
+	text-align: center;
 }
 </style>
 
@@ -72,13 +81,11 @@ margin-bottom:2%;
 								href='<spring:url value="/table.html" />'>Tabela</a></li>
 							<li class="${current == 'timetable' ? 'active' : ' ' }"><a
 								href='<spring:url value="/timetable.html" />'>Terminarz</a></li>
-							<security:authorize
-								access="hasRole('ROLE_USER')">
+							<security:authorize access="hasRole('ROLE_USER')">
 								<li class="${current == 'detail' ? 'active' : ' ' }"><a
 									href='<spring:url value="/account.html" />'>Moje konto</a></li>
 							</security:authorize>
-							<security:authorize
-								access="hasRole('ROLE_USER')">
+							<security:authorize access="hasRole('ROLE_USER')">
 								<li class="${current == 'user-matches' ? 'active' : ' ' }"><a
 									href='<spring:url value="/matches.html" />'>Moje mecze</a></li>
 							</security:authorize>

@@ -49,16 +49,16 @@
 											i++;
 							%>
 						</td>
-						<td class="center">${user.firstName}${ user.lastName }</td>
+						<td class="center">${user.firstName}&nbsp;${ user.lastName }</td>
 						<td class="center">${user.wonMatches + user.lostMatches}</td>
 						<td class="center">${user.wonMatches}</td>
 						<td class="center">${user.lostMatches }</td>
-						<td class="center"><b>${user.wonMatches - user.lostMatches}</b></td>
+						<td class="center"><b>${user.balanceMatches}</b></td>
 						<td class="center">${user.wonSets + user.lostSets }</td>
 						<td class="center">${user.wonSets }</td>
 						<td class="center">${user.lostSets }</td>
-						<td class="center"><b>${user.wonSets - user.lostSets}</b></td>
-						<td class="center"> XXX </td>
+						<td class="center"><b>${user.balanceSets}</b></td>
+						<td class="center">XXX</td>
 						<td class="center">${user.wonSmallPoints}</td>
 						<td class="center">${user.lostSmallPoints }</td>
 						<td class="center"><b>${user.balanceSmallPoints }</b></td>

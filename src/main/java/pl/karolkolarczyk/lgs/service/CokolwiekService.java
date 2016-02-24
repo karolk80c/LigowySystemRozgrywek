@@ -13,6 +13,7 @@ import pl.karolkolarczyk.lgs.entity.Match;
 import pl.karolkolarczyk.lgs.entity.User;
 import pl.karolkolarczyk.lgs.repository.CokolwiekRepository;
 import pl.karolkolarczyk.lgs.repository.MatchRepository;
+import pl.karolkolarczyk.lgs.repository.UserRepository;
 
 @Service
 public class CokolwiekService {
@@ -22,6 +23,9 @@ public class CokolwiekService {
 
 	@Autowired
 	MatchRepository matchRepository;
+
+	@Autowired
+	UserRepository userRepository;
 
 	public List<Cokolwiek> findAll() {
 		return cokolwiekRepository.findAll();
@@ -77,6 +81,8 @@ public class CokolwiekService {
 			user1.setLostSmallPoints(user1.getLostSmallPoints() + cokolwiek.getFirstPlayerScore());
 		}
 
+		userRepository.save(user1);
+		userRepository.save(user2);
 		match.setFirstPoints(firstPoints);
 		match.setSecondPoints(secondPoints);
 		match.setMatchDate(new Date());

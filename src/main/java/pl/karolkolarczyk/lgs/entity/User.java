@@ -10,6 +10,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.PrePersist;
+import javax.persistence.PreUpdate;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
@@ -68,6 +69,13 @@ public class User {
 	@PrePersist
 	public void triggers() {
 		createDate = new Date();
+	}
+
+	@PreUpdate
+	public void updateBalance() {
+		this.setBalanceSmallPoints(wonSmallPoints - lostSmallPoints);
+		this.setBalanceMatches(wonMatches - lostMatches);
+		this.setBalanceSets(wonSets - lostSets);
 	}
 
 	public String getLogin() {
@@ -198,25 +206,29 @@ public class User {
 		this.lostMatches = lostMatches;
 	}
 
+
 	public int getBalanceMatches() {
-		return wonMatches - lostMatches;
+		return balanceMatches;
+	}
+
+	public int getBalanceSets() {
+		return balanceSets;
+	}
+
+	public int getBalanceSmallPoints() {
+		return balanceSmallPoints;
 	}
 
 	public void setBalanceMatches(int balanceMatches) {
 		this.balanceMatches = balanceMatches;
 	}
 
-	public int getBalanceSets() {
-		return wonSets - lostSets;
-	}
+
 
 	public void setBalanceSets(int balanceSets) {
 		this.balanceSets = balanceSets;
 	}
 
-	public int getBalanceSmallPoints() {
-		return wonSmallPoints - lostSmallPoints;
-	}
 
 	public void setBalanceSmallPoints(int balanceSmallPoints) {
 		this.balanceSmallPoints = balanceSmallPoints;

@@ -5,7 +5,9 @@
 </h1>
 <br>
 
-
+<c:if test="${param.success eq true }">
+	<div class="alert alert-success">Zatwierdzono wynik meczu, do czassu az drugi zawodnik nie potwierdzi wyniku, mozesz wprowadzic dalsze zmiany</div>
+</c:if>
 
 <table class="table table-bordered table-hover table-striped">
 	<thead>
@@ -16,6 +18,7 @@
 			<th>Wynik</th>
 			<th>Zawodnik</th>
 			<th>Uaktualnij</th>
+			<th>Akceptuj</th>
 		</tr>
 	</thead>
 	<tbody>
@@ -28,6 +31,8 @@
 				<td>${match.secondName}</td>
 				<td><a class="btn btn-primary btn-lg"
 					href='<spring:url value="/matches/${match.id}.html" />'>Uaktualnij</a></td>
+				<td><a class="btn btn-lg btn-success"
+					href='<spring:url value="/matches/${match.id}/approve.html" />'>Akceptuj</a></td>
 			</tr>
 		</c:forEach>
 	</tbody>

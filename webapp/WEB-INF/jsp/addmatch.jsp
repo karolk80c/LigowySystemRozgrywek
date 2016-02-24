@@ -9,9 +9,10 @@
 <table class="table table-bordered table-hover table-striped">
 	<thead>
 		<tr>
-			<th class="center">Set</th>
-			<th class="center">${match.firstName}</th>
-			<th class="center">${match.secondName}</th>
+			<th>Set</th>
+			<th>${match.firstName}</th>
+			<th>${match.secondName}</th>
+			<th>Edycja</th>
 		</tr>
 	</thead>
 	<tbody>
@@ -26,8 +27,10 @@
 							i++;
 					%>
 				</td>
-				<td class="center">${cokolwiek.firstPlayerScore }</td>
-				<td class="center">${cokolwiek.secondPlayerScore }</td>
+				<td>${cokolwiek.firstPlayerScore }</td>
+				<td>${cokolwiek.secondPlayerScore }</td>
+				<td><a class="btn btn-primary btn"
+					href='<spring:url value="/matches/${match.id}/edit.html" />'>Edytuj</a></td>
 			</tr>
 		</c:forEach>
 	</tbody>

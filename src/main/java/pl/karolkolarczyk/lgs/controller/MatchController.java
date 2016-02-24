@@ -37,10 +37,16 @@ public class MatchController {
 
 	@RequestMapping("/{id}")
 	public String addMatchStatistics(Model model, @PathVariable Integer id) {
-		System.out.println("W Standard addMatStatistics");
 		Match match = matchService.findOneWithSets(id);
 		model.addAttribute("match", match);
 		return "addmatch";
+	}
+
+	@RequestMapping("/{id}/approve")
+	public String approveMatch(Model model, @PathVariable Integer id, Principal principal) {
+		User user = userService.findOne(principal.getName());
+		matchService.approve(id, user);
+		return "redirect:/matches.html?success=true";
 	}
 
 	@RequestMapping(value = "/{id}", method = RequestMethod.POST)
