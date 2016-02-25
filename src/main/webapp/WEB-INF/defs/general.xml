@@ -73,9 +73,13 @@
 		<put-attribute name="body" value="/WEB-INF/jsp/user-matches.jsp" />
 		<put-attribute name="current" value="user-matches" />
 	</definition>
-	<definition name="email" extends="common">
-		<put-attribute name="title" value="Wiadomosc" />
-		<put-attribute name="body" value="/WEB-INF/jsp/email.jsp" />
-		<put-attribute name="current" value="email" />
-	</definition>
+
+
+
+
+
+
+
+
+
 </tiles-definitions>

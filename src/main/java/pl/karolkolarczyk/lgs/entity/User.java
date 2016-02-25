@@ -30,10 +30,10 @@ public class User {
 	@Column(nullable = false)
 	private String lastName;
 
-	@Column(nullable = false)
+	@Column(nullable = false, unique = true)
 	private String emailAdress;
 
-	@Column(nullable = false)
+	@Column(nullable = false, unique = true)
 	private String contactNumber;
 
 	@Temporal(TemporalType.TIMESTAMP)
@@ -66,6 +66,16 @@ public class User {
 
 	private int balanceSmallPoints;
 
+	private int mainPoints;
+
+	public int getMainPoints() {
+		return mainPoints;
+	}
+
+	public void setMainPoints(int mainPoints) {
+		this.mainPoints = mainPoints;
+	}
+
 	@PrePersist
 	public void triggers() {
 		createDate = new Date();
@@ -76,6 +86,7 @@ public class User {
 		this.setBalanceSmallPoints(wonSmallPoints - lostSmallPoints);
 		this.setBalanceMatches(wonMatches - lostMatches);
 		this.setBalanceSets(wonSets - lostSets);
+		this.setMainPoints(wonMatches * 2);
 	}
 
 	public String getLogin() {

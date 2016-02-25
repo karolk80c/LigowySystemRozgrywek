@@ -5,10 +5,10 @@ import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import pl.karolkolarczyk.lgs.entity.Match;
-import pl.karolkolarczyk.lgs.entity.Cokolwiek;
+import pl.karolkolarczyk.lgs.entity.Set;
 
-public interface CokolwiekRepository extends JpaRepository<Cokolwiek, Integer> {
+public interface SetRepository extends JpaRepository<Set, Integer> {
 
-	List<Cokolwiek> findByMatch(Match match);
+	List<Set> findByMatch(Match match);
 
 }

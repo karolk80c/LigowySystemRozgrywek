@@ -11,8 +11,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import pl.karolkolarczyk.lgs.entity.Role;
 import pl.karolkolarczyk.lgs.entity.User;
-import pl.karolkolarczyk.lgs.repository.CokolwiekRepository;
-import pl.karolkolarczyk.lgs.repository.MatchRepository;
 import pl.karolkolarczyk.lgs.repository.RoleRepository;
 import pl.karolkolarczyk.lgs.repository.RoundRepository;
 import pl.karolkolarczyk.lgs.repository.UserRepository;
@@ -26,12 +24,6 @@ public class InitDatabaseService {
 
 	@Autowired
 	private RoleRepository roleRepository;
-
-	@Autowired
-	private MatchRepository matchRepository;
-
-	@Autowired
-	private CokolwiekRepository setRepository;
 
 	@Autowired
 	RoundRepository roundRepository;
@@ -93,8 +85,8 @@ public class InitDatabaseService {
 		userRepository.save(userTest2);
 
 		User userTest3 = new User();
-		userTest3.setContactNumber("999999999");
-		userTest3.setEmailAdress("supertestowy5@gmail.com");
+		userTest3.setContactNumber("321321321");
+		userTest3.setEmailAdress("supertestowy3@gmail.com");
 		userTest3.setFirstName("Michal");
 		userTest3.setLastName("Aniol");
 		userTest3.setRoles(testUserRolesList);
@@ -104,8 +96,8 @@ public class InitDatabaseService {
 		userRepository.save(userTest3);
 
 		User userTest4 = new User();
-		userTest4.setContactNumber("999999999");
-		userTest4.setEmailAdress("supertestowy5@gmail.com");
+		userTest4.setContactNumber("3424322");
+		userTest4.setEmailAdress("supertestowy4@gmail.com");
 		userTest4.setFirstName("Adam");
 		userTest4.setLastName("Wojcik");
 		userTest4.setRoles(testUserRolesList);
@@ -115,7 +107,7 @@ public class InitDatabaseService {
 		userRepository.save(userTest4);
 
 		User userTest5 = new User();
-		userTest5.setContactNumber("999999999");
+		userTest5.setContactNumber("12313131");
 		userTest5.setEmailAdress("supertestowy5@gmail.com");
 		userTest5.setFirstName("Jan");
 		userTest5.setLastName("Gracz");
@@ -126,8 +118,8 @@ public class InitDatabaseService {
 		userRepository.save(userTest5);
 
 		User userTest6 = new User();
-		userTest6.setContactNumber("999999999");
-		userTest6.setEmailAdress("supertestowy5@gmail.com");
+		userTest6.setContactNumber("555555");
+		userTest6.setEmailAdress("supertestowy6@gmail.com");
 		userTest6.setFirstName("Lcujan");
 		userTest6.setLastName("Pasta");
 		userTest6.setRoles(testUserRolesList);

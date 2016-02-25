@@ -7,11 +7,11 @@ import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import pl.karolkolarczyk.lgs.entity.Cokolwiek;
 import pl.karolkolarczyk.lgs.entity.Match;
+import pl.karolkolarczyk.lgs.entity.Set;
 import pl.karolkolarczyk.lgs.entity.User;
-import pl.karolkolarczyk.lgs.repository.CokolwiekRepository;
 import pl.karolkolarczyk.lgs.repository.MatchRepository;
+import pl.karolkolarczyk.lgs.repository.SetRepository;
 import pl.karolkolarczyk.lgs.repository.UserRepository;
 
 @Service
@@ -22,10 +22,7 @@ public class MatchService {
 	MatchRepository matchRepository;
 
 	@Autowired
-	CokolwiekRepository setRepository;
-
-	@Autowired
-	CokolwiekRepository cokolwiekRepository;
+	SetRepository setRepository;
 
 	@Autowired
 	UserRepository userRepository;
@@ -41,8 +38,8 @@ public class MatchService {
 	@Transactional
 	public Match findOneWithSets(Integer id) {
 		Match match = findOne(id);
-		List<Cokolwiek> sets = setRepository.findByMatch(match);
-		match.setCokolwieks(sets);
+		List<Set> sets = setRepository.findByMatch(match);
+		match.setSets(sets);
 		return match;
 	}
 

@@ -8,18 +8,18 @@ import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import pl.karolkolarczyk.lgs.entity.Cokolwiek;
+import pl.karolkolarczyk.lgs.entity.Set;
 import pl.karolkolarczyk.lgs.entity.Match;
 import pl.karolkolarczyk.lgs.entity.User;
-import pl.karolkolarczyk.lgs.repository.CokolwiekRepository;
+import pl.karolkolarczyk.lgs.repository.SetRepository;
 import pl.karolkolarczyk.lgs.repository.MatchRepository;
 import pl.karolkolarczyk.lgs.repository.UserRepository;
 
 @Service
-public class CokolwiekService {
+public class SetService {
 
 	@Autowired
-	CokolwiekRepository cokolwiekRepository;
+	SetRepository setRepository;
 
 	@Autowired
 	MatchRepository matchRepository;
@@ -27,23 +27,23 @@ public class CokolwiekService {
 	@Autowired
 	UserRepository userRepository;
 
-	public List<Cokolwiek> findAll() {
-		return cokolwiekRepository.findAll();
+	public List<Set> findAll() {
+		return setRepository.findAll();
 	}
 
 	@Transactional
-	public void save(Cokolwiek cokolwiek, Integer id, User principal) {
+	public void save(Set set, Integer id, User principal) {
 		Match match = matchRepository.findOne(id);
-		cokolwiek.setMatch(match);
-		cokolwiekRepository.save(cokolwiek);
-		List<Cokolwiek> cokolwieks = cokolwiekRepository.findByMatch(match);
+		set.setMatch(match);
+		setRepository.save(set);
+		List<Set> sets = setRepository.findByMatch(match);
 		List<User> users = match.getUsers();
 		User user1 = users.get(0);
 		User user2 = users.get(1);
 		int firstPoints = 0;
 		int secondPoints = 0;
 
-		for (Cokolwiek s : cokolwieks) {
+		for (Set s : sets) {
 			if (s.getFirstPlayerScore() > s.getSecondPlayerScore()) {
 				firstPoints++;
 			} else if (s.getFirstPlayerScore() < s.getSecondPlayerScore()) {
@@ -51,7 +51,7 @@ public class CokolwiekService {
 			}
 		}
 
-		if (cokolwiek.getFirstPlayerScore() > cokolwiek.getSecondPlayerScore()) {
+		if (set.getFirstPlayerScore() > set.getSecondPlayerScore()) {
 			if ((user1.getFirstName().concat(" ").concat(user1.getLastName())).equals(match.getFirstName())) {
 				user1.setWonSets(user1.getWonSets() + 1);
 				user2.setLostSets(user2.getLostSets() + 1);
@@ -59,7 +59,7 @@ public class CokolwiekService {
 				user2.setWonSets(user2.getWonSets() + 1);
 				user1.setLostSets(user1.getLostSets() + 1);
 			}
-		} else if (cokolwiek.getFirstPlayerScore() < cokolwiek.getSecondPlayerScore()) {
+		} else if (set.getFirstPlayerScore() < set.getSecondPlayerScore()) {
 			if ((user1.getFirstName().concat(" ").concat(user1.getLastName())).equals(match.getFirstName())) {
 				user2.setWonSets(user2.getWonSets() + 1);
 				user1.setLostSets(user1.getLostSets() + 1);
@@ -70,15 +70,15 @@ public class CokolwiekService {
 		}
 
 		if ((user1.getFirstName().concat(" ").concat(user1.getLastName())).equals(match.getFirstName())) {
-			user1.setWonSmallPoints(user1.getWonSmallPoints() + cokolwiek.getFirstPlayerScore());
-			user1.setLostSmallPoints(user1.getLostSmallPoints() + cokolwiek.getSecondPlayerScore());
-			user2.setWonSmallPoints(user2.getWonSmallPoints() + cokolwiek.getSecondPlayerScore());
-			user2.setLostSmallPoints(user2.getLostSmallPoints() + cokolwiek.getFirstPlayerScore());
+			user1.setWonSmallPoints(user1.getWonSmallPoints() + set.getFirstPlayerScore());
+			user1.setLostSmallPoints(user1.getLostSmallPoints() + set.getSecondPlayerScore());
+			user2.setWonSmallPoints(user2.getWonSmallPoints() + set.getSecondPlayerScore());
+			user2.setLostSmallPoints(user2.getLostSmallPoints() + set.getFirstPlayerScore());
 		} else if ((user2.getFirstName().concat(" ").concat(user2.getLastName())).equals(match.getFirstName())) {
-			user2.setWonSmallPoints(user2.getWonSmallPoints() + cokolwiek.getFirstPlayerScore());
-			user2.setLostSmallPoints(user2.getLostSmallPoints() + cokolwiek.getSecondPlayerScore());
-			user1.setWonSmallPoints(user1.getWonSmallPoints() + cokolwiek.getSecondPlayerScore());
-			user1.setLostSmallPoints(user1.getLostSmallPoints() + cokolwiek.getFirstPlayerScore());
+			user2.setWonSmallPoints(user2.getWonSmallPoints() + set.getFirstPlayerScore());
+			user2.setLostSmallPoints(user2.getLostSmallPoints() + set.getSecondPlayerScore());
+			user1.setWonSmallPoints(user1.getWonSmallPoints() + set.getSecondPlayerScore());
+			user1.setLostSmallPoints(user1.getLostSmallPoints() + set.getFirstPlayerScore());
 		}
 
 		userRepository.save(user1);

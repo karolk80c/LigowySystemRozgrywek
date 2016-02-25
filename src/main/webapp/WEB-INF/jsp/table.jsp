@@ -24,8 +24,7 @@
 				href='<spring:url value="/table.html?properties=lostSets&order=${order}" />'>P</a></th>
 			<th class="center"><a
 				href='<spring:url value="/table.html?properties=balanceSets&order=${order}" />'>B+-</a></th>
-			<th class="center"><a
-				href='<spring:url value="/table.html?properties=mainPoints&order=${order}" />'>Punkty</a></th>
+			<th class="center">Punkty</th>
 			<th class="center"><a
 				href='<spring:url value="/table.html?properties=wonSmallPoints&order=${order}" />'>W</a></th>
 			<th class="center"><a
@@ -59,7 +58,7 @@
 						<td class="center">${user.wonSets }</td>
 						<td class="center">${user.lostSets }</td>
 						<td class="center"><b>${user.balanceSets}</b></td>
-						<td class="center"><b>${user.mainPoints }</b></td>
+						<td class="center">XXX</td>
 						<td class="center">${user.wonSmallPoints}</td>
 						<td class="center">${user.lostSmallPoints }</td>
 						<td class="center"><b>${user.balanceSmallPoints }</b></td>

@@ -10,11 +10,11 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-import pl.karolkolarczyk.lgs.entity.Cokolwiek;
 import pl.karolkolarczyk.lgs.entity.Match;
+import pl.karolkolarczyk.lgs.entity.Set;
 import pl.karolkolarczyk.lgs.entity.User;
-import pl.karolkolarczyk.lgs.service.CokolwiekService;
 import pl.karolkolarczyk.lgs.service.MatchService;
+import pl.karolkolarczyk.lgs.service.SetService;
 import pl.karolkolarczyk.lgs.service.UserService;
 
 @Controller
@@ -22,7 +22,7 @@ import pl.karolkolarczyk.lgs.service.UserService;
 public class MatchController {
 
 	@Autowired
-	CokolwiekService cokolwiekService;
+	SetService setService;
 
 	@Autowired
 	MatchService matchService;
@@ -30,9 +30,9 @@ public class MatchController {
 	@Autowired
 	UserService userService;
 
-	@ModelAttribute("cokolwiek")
-	public Cokolwiek constructCokolwiek() {
-		return new Cokolwiek();
+	@ModelAttribute("set")
+	public Set constructSet() {
+		return new Set();
 	}
 
 	@RequestMapping("/{id}")
@@ -50,10 +50,10 @@ public class MatchController {
 	}
 
 	@RequestMapping(value = "/{id}", method = RequestMethod.POST)
-	public String addSet(Model model, @PathVariable Integer id, @ModelAttribute("cokolwiek") Cokolwiek cokolwiek,
+	public String addSet(Model model, @PathVariable Integer id, @ModelAttribute("set") Set set,
 			Principal principal) {
 		User user = userService.findOne(principal.getName());
-		cokolwiekService.save(cokolwiek, id, user);
+		setService.save(set, id, user);
 		return "redirect:/matches/" + id + ".html";
 	}
 

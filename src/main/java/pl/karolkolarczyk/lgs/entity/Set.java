@@ -8,7 +8,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
 @Entity(name="Runda")
-public class Cokolwiek {
+public class Set {
 
 	@Id
 	@GeneratedValue
@@ -17,19 +17,6 @@ public class Cokolwiek {
 	private int firstPlayerScore;
 	
 	private int secondPlayerScore;
-	
-
-	private String name;
-
-
-
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
 
 	@ManyToOne
 	@JoinColumn(name="match_id")

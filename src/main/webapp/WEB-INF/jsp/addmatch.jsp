@@ -12,18 +12,14 @@
 			<th>Set</th>
 			<th>${match.firstName}</th>
 			<th>${match.secondName}</th>
-			<c:if
-				test="${match.firstApproved eq false || match.secondApproved eq false }">
-				<th>Edycja</th>
-				<th>Usuniecie</th>
-			</c:if>
+			<th>Edycja</th>
 		</tr>
 	</thead>
 	<tbody>
 		<%
 			int i = 1;
 		%>
-		<c:forEach items="${match.sets}" var="set">
+		<c:forEach items="${match.cokolwieks}" var="cokolwiek">
 			<tr>
 				<td class="center">
 					<%
@@ -31,15 +27,10 @@
 							i++;
 					%>
 				</td>
-				<td>${set.firstPlayerScore }</td>
-				<td>${set.secondPlayerScore }</td>
-				<c:if
-					test="${match.firstApproved eq false || match.secondApproved eq false }">
-					<td><a class="btn btn-primary btn"
-						href='<spring:url value="/matches/${match.id}/edit.html" />'>Edytuj</a></td>
-					<td><a class="btn btn-primary btn"
-						href='<spring:url value="/matches/${match.id}/delete.html" />'>Usun</a></td>
-				</c:if>
+				<td>${cokolwiek.firstPlayerScore }</td>
+				<td>${cokolwiek.secondPlayerScore }</td>
+				<td><a class="btn btn-primary btn"
+					href='<spring:url value="/matches/${match.id}/edit.html" />'>Edytuj</a></td>
 			</tr>
 		</c:forEach>
 	</tbody>
@@ -56,7 +47,7 @@
 <a class="btn btn-info btn-lg"
 	href='<spring:url value="/matches.html" />'>Wroc</a>
 
-<form:form commandName="set" cssClass="form-horizontal">
+<form:form commandName="cokolwiek" cssClass="form-horizontal">
 	<!-- Modal -->
 	<div class="modal fade" id="myModal" tabindex="-1" role="dialog"
 		aria-labelledby="myModalLabel">
@@ -67,8 +58,7 @@
 						aria-label="Close">
 						<span aria-hidden="true">&times;</span>
 					</button>
-					<h4 class="modal-title" id="myModalLabel">Dodawanie wyniku
-						setu</h4>
+					<h4 class="modal-title" id="myModalLabel">Aktualizacja meczu</h4>
 				</div>
 				<div class="modal-body">
 					<div class="form-group">
