@@ -11,10 +11,10 @@
 	<http use-expressions="true">
 		<form-login login-page="/login.html" />
 		<logout logout-url="/logout.html" />
-
-		<intercept-url pattern="/users**" access="hasRole('ROLE_ADMIN')" />
-		<intercept-url pattern="/users/**" access="hasRole('ROLE_ADMIN')" />
-		<intercept-url pattern="/timetable/**" access="isAuthenticated()" />
+		<intercept-url pattern="/users/**" access="isAuthenticated()" />
+		<intercept-url pattern="/users/remove/**" access="hasRole('ROLE_ADMIN')" />
+		<intercept-url pattern="/users/update/**" access="hasRole('ROLE_ADMIN')" />
+			<intercept-url pattern="/draw**" access="hasRole('ROLE_ADMIN')" />
 	</http>
 
 	<authentication-manager>

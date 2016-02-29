@@ -23,7 +23,7 @@ public class DrawController {
 	public String doDraw(Model model) {
 		drawService.draw();
 
-		return "draw";
+		return "redirect:/timetable.html";
 	}
 
 

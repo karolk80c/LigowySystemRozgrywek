@@ -13,18 +13,29 @@ public class EmailService {
 
 	@Autowired
 	UserRepository userRepository;
+	private String siteUrl = "http://localhost:8080/league-game-system/";
 
 	public void sendEmail(String login, String recipient, String topic, String content) {
 		User sender = userRepository.findOne(login);
 		ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("Spring-mail.xml");
 		Mailer mailer = (Mailer) context.getBean("Mailer");
 		content = content
-				.concat("\n\n ----------------------------------------------------- \n\n Wiadomosc wys³ana przez ligowy system rozgrywek ping-ponga")
-				.concat("\n Jeœli chcesz odpowiedziec na wiadomosc mozesz skontaktowac sie z nadawca: "
-						+ "\n Dane kontaktowe: \n Imie nazwisko: " + sender.getFirstName() + " " + sender.getLastName()
-						+ "\nAdres email: " + sender.getEmailAdress() + "\n Numer kontaktowy: "
-						+ sender.getContactNumber());
+				.concat("\n\n ----------------------------------------------------- \n\nWiadomosc wys³ana przez ligowy system rozgrywek ping-ponga.")
+				.concat("\nJeœli chcesz odpowiedziec na wiadomosc mozesz skontaktowac sie z nadawca: "
+						+ "\nImie nazwisko: " + sender.getFirstName() + " " + sender.getLastName() + "\nAdres email: "
+						+ sender.getEmailAdress() + "\nNumer kontaktowy: " + sender.getContactNumber() + "\n")
+				.concat(siteUrl);
 		mailer.sendMail(sender.getEmailAdress(), recipient, topic, content);
+		context.close();
+	}
+
+	public void sendNotification(String login, String recipient, String topic, String content) {
+		ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("Spring-mail.xml");
+		Mailer mailer = (Mailer) context.getBean("Mailer");
+		content = content
+				.concat("\n\n ----------------------------------------------------- \n\nWiadomosc wygenerowana automatycznie przez ligowy system rozgrywek ping-ponga.\n")
+				.concat(siteUrl);
+		mailer.sendMail(login, recipient, topic, content);
 		context.close();
 	}
 }

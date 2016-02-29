@@ -21,13 +21,11 @@ public class TimetableController {
 	@Autowired
 	MatchService matchService;
 
-
 	@RequestMapping
 	public String showTimetable(Model model) {
 		List<Round> rounds = roundService.findAll();
 		model.addAttribute("round", rounds);
 		return "timetable";
 	}
-
 
 }

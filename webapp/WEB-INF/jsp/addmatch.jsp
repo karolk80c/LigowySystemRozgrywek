@@ -1,5 +1,8 @@
 <%@ include file="../layout/taglib.jsp"%>
 
+<div class="alert alert-info">W przypadku jakichkolwiek problemow
+	przejdz do zakladki kontakt i skontaktuj sie z administratorem serwisu.</div>
+
 <h1>
 	<b>Szczegoly meczu</b> ${match.firstName} vs ${match.secondName} <br>
 	<br>
@@ -13,8 +16,7 @@
 			<th>${match.firstName}</th>
 			<th>${match.secondName}</th>
 			<c:if
-				test="${match.firstApproved eq false || match.secondApproved eq false }">
-				<th>Edycja</th>
+				test="${match.firstApproved eq false && match.secondApproved eq false }">
 				<th>Usuniecie</th>
 			</c:if>
 		</tr>
@@ -34,11 +36,9 @@
 				<td>${set.firstPlayerScore }</td>
 				<td>${set.secondPlayerScore }</td>
 				<c:if
-					test="${match.firstApproved eq false || match.secondApproved eq false }">
-					<td><a class="btn btn-primary btn"
-						href='<spring:url value="/matches/${match.id}/edit.html" />'>Edytuj</a></td>
-					<td><a class="btn btn-primary btn"
-						href='<spring:url value="/matches/${match.id}/delete.html" />'>Usun</a></td>
+					test="${match.firstApproved eq false && match.secondApproved eq false }">
+					<td><a class="btn btn-danger btn"
+						href='<spring:url value="/matches/${match.id}/deleteSet/${set.id}.html" />'>Usun</a></td>
 				</c:if>
 			</tr>
 		</c:forEach>
@@ -51,10 +51,18 @@
 <br>
 <!-- Trigger the modal with a button -->
 
-<button class="btn btn-info btn-lg" data-toggle="modal"
-	data-target="#myModal">Dodaj Set</button>
+
+<c:if
+	test="${match.firstApproved eq false && match.secondApproved eq false }">
+	<button class="btn btn-primary btn-lg" data-toggle="modal"
+		data-target="#myModal">Dodaj Set</button>
+	<td><a class="btn btn-lg btn-success"
+		href='<spring:url value="/matches/${match.id}/approve.html" />'>Akceptuj</a></td>
+</c:if>
+
 <a class="btn btn-info btn-lg"
 	href='<spring:url value="/matches.html" />'>Wroc</a>
+
 
 <form:form commandName="set" cssClass="form-horizontal">
 	<!-- Modal -->

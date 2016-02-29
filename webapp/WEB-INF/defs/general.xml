@@ -78,4 +78,14 @@
 		<put-attribute name="body" value="/WEB-INF/jsp/email.jsp" />
 		<put-attribute name="current" value="email" />
 	</definition>
+	<definition name="email-to" extends="common">
+		<put-attribute name="title" value="Wiadomosc" />
+		<put-attribute name="body" value="/WEB-INF/jsp/email-to.jsp" />
+		<put-attribute name="current" value="email" />
+	</definition>
+	<definition name="error" extends="common">
+		<put-attribute name="title" value="Blad" />
+		<put-attribute name="body" value="/WEB-INF/jsp/error.jsp" />
+		<put-attribute name="current" value="error" />
+	</definition>
 </tiles-definitions>

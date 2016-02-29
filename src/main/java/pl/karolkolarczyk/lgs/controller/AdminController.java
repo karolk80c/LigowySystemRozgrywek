@@ -2,7 +2,6 @@ package pl.karolkolarczyk.lgs.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -24,17 +23,12 @@ public class AdminController {
 		return "redirect:/users.html";
 	}
 
+
 	@RequestMapping("/remove/{login}")
 	public String removeUser(@PathVariable String login) {
 		userService.delete(login);
 		return "redirect:/users.html";
 	}
-	
-	@RequestMapping("/{login}")
-	public String detail(Model model, @PathVariable String login) {
-		User user = userService.findOne(login);
-		model.addAttribute("user", user);
-		return "user-detail";
-	}
+
 
 }

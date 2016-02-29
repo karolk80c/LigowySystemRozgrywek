@@ -3,32 +3,22 @@
 	<div class="alert alert-success">Poprawnie wyslano wiadomosc</div>
 </c:if>
 
-<h1 class="center">Wyslij wiadomosc</h1>
+<h1 class="center">Wiadomosc do ${user.firstName} ${user.lastName}</h1>
 <br>
-
 <form:form commandName="email" cssClass="form-horizontal">
-	<div class="form-group">
-		<label for="recipient" class="col-sm-2 control-label">Do</label>
-		<div class="col-sm-10">
-			<form:select cssClass="form-control" path="recipient" multiple="false" size="1">
-				<ul>
-					<li><form:options items="${usersList}" itemValue="emailAdress"
-							itemLabel="fullName" /></li>
-				</ul>
-			</form:select>
-		</div>
-	</div>
+
+	<form:hidden path="recipient" value="${user.emailAdress}" />
 	<div class="form-group">
 		<label for="topic" class="col-sm-2 control-label">Temat</label>
 		<div class="col-sm-10">
 			<input type="text" class="form-control" id="topic" name="topic"
-				placeholder="Tutaj wpisz temat wiadomosci" value="">
+				value="">
 		</div>
 	</div>
 	<div class="form-group">
 		<label for="content" class="col-sm-2 control-label">Wiadomosc</label>
 		<div class="col-sm-10">
-			<textarea class="form-control" rows="4" name="content" placeholder="Tutaj wpisz tresc wiadomosci"></textarea>
+			<textarea class="form-control" rows="4" name="content"></textarea>
 		</div>
 	</div>
 	<div class="form-group">

@@ -7,5 +7,4 @@ import pl.karolkolarczyk.lgs.entity.Season;
 
 public interface SeasonRepository extends JpaRepository<Season, Integer> {
 
-
 }

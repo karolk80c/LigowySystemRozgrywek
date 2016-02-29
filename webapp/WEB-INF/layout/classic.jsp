@@ -89,8 +89,10 @@ tr th {
 								<li class="${current == 'user-matches' ? 'active' : ' ' }"><a
 									href='<spring:url value="/matches.html" />'>Moje mecze</a></li>
 							</security:authorize>
-							<li class="${current == 'email' ? 'active' : ' ' }"><a
-								href='<spring:url value="/email.html" />'>Wiadomosci</a></li>
+							<security:authorize access="isAuthenticated()">
+								<li class="${current == 'email' ? 'active' : ' ' }"><a
+									href='<spring:url value="/email.html" />'>Kontakt</a></li>
+							</security:authorize>
 							<security:authorize access="! isAuthenticated()">
 								<li class="${current == 'login' ? 'active' : ' ' }"><a
 									href='<spring:url value="/login.html" />'>Zaloguj</a></li>

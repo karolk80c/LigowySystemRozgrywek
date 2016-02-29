@@ -17,51 +17,13 @@ public class Season {
 	@OneToMany(mappedBy = "season")
 	private List<Round> rounds;
 
-	int number;
+	String number;
 
-	public int getNumber() {
+	public String getNumber() {
 		return number;
 	}
 
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + id;
-		result = prime * result + number;
-		result = prime * result + ((rounds == null) ? 0 : rounds.hashCode());
-		return result;
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj) {
-			return true;
-		}
-		if (obj == null) {
-			return false;
-		}
-		if (getClass() != obj.getClass()) {
-			return false;
-		}
-		Season other = (Season) obj;
-		if (id != other.id) {
-			return false;
-		}
-		if (number != other.number) {
-			return false;
-		}
-		if (rounds == null) {
-			if (other.rounds != null) {
-				return false;
-			}
-		} else if (!rounds.equals(other.rounds)) {
-			return false;
-		}
-		return true;
-	}
-
-	public void setNumber(int number) {
+	public void setNumber(String number) {
 		this.number = number;
 	}
 

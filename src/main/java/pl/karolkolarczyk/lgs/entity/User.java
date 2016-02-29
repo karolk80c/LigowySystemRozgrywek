@@ -3,37 +3,46 @@ package pl.karolkolarczyk.lgs.entity;
 import java.util.Date;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
-import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.validation.constraints.Size;
 
-@Entity(name="Uzytkownik")
+import org.hibernate.validator.constraints.Email;
+import org.hibernate.validator.constraints.NotBlank;
+
+@Entity(name = "Uzytkownik")
 public class User {
 
 	@Id
 	@Column(nullable = false)
+	@Size(min = 3, message = "Login powinien miec conajmniej 3 znaki!")
 	private String login;
 
 	@Column(nullable = false)
+	@Size(min = 3, message = "Haslo powinno miec conajmniej 3 znaki!")
 	private String password;
 
 	@Column(nullable = false)
+	@NotBlank(message = "To pole nie mo¿e byc puste.")
 	private String firstName;
 
 	@Column(nullable = false)
+	@NotBlank(message = "To pole nie mo¿e byc puste.")
 	private String lastName;
 
-	@Column(nullable = false, unique = true)
+	@Column(nullable = false)
+	@Email(message = "Nieprawid³owy adres email")
+	@NotBlank(message = "To pole nie mo¿e byc puste.")
 	private String emailAdress;
 
-	@Column(nullable = false, unique = true)
 	private String contactNumber;
 
 	@Temporal(TemporalType.TIMESTAMP)
@@ -42,10 +51,10 @@ public class User {
 	@ManyToMany(fetch = FetchType.EAGER)
 	private List<Role> roles;
 
-	@ManyToMany(fetch = FetchType.EAGER)
+	@ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	@JoinTable(name = "uzytkownik_mecz")
 	private List<Match> matches;
-	
+
 	private boolean enabled;
 
 	private int wonSmallPoints;
@@ -66,19 +75,24 @@ public class User {
 
 	private int balanceSmallPoints;
 
-	private int mainPoints;
+	private int footballPoints;
 
-	public int getMainPoints() {
-		return mainPoints;
+	private int volleyballPoints;
+
+	public int getVolleyballPoints() {
+		return volleyballPoints;
 	}
 
-	public void setMainPoints(int mainPoints) {
-		this.mainPoints = mainPoints;
+	public void setVolleyballPoints(int volleyballPoints) {
+		this.volleyballPoints = volleyballPoints;
 	}
 
-	@PrePersist
-	public void triggers() {
-		createDate = new Date();
+	public int getFootballPoints() {
+		return footballPoints;
+	}
+
+	public void setFootballPoints(int footballPoints) {
+		this.footballPoints = footballPoints;
 	}
 
 	@PreUpdate
@@ -86,7 +100,7 @@ public class User {
 		this.setBalanceSmallPoints(wonSmallPoints - lostSmallPoints);
 		this.setBalanceMatches(wonMatches - lostMatches);
 		this.setBalanceSets(wonSets - lostSets);
-		this.setMainPoints(wonMatches * 2);
+		this.setFootballPoints(this.getWonMatches() * 3);
 	}
 
 	public String getLogin() {
@@ -115,6 +129,10 @@ public class User {
 
 	public String getLastName() {
 		return lastName;
+	}
+
+	public String getFullName() {
+		return firstName.concat(" ").concat(lastName);
 	}
 
 	public void setLastName(String lastName) {
@@ -217,7 +235,6 @@ public class User {
 		this.lostMatches = lostMatches;
 	}
 
-
 	public int getBalanceMatches() {
 		return balanceMatches;
 	}
@@ -234,16 +251,17 @@ public class User {
 		this.balanceMatches = balanceMatches;
 	}
 
-
-
 	public void setBalanceSets(int balanceSets) {
 		this.balanceSets = balanceSets;
 	}
-
 
 	public void setBalanceSmallPoints(int balanceSmallPoints) {
 		this.balanceSmallPoints = balanceSmallPoints;
 	}
 
+	@Override
+	public String toString() {
+		return "User [firstName=" + firstName + ", lastName=" + lastName + "]";
+	}
 
 }

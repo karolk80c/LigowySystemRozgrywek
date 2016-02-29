@@ -1,8 +1,10 @@
 package pl.karolkolarczyk.lgs.service;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -33,6 +35,8 @@ public class DrawService {
 	@Autowired
 	private RoundRepository roundRepository;
 
+	private static final Logger logger = Logger.getLogger(DrawService.class);
+
 	public void draw() {
 		Season season = new Season();
 		List<User> users = userRepository.findAll();
@@ -43,35 +47,35 @@ public class DrawService {
 		}
 
 		int userListSize = userListLogin.size();
-		int numDays = (userListSize - 1);
+		int numRounds = (userListSize - 1);
 		int halfSize = userListSize / 2;
 
-		System.out.println("\nIlosc uczestników: " + userListSize);
+		logger.info("\nIlosc uczestników: " + userListSize);
 		for (String string : userListLogin) {
-			System.out.println(string);
+			logger.info(string);
 		}
-		System.out.println("\nIlosc kolejek: " + numRounds(userListSize));
-		System.out.println("Ilosc spotkan: " + iloscSpotkan + "\n");
+		logger.info("\nIlosc kolejek: " + numRounds(userListSize));
+		logger.info("Ilosc spotkan: " + iloscSpotkan + "\n");
 
-		List<String> teams = new ArrayList<>();
+		List<String> usersInMatches = new ArrayList<>();
 		if (userListLogin.size() > 0) {
-			teams.addAll(userListLogin);
+			usersInMatches.addAll(userListLogin);
 
-			teams.remove(0);
+			usersInMatches.remove(0);
 
-			int teamsSize = teams.size();
+			int usersInMatchesSize = usersInMatches.size();
 			List<Round> rounds = new ArrayList<>();
 
-			for (int day = 0; day < numDays; day++) {
-				System.out.println("Kolejka " + (day + 1));
+			for (int roundNr = 0; roundNr < numRounds; roundNr++) {
+				logger.info("Kolejka " + (roundNr + 1));
 				Round round = new Round();
 				List<Match> matches = new ArrayList<>();
-				round.setNumber((day + 1));
+				round.setNumber((roundNr + 1));
 
-				int teamIdx = day % teamsSize;
-				if (!("null".equals(teams.get(teamIdx))) && !("null".equals(userListLogin.get(0)))) {
-					System.out.println(teams.get(teamIdx) + " vs " + userListLogin.get(0));
-					User user1 = userRepository.findOne(teams.get(teamIdx));
+				int usersID = roundNr % usersInMatchesSize;
+				if (!("null".equals(usersInMatches.get(usersID))) && !("null".equals(userListLogin.get(0)))) {
+					logger.info(usersInMatches.get(usersID) + " vs " + userListLogin.get(0));
+					User user1 = userRepository.findOne(usersInMatches.get(usersID));
 					User user2 = userRepository.findOne(userListLogin.get(0));
 					List<User> usersList = new ArrayList<>();
 					usersList.add(user1);
@@ -94,13 +98,14 @@ public class DrawService {
 
 				}
 
-				for (int idx = 1; idx < halfSize; idx++) {
-					int firstTeam = (day + idx) % teamsSize;
-					int secondTeam = (day + teamsSize - idx) % teamsSize;
-					if (!("null".equals(teams.get(firstTeam))) && !("null".equals(teams.get(secondTeam)))) {
-						System.out.println(teams.get(firstTeam) + " vs " + teams.get(secondTeam));
-						User user1 = userRepository.findOne(teams.get(firstTeam));
-						User user2 = userRepository.findOne(teams.get(secondTeam));
+				for (int usersId = 1; usersId < halfSize; usersId++) {
+					int firstTeam = (roundNr + usersId) % usersInMatchesSize;
+					int secondTeam = (roundNr + usersInMatchesSize - usersId) % usersInMatchesSize;
+					if (!("null".equals(usersInMatches.get(firstTeam)))
+							&& !("null".equals(usersInMatches.get(secondTeam)))) {
+						logger.info(usersInMatches.get(firstTeam) + " vs " + usersInMatches.get(secondTeam));
+						User user1 = userRepository.findOne(usersInMatches.get(firstTeam));
+						User user2 = userRepository.findOne(usersInMatches.get(secondTeam));
 						List<User> usersList = new ArrayList<>();
 						usersList.add(user1);
 						usersList.add(user2);
@@ -122,15 +127,15 @@ public class DrawService {
 
 					}
 				}
-				System.out.println();
 				round.setMatches(matches);
 				round.setSeason(season);
 				roundRepository.save(round);
 				rounds.add(round);
 
 			}
-
-			season.setRounds(rounds);
+			String seasonNumber = Calendar.getInstance().get(Calendar.YEAR) + "/"
+					+ Calendar.getInstance().get(Calendar.MONTH);
+			season.setNumber(seasonNumber);
 			seasonRepository.save(season);
 		}
 

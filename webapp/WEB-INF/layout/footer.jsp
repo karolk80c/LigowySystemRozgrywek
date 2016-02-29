@@ -2,5 +2,5 @@
     pageEncoding="UTF-8"%>
 
 
-    &copy; Karol Kolarczyk
+    &copy; Uniwersytet Jagielloński
     <br>
