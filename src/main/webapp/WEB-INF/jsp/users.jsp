@@ -5,8 +5,9 @@
 	<thead>
 		<tr>
 			<th>Nazwa_Uzytkownika</th>
-			<th class="center">Zaakceptuj</th>
-			<th class="center">Usun</th>
+			<th>Zaakceptuj</th>
+			<th>Usun</th>
+			<th>Kontakt</th>
 		</tr>
 	</thead>
 	<tbody>
@@ -19,17 +20,19 @@
 								${user.login }</a></td>
 						<td class="center"><c:choose>
 								<c:when test="${role.name == 'ROLE_AWAIT' }">
-									<a href=" <spring:url value="/users/update/${user.login}.html" />"
+									<a
+										href=" <spring:url value="/users/update/${user.login}.html" />"
 										class="btn btn-success"> Zaakceptuj </a>
 								</c:when>
 								<c:otherwise>
 								Aktywny
 							</c:otherwise>
 							</c:choose></td>
-
 						<td class="center"><a
 							href=" <spring:url value="/users/remove/${user.login}.html" />"
 							class="btn btn-danger">Usun</a></td>
+						<td><a class="btn btn-info"
+							href='<spring:url value="email/${user.login }.html" />'>Wyslij wiadomosc</a></td>
 					</tr>
 				</c:if>
 			</c:forEach>

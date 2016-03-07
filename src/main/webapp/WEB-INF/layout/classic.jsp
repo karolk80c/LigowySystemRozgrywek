@@ -1,5 +1,3 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8"%>
 <%@ include file="../layout/taglib.jsp"%>
 
 
@@ -62,41 +60,59 @@ tr th {
 								class="icon-bar"></span> <span class="icon-bar"></span> <span
 								class="icon-bar"></span>
 						</button>
-						<a class="navbar-brand" href="<spring:url value="/" />  ">System
-							Rozgrywek Ligowych</a>
+						<a class="navbar-brand" href="<spring:url value="/" />  "><spring:message
+								code="nav.title" /></a>
 					</div>
 					<div id="navbar" class="navbar-collapse collapse">
 						<ul class="nav navbar-nav">
 							<li class="${current == 'index' ? 'active' : ' ' }"><a
-								href='<spring:url value="/" />'>Strona Główna</a></li>
+								href='<spring:url value="/" />'><spring:message
+										code="nav.homePage" /></a></li>
+							<li class="${current == 'news' ? 'active' : ' ' }"><a
+								href='<spring:url value="/news.html" />'><spring:message
+										code="nav.news" /></a></li>
 							<security:authorize access="hasRole('ROLE_ADMIN')">
 								<li class="${current == 'users' ? 'active' : ' ' }"><a
-									href='<spring:url value="/users.html" />'>Zawodnicy</a></li>
+									href='<spring:url value="/users.html" />'><spring:message
+											code="nav.users" /></a></li>
 							</security:authorize>
 							<security:authorize access="hasRole('ROLE_ADMIN')">
 								<li class="${current == 'draw' ? 'active' : ' ' }"><a
-									href='<spring:url value="/draw.html" />'>Losowanie</a></li>
+									href='<spring:url value="/draw.html" />'><spring:message
+											code="nav.draw" /></a></li>
 							</security:authorize>
 							<li class="${current == 'table' ? 'active' : ' ' }"><a
-								href='<spring:url value="/table.html" />'>Tabela</a></li>
+								href='<spring:url value="/table.html" />'><spring:message
+										code="nav.table" /></a></li>
 							<li class="${current == 'timetable' ? 'active' : ' ' }"><a
-								href='<spring:url value="/timetable.html" />'>Terminarz</a></li>
+								href='<spring:url value="/timetable.html" />'><spring:message
+										code="nav.timetable" /></a></li>
 							<security:authorize access="hasRole('ROLE_USER')">
 								<li class="${current == 'detail' ? 'active' : ' ' }"><a
-									href='<spring:url value="/account.html" />'>Moje konto</a></li>
+									href='<spring:url value="/account.html" />'><spring:message
+											code="nav.account" /></a></li>
 							</security:authorize>
 							<security:authorize access="hasRole('ROLE_USER')">
 								<li class="${current == 'user-matches' ? 'active' : ' ' }"><a
-									href='<spring:url value="/matches.html" />'>Moje mecze</a></li>
+									href='<spring:url value="/matches.html" />'><spring:message
+											code="nav.matches" /></a></li>
+							</security:authorize>
+							<security:authorize access="isAuthenticated()">
+								<li class="${current == 'email' ? 'active' : ' ' }"><a
+									href='<spring:url value="/email.html" />'><spring:message
+											code="nav.contact" /></a></li>
 							</security:authorize>
 							<security:authorize access="! isAuthenticated()">
 								<li class="${current == 'login' ? 'active' : ' ' }"><a
-									href='<spring:url value="/login.html" />'>Zaloguj</a></li>
+									href='<spring:url value="/login.html" />'><spring:message
+											code="nav.login" /></a></li>
 								<li class="${current == 'user-register' ? 'active' : ' ' }"><a
-									href='<spring:url value="/register.html" />'>Zarejestruj</a></li>
+									href='<spring:url value="/register.html" />'><spring:message
+											code="nav.register" /></a></li>
 							</security:authorize>
 							<security:authorize access="isAuthenticated()">
-								<li><a href='<spring:url value="/logout.html" />'>Wyloguj</a></li>
+								<li><a href='<spring:url value="/logout.html" />'><spring:message
+											code="nav.logout" /></a></li>
 							</security:authorize>
 						</ul>
 					</div>

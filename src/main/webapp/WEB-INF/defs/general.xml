@@ -73,13 +73,29 @@
 		<put-attribute name="body" value="/WEB-INF/jsp/user-matches.jsp" />
 		<put-attribute name="current" value="user-matches" />
 	</definition>
-
-
-
-
-
-
-
-
-
+	<definition name="email" extends="common">
+		<put-attribute name="title" value="Wiadomosc" />
+		<put-attribute name="body" value="/WEB-INF/jsp/email.jsp" />
+		<put-attribute name="current" value="email" />
+	</definition>
+	<definition name="email-to" extends="common">
+		<put-attribute name="title" value="Wiadomosc" />
+		<put-attribute name="body" value="/WEB-INF/jsp/email-to.jsp" />
+		<put-attribute name="current" value="email" />
+	</definition>
+	<definition name="error" extends="common">
+		<put-attribute name="title" value="Blad" />
+		<put-attribute name="body" value="/WEB-INF/jsp/error.jsp" />
+		<put-attribute name="current" value="error" />
+	</definition>
+	<definition name="news" extends="common">
+		<put-attribute name="title" value="Aktualnosci" />
+		<put-attribute name="body" value="/WEB-INF/jsp/news.jsp" />
+		<put-attribute name="current" value="news" />
+	</definition>
+	<definition name="dateAndPlace" extends="common">
+		<put-attribute name="title" value="Aktualnosci" />
+		<put-attribute name="body" value="/WEB-INF/jsp/dateAndPlace.jsp" />
+		<put-attribute name="current" value="dateAndPlace" />
+	</definition>
 </tiles-definitions>

@@ -35,6 +35,9 @@ public class DrawService {
 	@Autowired
 	private RoundRepository roundRepository;
 
+	@Autowired
+	private EmailService emailService;
+
 	private static final Logger logger = Logger.getLogger(DrawService.class);
 
 	public void draw() {
@@ -137,8 +140,9 @@ public class DrawService {
 					+ Calendar.getInstance().get(Calendar.MONTH);
 			season.setNumber(seasonNumber);
 			seasonRepository.save(season);
+			emailService.sendNotificationToAllPlayers("Wystartowa³ sezon ping-pongowy ".concat(seasonNumber),
+					"Wystartowa³ sezon ping-ponga, od tej chwili mo¿esz ustalac miejsce i date spotkan oraz aktualizowac wyniki swoich rozgrywek ");
 		}
-
 	}
 
 	public List<String> generateLoginList(List<User> users) {

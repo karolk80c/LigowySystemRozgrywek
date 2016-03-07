@@ -1,5 +1,8 @@
 <%@ include file="../layout/taglib.jsp"%>
 
+<div class="alert alert-info">W przypadku jakichkolwiek problemow
+	przejdz do zakladki kontakt i skontaktuj sie z administratorem serwisu.</div>
+
 <h1>
 	<b>Szczegoly meczu</b> ${match.firstName} vs ${match.secondName} <br>
 	<br>
@@ -12,14 +15,17 @@
 			<th>Set</th>
 			<th>${match.firstName}</th>
 			<th>${match.secondName}</th>
-			<th>Edycja</th>
+			<c:if
+				test="${match.firstApproved eq false && match.secondApproved eq false }">
+				<th>Usuniecie</th>
+			</c:if>
 		</tr>
 	</thead>
 	<tbody>
 		<%
 			int i = 1;
 		%>
-		<c:forEach items="${match.cokolwieks}" var="cokolwiek">
+		<c:forEach items="${match.sets}" var="set">
 			<tr>
 				<td class="center">
 					<%
@@ -27,10 +33,13 @@
 							i++;
 					%>
 				</td>
-				<td>${cokolwiek.firstPlayerScore }</td>
-				<td>${cokolwiek.secondPlayerScore }</td>
-				<td><a class="btn btn-primary btn"
-					href='<spring:url value="/matches/${match.id}/edit.html" />'>Edytuj</a></td>
+				<td>${set.firstPlayerScore }</td>
+				<td>${set.secondPlayerScore }</td>
+				<c:if
+					test="${match.firstApproved eq false && match.secondApproved eq false }">
+					<td><a class="btn btn-danger btn"
+						href='<spring:url value="/matches/${match.id}/deleteSet/${set.id}.html" />'>Usun</a></td>
+				</c:if>
 			</tr>
 		</c:forEach>
 	</tbody>
@@ -42,12 +51,20 @@
 <br>
 <!-- Trigger the modal with a button -->
 
-<button class="btn btn-info btn-lg" data-toggle="modal"
-	data-target="#myModal">Dodaj Set</button>
+
+<c:if
+	test="${match.firstApproved eq false && match.secondApproved eq false }">
+	<button class="btn btn-primary btn-lg" data-toggle="modal"
+		data-target="#myModal">Dodaj Set</button>
+	<td><a class="btn btn-lg btn-success"
+		href='<spring:url value="/matches/${match.id}/approve.html" />'>Akceptuj</a></td>
+</c:if>
+
 <a class="btn btn-info btn-lg"
 	href='<spring:url value="/matches.html" />'>Wroc</a>
 
-<form:form commandName="cokolwiek" cssClass="form-horizontal">
+
+<form:form commandName="set" cssClass="form-horizontal">
 	<!-- Modal -->
 	<div class="modal fade" id="myModal" tabindex="-1" role="dialog"
 		aria-labelledby="myModalLabel">
@@ -58,7 +75,8 @@
 						aria-label="Close">
 						<span aria-hidden="true">&times;</span>
 					</button>
-					<h4 class="modal-title" id="myModalLabel">Aktualizacja meczu</h4>
+					<h4 class="modal-title" id="myModalLabel">Dodawanie wyniku
+						setu</h4>
 				</div>
 				<div class="modal-body">
 					<div class="form-group">

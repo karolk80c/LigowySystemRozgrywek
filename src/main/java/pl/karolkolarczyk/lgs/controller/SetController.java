@@ -60,4 +60,10 @@ public class SetController {
 		return "redirect:/matches/" + id + ".html";
 	}
 
+	@RequestMapping("/{id}/dateAndPlace")
+	public String addDataAndPlace(Model model, @PathVariable Integer id) {
+		model.addAttribute("match", matchService.findOne(id));
+		return "dateAndPlace";
+	}
+
 }

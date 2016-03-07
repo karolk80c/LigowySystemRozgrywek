@@ -2,7 +2,7 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>pl.karolkolarczyk.lgs</groupId>
-	<artifactId>league-game-system</artifactId>
+	<artifactId>ping-pong</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>war</packaging>
 
@@ -27,9 +27,9 @@
 
 	<!-- Shared version number properties -->
 	<properties>
-		<org.springframework.version>4.0.2.RELEASE</org.springframework.version>
+		<org.springframework.version>4.0.4.RELEASE</org.springframework.version>
 		<apache.tiles>3.0.5</apache.tiles>
-		<security.version>3.2.3.RELEASE</security.version>
+		<security.version>3.2.9.RELEASE</security.version>
 	</properties>
 
 	<dependencies>

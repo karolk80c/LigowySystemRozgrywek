@@ -1,5 +1,7 @@
 package pl.karolkolarczyk.lgs.service;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.stereotype.Service;
@@ -13,7 +15,11 @@ public class EmailService {
 
 	@Autowired
 	UserRepository userRepository;
-	private String siteUrl = "http://localhost:8080/league-game-system/";
+
+	@Autowired
+	UserService userService;
+
+	private String siteUrl = "http://149.156.64.22:8081/ping-pong/";
 
 	public void sendEmail(String login, String recipient, String topic, String content) {
 		User sender = userRepository.findOne(login);
@@ -38,4 +44,12 @@ public class EmailService {
 		mailer.sendMail(login, recipient, topic, content);
 		context.close();
 	}
+
+	public void sendNotificationToAllPlayers(String topic, String content) {
+		List<User> users = userService.findAllWithoutAdmins();
+		for (User user : users) {
+			sendNotification("leaguegamesystem@gmail.com", user.getEmailAdress(), topic, content);
+		}
+	}
+
 }

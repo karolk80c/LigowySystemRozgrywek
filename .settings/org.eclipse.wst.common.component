@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?><project-modules id="moduleCoreId" project-version="1.5.0">
-    <wb-module deploy-name="league-game-system">
+    <wb-module deploy-name="ping-pong">
         <wb-resource deploy-path="/WEB-INF/web.xml" source-path="/webapp/WEB-INF/web.xml"/>
         <wb-resource deploy-path="/" source-path="/target/m2e-wtp/web-resources"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/main/java"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/main/resources"/>
         <wb-resource deploy-path="/" source-path="/webapp"/>
-        <wb-resource deploy-path="/" source-path="/src/main/webapp" tag="defaultRootSource"/>
-        <property name="context-root" value="league-game-system"/>
-        <property name="java-output-path" value="/league-game-system/target/classes"/>
+        <wb-resource deploy-path="/webapp" source-path="/src/main/webapp" tag="defaultRootSource"/>
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/webapp"/>
+        <property name="java-output-path" value="/ping-pong/target/classes"/>
+        <property name="context-root" value="ping-pong"/>
     </wb-module>
 </project-modules>

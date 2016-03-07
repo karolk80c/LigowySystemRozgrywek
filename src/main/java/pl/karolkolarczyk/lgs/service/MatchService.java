@@ -1,6 +1,7 @@
 package pl.karolkolarczyk.lgs.service;
 
-import java.util.Date;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import javax.transaction.Transactional;
@@ -31,6 +32,9 @@ public class MatchService {
 
 	@Autowired
 	EmailService emailService;
+
+	@Autowired
+	UserService userService;
 
 	public List<Match> findAll() {
 		return matchRepository.findAll();
@@ -74,7 +78,6 @@ public class MatchService {
 							"Twoj przeciwnik wlasnie zaaktualizowal wynik meczu, sprawdz szczegoly spotkania i jesli wszystko sie zgadza zaakceptuj wynik.");
 				}
 			} else {
-				match.setMatchDate(new Date());
 				if (user.getLogin().equals(user1.getLogin())) {
 					if (match.getFirstPoints() == 3 && (match.getSecondPoints() == 1 || match.getSecondPoints() == 0)) {
 						user1.setVolleyballPoints(user1.getVolleyballPoints() + 3);
@@ -88,7 +91,9 @@ public class MatchService {
 						user2.setVolleyballPoints(user2.getVolleyballPoints() + 2);
 						user1.setVolleyballPoints(user1.getVolleyballPoints() + 1);
 					} else {
-						throw new UnacceptableResultException(match.getFirstPoints(), match.getSecondPoints());
+						// throw new
+						// UnacceptableResultException(match.getFirstPoints(),
+						// match.getSecondPoints());
 					}
 					user1.setWonSets(user1.getWonSets() + match.getFirstPoints());
 					user2.setWonSets(user2.getWonSets() + match.getSecondPoints());
@@ -120,7 +125,9 @@ public class MatchService {
 						user1.setVolleyballPoints(user1.getVolleyballPoints() + 2);
 						user2.setVolleyballPoints(user2.getVolleyballPoints() + 1);
 					} else {
-						throw new UnacceptableResultException(match.getFirstPoints(), match.getSecondPoints());
+						// throw new
+						// UnacceptableResultException(match.getFirstPoints(),
+						// match.getSecondPoints());
 					}
 					user2.setWonSets(user2.getWonSets() + match.getFirstPoints());
 					user1.setWonSets(user1.getWonSets() + match.getSecondPoints());
@@ -141,6 +148,7 @@ public class MatchService {
 				}
 				userRepository.save(user1);
 				userRepository.save(user2);
+				updateUsersRanking();
 			}
 		} else if ((user.getFirstName().concat(" ").concat(user.getLastName())).equals(match.getSecondName())) {
 			match.setSecondApproved(true);
@@ -156,7 +164,6 @@ public class MatchService {
 							"Twoj przeciwnik wlasnie zaaktualizowal wynik meczu, sprawdz szczegoly spotkania i jesli wszystko sie zgadza zaakceptuj wynik.");
 				}
 			} else {
-				match.setMatchDate(new Date());
 				if (user.getLogin().equals(user1.getLogin())) {
 					if (match.getFirstPoints() == 3 && (match.getSecondPoints() == 1 || match.getSecondPoints() == 0)) {
 						user2.setVolleyballPoints(user2.getVolleyballPoints() + 3);
@@ -170,7 +177,9 @@ public class MatchService {
 						user1.setVolleyballPoints(user1.getVolleyballPoints() + 2);
 						user2.setVolleyballPoints(user2.getVolleyballPoints() + 1);
 					} else {
-						throw new UnacceptableResultException(match.getFirstPoints(), match.getSecondPoints());
+						// throw new
+						// UnacceptableResultException(match.getFirstPoints(),
+						// match.getSecondPoints());
 					}
 					user2.setWonSmallPoints(user2.getWonSmallPoints() + firstSmallPoints);
 					user2.setLostSmallPoints(user2.getLostSmallPoints() + secondSmallPoints);
@@ -200,7 +209,9 @@ public class MatchService {
 						user2.setVolleyballPoints(user2.getVolleyballPoints() + 2);
 						user1.setVolleyballPoints(user1.getVolleyballPoints() + 1);
 					} else {
-						throw new UnacceptableResultException(match.getFirstPoints(), match.getSecondPoints());
+						// throw new
+						// UnacceptableResultException(match.getFirstPoints(),
+						// match.getSecondPoints());
 					}
 					user1.setWonSmallPoints(user1.getWonSmallPoints() + firstSmallPoints);
 					user1.setLostSmallPoints(user1.getLostSmallPoints() + secondSmallPoints);
@@ -220,8 +231,30 @@ public class MatchService {
 				}
 				userRepository.save(user1);
 				userRepository.save(user2);
+				updateUsersRanking();
 			}
 		}
+
+	}
+
+
+	public void updateUsersRanking(){
+		List<User> usersList = compareAndSortUsers();
+		int i = 1;
+		for (User user : usersList) {
+			user.setRankingPosition(i);
+			i++;
+			userRepository.save(user);
+		}
+	}
+
+
+	public List<User> compareAndSortUsers() {
+		List<User> usersList = userService.findAllWithoutAdmins();
+		Comparator<User> comparator = Comparator.comparing(User::getWonMatches).thenComparing(User::getBalanceSets)
+				.thenComparing(User::getBalanceSmallPoints);
+		Collections.sort(usersList, comparator.reversed());
+		return usersList;
 	}
 
 	@Transactional

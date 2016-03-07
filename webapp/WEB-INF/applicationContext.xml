@@ -50,13 +50,9 @@
 
 	<tx:annotation-driven transaction-manager="transactionManager" />
 
-
 	<jpa:repositories base-package="pl.karolkolarczyk.lgs.repository" />
 
 	<import resource="security.xml" />
-
-
-
 
 </beans>
 

@@ -88,4 +88,14 @@
 		<put-attribute name="body" value="/WEB-INF/jsp/error.jsp" />
 		<put-attribute name="current" value="error" />
 	</definition>
+	<definition name="news" extends="common">
+		<put-attribute name="title" value="Aktualnosci" />
+		<put-attribute name="body" value="/WEB-INF/jsp/news.jsp" />
+		<put-attribute name="current" value="news" />
+	</definition>
+	<definition name="dateAndPlace" extends="common">
+		<put-attribute name="title" value="Aktualnosci" />
+		<put-attribute name="body" value="/WEB-INF/jsp/dateAndPlace.jsp" />
+		<put-attribute name="current" value="dateAndPlace" />
+	</definition>
 </tiles-definitions>

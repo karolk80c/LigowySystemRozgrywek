@@ -7,7 +7,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 
-@Entity(name = "Sezon")
+@Entity(name = "sezon")
 public class Season {
 
 	@Id

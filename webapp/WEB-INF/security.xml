@@ -8,13 +8,12 @@
 
 	<global-method-security pre-post-annotations="enabled" />
 
-	<http use-expressions="true">
-		<form-login login-page="/login.html" />
+	<http use-expressions="true" auto-config="true">
+		<form-login login-page="/login.html"
+			authentication-failure-url="/login.html?error=true" />
 		<logout logout-url="/logout.html" />
-		<intercept-url pattern="/users/**" access="isAuthenticated()" />
-		<intercept-url pattern="/users/remove/**" access="hasRole('ROLE_ADMIN')" />
-		<intercept-url pattern="/users/update/**" access="hasRole('ROLE_ADMIN')" />
-			<intercept-url pattern="/draw**" access="hasRole('ROLE_ADMIN')" />
+		<intercept-url pattern="/users**" access="hasRole('ROLE_ADMIN')" />
+		<intercept-url pattern="/draw**" access="hasRole('ROLE_ADMIN')" />
 	</http>
 
 	<authentication-manager>

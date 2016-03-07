@@ -15,7 +15,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
-@Entity(name = "Spotkanie")
+@Entity(name = "spotkanie")
 public class Match {
 
 	@Id
@@ -45,10 +45,19 @@ public class Match {
 
 	String firstName;
 	String secondName;
+	String matchPlace;
 	boolean firstApproved;
 	boolean secondApproved;
 	int secondPoints;
 	int firstPoints;
+
+	public String getMatchPlace() {
+		return matchPlace;
+	}
+
+	public void setMatchPlace(String matchPlace) {
+		this.matchPlace = matchPlace;
+	}
 
 	public boolean isFirstApproved() {
 		return firstApproved;
@@ -129,8 +138,5 @@ public class Match {
 	public void setId(int id) {
 		this.id = id;
 	}
-
-
-
 
 }

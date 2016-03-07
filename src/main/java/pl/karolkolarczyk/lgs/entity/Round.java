@@ -8,11 +8,10 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
-@Entity(name = "Kolejka")
+@Entity(name = "kolejka")
 public class Round {
 
 	@Id
@@ -20,7 +19,6 @@ public class Round {
 	int id;
 
 	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-	@JoinTable(name = "kolejka_spotkanie")
 	private List<Match> matches;
 
 	@ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)

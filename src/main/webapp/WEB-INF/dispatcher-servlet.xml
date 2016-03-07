@@ -11,6 +11,11 @@
 	<mvc:annotation-driven />
 	<mvc:resources location="assets" mapping="/assets/**" />
 
+	<bean id="messageSource"
+		class="org.springframework.context.support.ResourceBundleMessageSource">
+		<property name="basename" value="META-INF/messages/messages"></property>
+	</bean>
+
 	<bean id="tilesViewResolver"
 		class="org.springframework.web.servlet.view.UrlBasedViewResolver">
 		<property name="viewClass"

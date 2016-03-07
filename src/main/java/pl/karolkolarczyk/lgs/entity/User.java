@@ -18,7 +18,7 @@ import javax.validation.constraints.Size;
 import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotBlank;
 
-@Entity(name = "Uzytkownik")
+@Entity(name = "uzytkownik")
 public class User {
 
 	@Id
@@ -78,6 +78,16 @@ public class User {
 	private int footballPoints;
 
 	private int volleyballPoints;
+
+	private int rankingPosition;
+
+	public int getRankingPosition() {
+		return rankingPosition;
+	}
+
+	public void setRankingPosition(int rankingPosition) {
+		this.rankingPosition = rankingPosition;
+	}
 
 	public int getVolleyballPoints() {
 		return volleyballPoints;

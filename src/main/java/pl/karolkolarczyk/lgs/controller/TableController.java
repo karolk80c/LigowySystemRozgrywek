@@ -1,8 +1,6 @@
 package pl.karolkolarczyk.lgs.controller;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import pl.karolkolarczyk.lgs.entity.User;
+import pl.karolkolarczyk.lgs.service.MatchService;
 import pl.karolkolarczyk.lgs.service.UserService;
 
 @Controller
@@ -23,6 +22,9 @@ public class TableController {
 
 	@Autowired
 	UserService userService;
+
+	@Autowired
+	MatchService matchService;
 
 	@RequestMapping
 	public String showTable(Model model) {
@@ -34,11 +36,7 @@ public class TableController {
 			@RequestParam(defaultValue = "desc") String order, Model model) {
 		List<User> usersList = new ArrayList<>();
 		if (properties.equals("mainPoints") && order.equals("desc")) {
-			usersList = userService.findAll();
-			Comparator<User> comparator = Comparator.comparing(User::getFootballPoints)
-					.thenComparing(User::getBalanceMatches)
-					.thenComparing(User::getBalanceSmallPoints);
-			Collections.sort(usersList, comparator.reversed());
+			usersList = matchService.compareAndSortUsers();
 			model.addAttribute("users", usersList);
 		} else {
 			Page<User> users = null;
@@ -56,7 +54,7 @@ public class TableController {
 			for (User user : users) {
 				usersList.add(user);
 			}
-			model.addAttribute("users", users);
+			model.addAttribute("users", usersList);
 		}
 		return "table";
 	}
