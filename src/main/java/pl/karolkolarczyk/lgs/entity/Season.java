@@ -2,6 +2,7 @@ package pl.karolkolarczyk.lgs.entity;
 
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -14,7 +15,7 @@ public class Season {
 	@GeneratedValue
 	int id;
 
-	@OneToMany(mappedBy = "season")
+	@OneToMany(mappedBy = "season", cascade = CascadeType.REMOVE)
 	private List<Round> rounds;
 
 	String number;

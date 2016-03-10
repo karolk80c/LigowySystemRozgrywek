@@ -18,12 +18,15 @@ import javax.validation.constraints.Size;
 import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotBlank;
 
+import pl.karolkolarczyk.lgs.annotation.UniqueLogin;
+
 @Entity(name = "uzytkownik")
 public class User {
 
 	@Id
-	@Column(nullable = false)
+	@Column(nullable = false, unique = true)
 	@Size(min = 3, message = "Login powinien miec conajmniej 3 znaki!")
+	@UniqueLogin(message = "Podany login jest ju¿ zajêty")
 	private String login;
 
 	@Column(nullable = false)
@@ -51,7 +54,7 @@ public class User {
 	@ManyToMany(fetch = FetchType.EAGER)
 	private List<Role> roles;
 
-	@ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+	@ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
 	@JoinTable(name = "uzytkownik_mecz")
 	private List<Match> matches;
 
@@ -80,6 +83,7 @@ public class User {
 	private int volleyballPoints;
 
 	private int rankingPosition;
+
 
 	public int getRankingPosition() {
 		return rankingPosition;

@@ -1,3 +1,5 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8"%>
 <%@ include file="../layout/taglib.jsp"%>
 
 
@@ -6,7 +8,8 @@
 		<tr>
 			<th>Nazwa_Uzytkownika</th>
 			<th>Zaakceptuj</th>
-			<th>Usun</th>
+			<th>Usuń</th>
+			<th>Dyskfalifikuj</th>
 			<th>Kontakt</th>
 		</tr>
 	</thead>
@@ -18,21 +21,28 @@
 						<td><a
 							href=" <spring:url value="/users/${user.login}.html" />">
 								${user.login }</a></td>
-						<td class="center"><c:choose>
+						<td><c:choose>
 								<c:when test="${role.name == 'ROLE_AWAIT' }">
 									<a
 										href=" <spring:url value="/users/update/${user.login}.html" />"
 										class="btn btn-success"> Zaakceptuj </a>
 								</c:when>
+								<c:when test="${role.name == 'ROLE_DISQUALIFIED' }">
+								Zdyskfalifikowany (Nieaktywny)
+							</c:when>
 								<c:otherwise>
 								Aktywny
 							</c:otherwise>
 							</c:choose></td>
-						<td class="center"><a
+						<td><a
 							href=" <spring:url value="/users/remove/${user.login}.html" />"
 							class="btn btn-danger">Usun</a></td>
+						<td><a
+							href=" <spring:url value="/users/disqualifie/${user.login}.html" />"
+							class="btn btn-success"> Zdyskfalifikuj </a></td>
 						<td><a class="btn btn-info"
-							href='<spring:url value="email/${user.login }.html" />'>Wyslij wiadomosc</a></td>
+							href='<spring:url value="email/${user.login }.html" />'>Wyslij
+								wiadomosc</a></td>
 					</tr>
 				</c:if>
 			</c:forEach>

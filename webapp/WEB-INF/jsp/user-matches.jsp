@@ -1,3 +1,5 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8"%>
 <%@ include file="../layout/taglib.jsp"%>
 
 <h1>
@@ -12,12 +14,12 @@
 	<div class="alert alert-success">Zatwierdzono wynik meczu</div>
 </c:if>
 <c:set var="now" value="<%=new java.util.Date()%>" />
-<fmt:formatDate type="both" dateStyle="short" timeStyle="short" value="${now}" />
+<fmt:formatDate type="both" dateStyle="short" timeStyle="short"
+	value="${now}" />
 <table class="table table-bordered table-hover table-striped">
 	<thead>
 		<tr>
 			<th>Zawodnik</th>
-			<th>Wynik</th>
 			<th>Wynik</th>
 			<th>Zawodnik</th>
 			<th>Szczegoly</th>
@@ -29,10 +31,11 @@
 	<tbody>
 		<c:forEach items="${user.matches}" var="match">
 			<tr>
-				<td><a
-					href='<spring:url value="/users/${match.firstName}.html" />'> </a>${match.firstName}</td>
-				<td>${match.firstPoints}</td>
-				<td>${match.secondPoints }</td>
+				<td>${match.firstName}</td>
+				<td><b>${match.firstPoints}:${match.secondPoints}</b>&nbsp;<c:forEach
+						var="set" items="${match.sets}">
+							(${set.firstPlayerScore}:${set.secondPlayerScore})
+							</c:forEach></td>
 				<td>${match.secondName}</td>
 				<c:choose>
 					<c:when

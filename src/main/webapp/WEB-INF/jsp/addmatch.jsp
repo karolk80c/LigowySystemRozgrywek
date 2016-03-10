@@ -1,7 +1,6 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8"%>
 <%@ include file="../layout/taglib.jsp"%>
-
-<div class="alert alert-info">W przypadku jakichkolwiek problemow
-	przejdz do zakladki kontakt i skontaktuj sie z administratorem serwisu.</div>
 
 <h1>
 	<b>Szczegoly meczu</b> ${match.firstName} vs ${match.secondName} <br>
@@ -61,7 +60,7 @@
 </c:if>
 
 <a class="btn btn-info btn-lg"
-	href='<spring:url value="/matches.html" />'>Wroc</a>
+	href='<spring:url value="/matches.html" />'>Wróć</a>
 
 
 <form:form commandName="set" cssClass="form-horizontal">

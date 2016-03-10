@@ -12,6 +12,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 
+import pl.karolkolarczyk.lgs.entity.Match;
 import pl.karolkolarczyk.lgs.entity.Role;
 import pl.karolkolarczyk.lgs.entity.User;
 import pl.karolkolarczyk.lgs.repository.MatchRepository;
@@ -32,13 +33,16 @@ public class UserService {
 	MatchRepository matchRepository;
 
 	@Autowired
+	MatchService matchService;
+
+	@Autowired
 	EmailService emailService;
 
 	public List<User> findAll() {
 		return userRepository.findAll();
 	}
 
-	public List<User> findAllWithoutAdmins() {
+	public List<User> findActivePlayers() {
 		List<User> users = userRepository.findAll();
 		List<User> usersWithoutAdmins = new ArrayList<>();
 		for (User user : users) {
@@ -86,12 +90,28 @@ public class UserService {
 	}
 
 	public void delete(String login) {
-		userRepository.delete(login);
+		User user = userRepository.findOne(login);
+		userRepository.delete(user);
 	}
 
 	@Transactional
 	public Page<User> findAllWithStatistics(String properties, Direction order) {
 		return userRepository.findAll(new PageRequest(0, 30, order, properties));
+	}
+
+	public void disqualifie(String login) {
+		User user = userRepository.findOne(login);
+		user.setEnabled(false);
+		List<Role> rolesList = new ArrayList<>();
+		rolesList.add(roleRepository.findByName("ROLE_DISQUALIFIED"));
+		user.setRoles(rolesList);
+		List<Match> matches = user.getMatches();
+		for (Match match : matches) {
+			if (!match.isCompleted()) {
+				matchService.approve(match.getId(), user);
+			}
+		}
+		userRepository.save(user);
 	}
 
 }

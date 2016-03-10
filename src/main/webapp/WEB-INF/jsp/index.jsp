@@ -1,3 +1,5 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8"%>
 <%@ include file="../layout/taglib.jsp"%>
 <style>
 .image {
@@ -9,7 +11,6 @@
 
 <div class="center">
 	<br>
-
 	<h1>
 		<spring:message code="homePage.applicationTitle" />
 	</h1>

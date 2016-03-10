@@ -46,7 +46,7 @@ public class EmailService {
 	}
 
 	public void sendNotificationToAllPlayers(String topic, String content) {
-		List<User> users = userService.findAllWithoutAdmins();
+		List<User> users = userService.findActivePlayers();
 		for (User user : users) {
 			sendNotification("leaguegamesystem@gmail.com", user.getEmailAdress(), topic, content);
 		}

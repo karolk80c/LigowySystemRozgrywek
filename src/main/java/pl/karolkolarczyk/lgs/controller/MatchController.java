@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import pl.karolkolarczyk.lgs.entity.User;
-import pl.karolkolarczyk.lgs.exception.UnacceptableResultException;
 import pl.karolkolarczyk.lgs.service.MatchService;
 import pl.karolkolarczyk.lgs.service.SetService;
 import pl.karolkolarczyk.lgs.service.UserService;
@@ -38,12 +37,7 @@ public class MatchController {
 	@RequestMapping("/{id}/approve")
 	public String approveMatch(Model model, @PathVariable Integer id, Principal principal) {
 		User user = userService.findOne(principal.getName());
-		try {
-			matchService.approve(id, user);
-		} catch (UnacceptableResultException e) {
-			e.printStackTrace();
-			return "error";
-		}
+		matchService.approve(id, user);
 		return "redirect:/matches.html?success=true";
 	}
 

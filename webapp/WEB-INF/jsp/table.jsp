@@ -1,3 +1,5 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8"%>
 <%@ include file="../layout/taglib.jsp"%>
 
 <div class="alert alert-info">
@@ -49,12 +51,22 @@
 	<tbody>
 		<c:forEach items="${users}" var="user">
 			<c:forEach items="${user.roles}" var="role">
-				<c:if test="${role.name == 'ROLE_USER' }">
+				<c:if
+					test="${role.name == 'ROLE_USER' || role.name == 'ROLE_DISQUALIFIED' }">
 					<tr>
 						<td>${user.rankingPosition }</td>
-						<td><a
-							href='<spring:url value="/users/${user.login}.html" />'>
-								${user.firstName}&nbsp;${ user.lastName }</a></td>
+						<c:choose>
+							<c:when test="${role.name == 'ROLE_DISQUALIFIED'}">
+								<td>${user.firstName}&nbsp;${ user.lastName }<br>(Nieaktywny)
+								</td>
+							</c:when>
+							<c:otherwise>
+								<td><a
+									href='<spring:url value="/users/${user.login}.html" />'>
+										${user.firstName}&nbsp;${ user.lastName }</a></td>
+							</c:otherwise>
+						</c:choose>
+
 						<td>${user.wonMatches + user.lostMatches}</td>
 						<td>${user.wonMatches}</td>
 						<td>${user.lostMatches }</td>

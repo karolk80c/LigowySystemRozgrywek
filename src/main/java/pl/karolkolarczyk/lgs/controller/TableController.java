@@ -33,7 +33,7 @@ public class TableController {
 
 	@RequestMapping(method = RequestMethod.GET)
 	public String sortColumn(@RequestParam(defaultValue = "mainPoints") String properties,
-			@RequestParam(defaultValue = "desc") String order, Model model) {
+			@RequestParam(defaultValue = "desc") String order, Model model) throws Exception {
 		List<User> usersList = new ArrayList<>();
 		if (properties.equals("mainPoints") && order.equals("desc")) {
 			usersList = matchService.compareAndSortUsers();
@@ -54,6 +54,7 @@ public class TableController {
 			for (User user : users) {
 				usersList.add(user);
 			}
+
 			model.addAttribute("users", usersList);
 		}
 		return "table";

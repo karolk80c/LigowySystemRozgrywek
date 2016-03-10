@@ -3,8 +3,8 @@
 
 <%@ include file="../layout/taglib.jsp"%>
 <div class="alert alert-info">Zarejestruj się jeśli chcesz
-	uczestniczyc w zawodach, w przeciwnym wypadku nie musisz się
-	rejestrowac.</div>
+	uczestniczyć w zawodach, w przeciwnym wypadku nie musisz się
+	rejestrować.</div>
 
 <c:if test="${param.success eq true }">
 	<div class="alert alert-success">Rejestracja zakończona
@@ -15,7 +15,7 @@
 <form:form commandName="user" cssClass="form-horizontal">
 
 	<div class="form-group">
-		<label class="control-label col-sm-2" for="name">Imie:</label>
+		<label class="control-label col-sm-2" for="name">Imię:</label>
 		<div class="col-sm-10">
 			<form:input path="firstName" cssClass="form-control" />
 			<form:errors path="firstName" />

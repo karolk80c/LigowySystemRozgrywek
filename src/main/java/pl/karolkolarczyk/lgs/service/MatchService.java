@@ -52,9 +52,16 @@ public class MatchService {
 		return match;
 	}
 
+	public void disqualifiedFromMatch(Integer id, User diqualified, User winner) {
+
+	}
+
 	@Transactional
-	public void approve(Integer id, User user) throws UnacceptableResultException {
+	public void approve(Integer id, User user) {
 		Match match = findOne(id);
+		List<User> users = match.getUsers();
+		User user1 = users.get(0);
+		User user2 = users.get(1);
 		List<Set> sets = setRepository.findByMatch(match);
 		int firstSmallPoints = 0;
 		int secondSmallPoints = 0;
@@ -62,183 +69,89 @@ public class MatchService {
 			firstSmallPoints += set.getFirstPlayerScore();
 			secondSmallPoints += set.getSecondPlayerScore();
 		}
-		List<User> users = match.getUsers();
-		User user1 = users.get(0);
-		User user2 = users.get(1);
+
 		if ((user.getFirstName().concat(" ").concat(user.getLastName())).equals(match.getFirstName())) {
 			match.setFirstApproved(true);
 			if (!match.isSecondApproved()) {
 				if (user.getLogin().equals(user1.getLogin())) {
-					emailService.sendNotification("leaguegamesystem@gmail.com", user2.getEmailAdress(),
-							"Aktualizacja meczu ping-pong",
-							"Twoj przeciwnik wlasnie zaaktualizowal wynik meczu, sprawdz szczegoly spotkania i jesli wszystko sie zgadza zaakceptuj wynik.");
+					sendNotificationTo(user2);
 				} else {
-					emailService.sendNotification("leaguegamesystem@gmail.com", user1.getEmailAdress(),
-							"Aktualizacja meczu ping-pong",
-							"Twoj przeciwnik wlasnie zaaktualizowal wynik meczu, sprawdz szczegoly spotkania i jesli wszystko sie zgadza zaakceptuj wynik.");
+					sendNotificationTo(user1);
 				}
 			} else {
 				if (user.getLogin().equals(user1.getLogin())) {
-					if (match.getFirstPoints() == 3 && (match.getSecondPoints() == 1 || match.getSecondPoints() == 0)) {
-						user1.setVolleyballPoints(user1.getVolleyballPoints() + 3);
-					} else if (match.getFirstPoints() == 3 && match.getSecondPoints() == 2) {
-						user1.setVolleyballPoints(user1.getVolleyballPoints() + 2);
-						user2.setVolleyballPoints(user2.getVolleyballPoints() + 1);
-					} else if (match.getSecondPoints() == 3
-							&& (match.getFirstPoints() == 1 || match.getFirstPoints() == 0)) {
-						user2.setVolleyballPoints(user2.getVolleyballPoints() + 3);
-					} else if (match.getSecondPoints() == 3 && match.getFirstPoints() == 2) {
-						user2.setVolleyballPoints(user2.getVolleyballPoints() + 2);
-						user1.setVolleyballPoints(user1.getVolleyballPoints() + 1);
-					} else {
-						// throw new
-						// UnacceptableResultException(match.getFirstPoints(),
-						// match.getSecondPoints());
-					}
-					user1.setWonSets(user1.getWonSets() + match.getFirstPoints());
-					user2.setWonSets(user2.getWonSets() + match.getSecondPoints());
-					user2.setLostSets(user2.getLostSets() + match.getFirstPoints());
-					user1.setLostSets(user1.getLostSets() + match.getSecondPoints());
-
-					user1.setWonSmallPoints(user1.getWonSmallPoints() + firstSmallPoints);
-					user1.setLostSmallPoints(user1.getLostSmallPoints() + secondSmallPoints);
-					user2.setWonSmallPoints(user2.getWonSmallPoints() + secondSmallPoints);
-					user2.setLostSmallPoints(user2.getLostSmallPoints() + firstSmallPoints);
-
-					if (match.getFirstPoints() > match.getSecondPoints()) {
-						user2.setLostMatches(user2.getLostMatches() + 1);
-						user1.setWonMatches(user1.getWonMatches() + 1);
-					} else if (match.getFirstPoints() < match.getSecondPoints()) {
-						user1.setLostMatches(user1.getLostMatches() + 1);
-						user2.setWonMatches(user2.getWonMatches() + 1);
-					}
+					updatePoints(match, firstSmallPoints, secondSmallPoints, user1, user2);
 				} else if (user.getLogin().equals(user2.getLogin())) {
-					if (match.getFirstPoints() == 3 && (match.getSecondPoints() == 1 || match.getSecondPoints() == 0)) {
-						user2.setVolleyballPoints(user2.getVolleyballPoints() + 3);
-					} else if (match.getFirstPoints() == 3 && match.getSecondPoints() == 2) {
-						user2.setVolleyballPoints(user2.getVolleyballPoints() + 2);
-						user1.setVolleyballPoints(user1.getVolleyballPoints() + 1);
-					} else if (match.getSecondPoints() == 3
-							&& (match.getFirstPoints() == 1 || match.getFirstPoints() == 0)) {
-						user1.setVolleyballPoints(user1.getVolleyballPoints() + 3);
-					} else if (match.getSecondPoints() == 3 && match.getFirstPoints() == 2) {
-						user1.setVolleyballPoints(user1.getVolleyballPoints() + 2);
-						user2.setVolleyballPoints(user2.getVolleyballPoints() + 1);
-					} else {
-						// throw new
-						// UnacceptableResultException(match.getFirstPoints(),
-						// match.getSecondPoints());
-					}
-					user2.setWonSets(user2.getWonSets() + match.getFirstPoints());
-					user1.setWonSets(user1.getWonSets() + match.getSecondPoints());
-					user1.setLostSets(user1.getLostSets() + match.getFirstPoints());
-					user2.setLostSets(user2.getLostSets() + match.getSecondPoints());
-
-					user2.setWonSmallPoints(user2.getWonSmallPoints() + firstSmallPoints);
-					user2.setLostSmallPoints(user2.getLostSmallPoints() + secondSmallPoints);
-					user1.setWonSmallPoints(user1.getWonSmallPoints() + secondSmallPoints);
-					user1.setLostSmallPoints(user1.getLostSmallPoints() + firstSmallPoints);
-					if (match.getFirstPoints() > match.getSecondPoints()) {
-						user1.setLostMatches(user1.getLostMatches() + 1);
-						user2.setWonMatches(user2.getWonMatches() + 1);
-					} else if (match.getFirstPoints() < match.getSecondPoints()) {
-						user2.setLostMatches(user2.getLostMatches() + 1);
-						user1.setWonMatches(user1.getWonMatches() + 1);
-					}
+					updatePoints(match, firstSmallPoints, secondSmallPoints, user2, user1);
 				}
-				userRepository.save(user1);
-				userRepository.save(user2);
-				updateUsersRanking();
+				saveUsers(user1, user2);
 			}
 		} else if ((user.getFirstName().concat(" ").concat(user.getLastName())).equals(match.getSecondName())) {
 			match.setSecondApproved(true);
 			if (!match.isFirstApproved()) {
 				if (user.getLogin().equals(user1.getLogin())) {
-					String topic = "Aktualizacja meczu ping-ponga " + match.getFirstName() + " vs "
-							+ match.getSecondName();
-					emailService.sendNotification("leaguegamesystem@gmail.com", user2.getEmailAdress(), topic,
-							"Twoj przeciwnik wlasnie zaaktualizowal wynik meczu, sprawdz szczegoly spotkania i jesli wszystko sie zgadza zaakceptuj wynik.");
+					sendNotificationTo(user2);
 				} else {
-					emailService.sendNotification("leaguegamesystem@gmail.com", user1.getEmailAdress(),
-							"Aktualizacja meczu ping-pong",
-							"Twoj przeciwnik wlasnie zaaktualizowal wynik meczu, sprawdz szczegoly spotkania i jesli wszystko sie zgadza zaakceptuj wynik.");
+					sendNotificationTo(user1);
 				}
 			} else {
 				if (user.getLogin().equals(user1.getLogin())) {
-					if (match.getFirstPoints() == 3 && (match.getSecondPoints() == 1 || match.getSecondPoints() == 0)) {
-						user2.setVolleyballPoints(user2.getVolleyballPoints() + 3);
-					} else if (match.getFirstPoints() == 3 && match.getSecondPoints() == 2) {
-						user2.setVolleyballPoints(user2.getVolleyballPoints() + 2);
-						user1.setVolleyballPoints(user1.getVolleyballPoints() + 1);
-					} else if (match.getSecondPoints() == 3
-							&& (match.getFirstPoints() == 1 || match.getFirstPoints() == 0)) {
-						user1.setVolleyballPoints(user1.getVolleyballPoints() + 3);
-					} else if (match.getSecondPoints() == 3 && match.getFirstPoints() == 2) {
-						user1.setVolleyballPoints(user1.getVolleyballPoints() + 2);
-						user2.setVolleyballPoints(user2.getVolleyballPoints() + 1);
-					} else {
-						// throw new
-						// UnacceptableResultException(match.getFirstPoints(),
-						// match.getSecondPoints());
-					}
-					user2.setWonSmallPoints(user2.getWonSmallPoints() + firstSmallPoints);
-					user2.setLostSmallPoints(user2.getLostSmallPoints() + secondSmallPoints);
-					user1.setWonSmallPoints(user1.getWonSmallPoints() + secondSmallPoints);
-					user1.setLostSmallPoints(user1.getLostSmallPoints() + firstSmallPoints);
-					user2.setWonSets(user2.getWonSets() + match.getFirstPoints());
-					user1.setWonSets(user1.getWonSets() + match.getSecondPoints());
-					user1.setLostSets(user1.getLostSets() + match.getFirstPoints());
-					user2.setLostSets(user2.getLostSets() + match.getSecondPoints());
-					if (match.getFirstPoints() > match.getSecondPoints()) {
-						user1.setLostMatches(user1.getLostMatches() + 1);
-						user2.setWonMatches(user2.getWonMatches() + 1);
-					} else if (match.getFirstPoints() < match.getSecondPoints()) {
-						user2.setLostMatches(user2.getLostMatches() + 1);
-						user1.setWonMatches(user1.getWonMatches() + 1);
-					}
+					updatePoints(match, firstSmallPoints, secondSmallPoints, user2, user1);
 				} else if (user.getLogin().equals(user2.getLogin())) {
-					if (match.getFirstPoints() == 3 && (match.getSecondPoints() == 1 || match.getSecondPoints() == 0)) {
-						user1.setVolleyballPoints(user1.getVolleyballPoints() + 3);
-					} else if (match.getFirstPoints() == 3 && match.getSecondPoints() == 2) {
-						user1.setVolleyballPoints(user1.getVolleyballPoints() + 2);
-						user2.setVolleyballPoints(user2.getVolleyballPoints() + 1);
-					} else if (match.getSecondPoints() == 3
-							&& (match.getFirstPoints() == 1 || match.getFirstPoints() == 0)) {
-						user2.setVolleyballPoints(user2.getVolleyballPoints() + 3);
-					} else if (match.getSecondPoints() == 3 && match.getFirstPoints() == 2) {
-						user2.setVolleyballPoints(user2.getVolleyballPoints() + 2);
-						user1.setVolleyballPoints(user1.getVolleyballPoints() + 1);
-					} else {
-						// throw new
-						// UnacceptableResultException(match.getFirstPoints(),
-						// match.getSecondPoints());
-					}
-					user1.setWonSmallPoints(user1.getWonSmallPoints() + firstSmallPoints);
-					user1.setLostSmallPoints(user1.getLostSmallPoints() + secondSmallPoints);
-					user2.setWonSmallPoints(user2.getWonSmallPoints() + secondSmallPoints);
-					user2.setLostSmallPoints(user2.getLostSmallPoints() + firstSmallPoints);
-					user1.setWonSets(user1.getWonSets() + match.getFirstPoints());
-					user2.setWonSets(user2.getWonSets() + match.getSecondPoints());
-					user2.setLostSets(user2.getLostSets() + match.getFirstPoints());
-					user1.setLostSets(user1.getLostSets() + match.getSecondPoints());
-					if (match.getFirstPoints() > match.getSecondPoints()) {
-						user2.setLostMatches(user2.getLostMatches() + 1);
-						user1.setWonMatches(user1.getWonMatches() + 1);
-					} else if (match.getFirstPoints() < match.getSecondPoints()) {
-						user1.setLostMatches(user1.getLostMatches() + 1);
-						user2.setWonMatches(user2.getWonMatches() + 1);
-					}
+					updatePoints(match, firstSmallPoints, secondSmallPoints, user1, user2);
 				}
-				userRepository.save(user1);
-				userRepository.save(user2);
-				updateUsersRanking();
+				saveUsers(user1, user2);
 			}
 		}
 
 	}
 
+	private void saveUsers(User user1, User user2) {
+		userRepository.save(user1);
+		userRepository.save(user2);
+		updateUsersRanking();
+	}
 
-	public void updateUsersRanking(){
+	private void sendNotificationTo(User user) {
+		emailService.sendNotification("leaguegamesystem@gmail.com", user.getEmailAdress(),
+				"Aktualizacja meczu ping-pong",
+				"Twoj przeciwnik wlasnie zaaktualizowal wynik meczu, sprawdz szczegoly spotkania i jesli wszystko sie zgadza zaakceptuj wynik.");
+	}
+
+	private void updatePoints(Match match, int firstSmallPoints, int secondSmallPoints, User user1, User user2) {
+		if (match.getFirstPoints() == 3 && (match.getSecondPoints() == 1 || match.getSecondPoints() == 0)) {
+			user1.setVolleyballPoints(user1.getVolleyballPoints() + 3);
+		} else if (match.getFirstPoints() == 3 && match.getSecondPoints() == 2) {
+			user1.setVolleyballPoints(user1.getVolleyballPoints() + 2);
+			user2.setVolleyballPoints(user2.getVolleyballPoints() + 1);
+		} else if (match.getSecondPoints() == 3 && (match.getFirstPoints() == 1 || match.getFirstPoints() == 0)) {
+			user2.setVolleyballPoints(user2.getVolleyballPoints() + 3);
+		} else if (match.getSecondPoints() == 3 && match.getFirstPoints() == 2) {
+			user2.setVolleyballPoints(user2.getVolleyballPoints() + 2);
+			user1.setVolleyballPoints(user1.getVolleyballPoints() + 1);
+		}
+		user1.setWonSmallPoints(user1.getWonSmallPoints() + firstSmallPoints);
+		user1.setLostSmallPoints(user1.getLostSmallPoints() + secondSmallPoints);
+		user2.setWonSmallPoints(user2.getWonSmallPoints() + secondSmallPoints);
+		user2.setLostSmallPoints(user2.getLostSmallPoints() + firstSmallPoints);
+		user1.setWonSets(user1.getWonSets() + match.getFirstPoints());
+		user2.setWonSets(user2.getWonSets() + match.getSecondPoints());
+		user2.setLostSets(user2.getLostSets() + match.getFirstPoints());
+		user1.setLostSets(user1.getLostSets() + match.getSecondPoints());
+		if (match.getFirstPoints() > match.getSecondPoints()) {
+			user2.setLostMatches(user2.getLostMatches() + 1);
+			user1.setWonMatches(user1.getWonMatches() + 1);
+		} else if (match.getFirstPoints() < match.getSecondPoints()) {
+			user1.setLostMatches(user1.getLostMatches() + 1);
+			user2.setWonMatches(user2.getWonMatches() + 1);
+		}
+		if (match.getFirstPoints() - Math.abs(match.getSecondPoints()) > 3
+				|| match.getFirstPoints() + Math.abs(match.getSecondPoints()) < 3) {
+			throw new UnacceptableResultException(match.getFirstPoints(), match.getSecondPoints());
+		}
+	}
+
+	public void updateUsersRanking() {
 		List<User> usersList = compareAndSortUsers();
 		int i = 1;
 		for (User user : usersList) {
@@ -248,9 +161,8 @@ public class MatchService {
 		}
 	}
 
-
 	public List<User> compareAndSortUsers() {
-		List<User> usersList = userService.findAllWithoutAdmins();
+		List<User> usersList = userService.findActivePlayers();
 		Comparator<User> comparator = Comparator.comparing(User::getWonMatches).thenComparing(User::getBalanceSets)
 				.thenComparing(User::getBalanceSmallPoints);
 		Collections.sort(usersList, comparator.reversed());

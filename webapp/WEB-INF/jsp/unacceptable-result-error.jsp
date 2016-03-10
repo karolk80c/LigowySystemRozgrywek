@@ -7,9 +7,9 @@
 		<spring:message code="error.title" />
 	</h1>
 	<br>
-	<p>
-		<spring:message code="error.content" />
+	<p class="center">
+		<b>Niedopuszczalny wynik ${firstPlayerScore}:${secondPlayerScore}</b>
 	</p>
-
+	<br>
 
 </div>

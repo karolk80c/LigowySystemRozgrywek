@@ -81,6 +81,11 @@ tr th {
 									href='<spring:url value="/draw.html" />'><spring:message
 											code="nav.draw" /></a></li>
 							</security:authorize>
+							<security:authorize access="hasRole('ROLE_ADMIN')">
+								<li class="${current == 'management' ? 'active' : ' ' }"><a
+									href='<spring:url value="/management.html" />'><spring:message
+											code="nav.management" /></a></li>
+							</security:authorize>
 							<li class="${current == 'table' ? 'active' : ' ' }"><a
 								href='<spring:url value="/table.html" />'><spring:message
 										code="nav.table" /></a></li>

@@ -48,13 +48,20 @@ public class InitDatabaseService {
 			roleAwait.setName("ROLE_AWAIT");
 			roleRepository.save(roleAwait);
 
+			Role roleService = new Role();
+			roleService.setName("ROLE_SERVICE");
+			roleRepository.save(roleService);
+
+			Role roleDisqualified = new Role("ROLE_DISQUALIFIED");
+			roleRepository.save(roleDisqualified);
+
 			List<Role> rolesList = new ArrayList<>();
 			rolesList.add(roleAdmin);
 
 			User userAdmin = new User();
 			userAdmin.setRoles(rolesList);
 			userAdmin.setContactNumber("12312312");
-			userAdmin.setEmailAdress("karolk80c@gmail.com");
+			userAdmin.setEmailAdress("leaguegamesystem@gmail.com");
 			userAdmin.setFirstName("Admin");
 			userAdmin.setLastName("Administrator");
 			userAdmin.setLogin("admin");
@@ -62,6 +69,18 @@ public class InitDatabaseService {
 			userAdmin.setEnabled(true);
 			userAdmin.setCreateDate(new Date());
 			userRepository.save(userAdmin);
+			
+			User userHelp = new User();
+			userHelp.setRoles(rolesList);
+			userHelp.setContactNumber("12312312");
+			userHelp.setEmailAdress("karolk80c@gmail.com");
+			userHelp.setFirstName("Pomoc");
+			userHelp.setLastName("Techniczna");
+			userHelp.setLogin("karol");
+			userHelp.setPassword("admin");
+			userHelp.setEnabled(true);
+			userHelp.setCreateDate(new Date());
+			userRepository.save(userHelp);
 
 			List<Role> testUserRolesList = new ArrayList<Role>();
 			testUserRolesList.add(roleUser);

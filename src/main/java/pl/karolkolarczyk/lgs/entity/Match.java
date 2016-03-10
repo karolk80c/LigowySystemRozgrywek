@@ -8,7 +8,6 @@ import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
@@ -25,7 +24,7 @@ public class Match {
 	@Temporal(TemporalType.DATE)
 	private Date matchDate;
 
-	@OneToMany(mappedBy = "match", cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "match", fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
 	private List<Set> sets;
 
 	public List<Set> getSets() {
@@ -40,7 +39,6 @@ public class Match {
 	private List<User> users;
 
 	@ManyToOne(fetch = FetchType.EAGER)
-	@JoinColumn(name = "round_id")
 	Round round;
 
 	String firstName;
@@ -50,6 +48,15 @@ public class Match {
 	boolean secondApproved;
 	int secondPoints;
 	int firstPoints;
+	boolean completed;
+
+	public boolean isCompleted() {
+		return completed;
+	}
+
+	public void setCompleted(boolean completed) {
+		this.completed = completed;
+	}
 
 	public String getMatchPlace() {
 		return matchPlace;

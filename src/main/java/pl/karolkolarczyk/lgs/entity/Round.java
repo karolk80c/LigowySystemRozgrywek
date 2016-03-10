@@ -18,10 +18,10 @@ public class Round {
 	@GeneratedValue
 	int id;
 
-	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "round", fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
 	private List<Match> matches;
 
-	@ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "season_id")
 	Season season;
 
