@@ -3,7 +3,6 @@ package pl.karolkolarczyk.lgs.entity;
 import java.util.Date;
 import java.util.List;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -18,6 +17,7 @@ import javax.validation.constraints.Size;
 import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotBlank;
 
+import pl.karolkolarczyk.lgs.annotation.UniqueEmail;
 import pl.karolkolarczyk.lgs.annotation.UniqueLogin;
 
 @Entity(name = "uzytkownik")
@@ -41,9 +41,10 @@ public class User {
 	@NotBlank(message = "To pole nie mo¿e byc puste.")
 	private String lastName;
 
-	@Column(nullable = false)
+	@Column(nullable = false, unique = true)
 	@Email(message = "Nieprawid³owy adres email")
 	@NotBlank(message = "To pole nie mo¿e byc puste.")
+	@UniqueEmail(message = "Na podany adres zosta³ ju¿ zarejestrowany u¿ytkownik")
 	private String emailAdress;
 
 	private String contactNumber;
@@ -54,7 +55,7 @@ public class User {
 	@ManyToMany(fetch = FetchType.EAGER)
 	private List<Role> roles;
 
-	@ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
+	@ManyToMany(fetch = FetchType.EAGER)
 	@JoinTable(name = "uzytkownik_mecz")
 	private List<Match> matches;
 
@@ -83,7 +84,6 @@ public class User {
 	private int volleyballPoints;
 
 	private int rankingPosition;
-
 
 	public int getRankingPosition() {
 		return rankingPosition;

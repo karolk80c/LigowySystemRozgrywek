@@ -69,7 +69,7 @@ public class InitDatabaseService {
 			userAdmin.setEnabled(true);
 			userAdmin.setCreateDate(new Date());
 			userRepository.save(userAdmin);
-			
+
 			User userHelp = new User();
 			userHelp.setRoles(rolesList);
 			userHelp.setContactNumber("12312312");
@@ -90,7 +90,11 @@ public class InitDatabaseService {
 			for (int i = 1; i <= howManyUserGenerate; i++) {
 				User userTest = new User();
 				userTest.setContactNumber("999999999");
-				userTest.setEmailAdress("supertestowy@gmail.com");
+				if (i != 0) {
+					userTest.setEmailAdress("supertestowy" + i + "@gmail.com");
+				} else {
+					userTest.setEmailAdress("supertestowy@gmail.com");
+				}
 				userTest.setFirstName("Imie" + i);
 				userTest.setLastName("Nazwisko" + i);
 				userTest.setRoles(testUserRolesList);

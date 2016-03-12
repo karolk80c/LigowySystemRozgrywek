@@ -18,16 +18,19 @@
 
 tr {
 	text-align: center;
+	vertical-align: middle;
 }
 
 tr th {
 	text-align: center;
 }
+
 </style>
 
 
 <link rel="stylesheet"
 	href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
+<link rel="stylesheet" href="../../assets/css/bootstrap-datapicker3.css" />
 
 <link rel="stylesheet"
 	href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap-theme.min.css">
@@ -39,6 +42,12 @@ tr th {
 
 <script
 	src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
+
+
+<script type="text/javascript"
+	src="../../assets/js/bootstrap-datapicker.js"></script>
+	<script type="text/javascript"
+	src="../../assets/js/locales/bootstrap-datapicker.pl.js"></script>
 
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title><tiles:getAsString name="title" /></title>

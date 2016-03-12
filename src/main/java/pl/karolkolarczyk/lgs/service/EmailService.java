@@ -1,5 +1,6 @@
 package pl.karolkolarczyk.lgs.service;
 
+import java.security.Principal;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,6 +34,14 @@ public class EmailService {
 				.concat(siteUrl);
 		mailer.sendMail(sender.getEmailAdress(), recipient, topic, content);
 		context.close();
+	}
+
+	public void sendEmailToAllActive(String topic, String content, Principal principal) {
+		List<User> users = userService.findActivePlayers();
+		String senderLogin = principal.getName();
+		for (User user : users) {
+			sendEmail(senderLogin, user.getEmailAdress(), topic, content);
+		}
 	}
 
 	public void sendNotification(String login, String recipient, String topic, String content) {

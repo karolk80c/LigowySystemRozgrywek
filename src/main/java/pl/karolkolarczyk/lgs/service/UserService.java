@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import pl.karolkolarczyk.lgs.entity.Match;
 import pl.karolkolarczyk.lgs.entity.Role;
 import pl.karolkolarczyk.lgs.entity.User;
+import pl.karolkolarczyk.lgs.exception.ImpossibleResultException;
 import pl.karolkolarczyk.lgs.repository.MatchRepository;
 import pl.karolkolarczyk.lgs.repository.RoleRepository;
 import pl.karolkolarczyk.lgs.repository.UserRepository;
@@ -42,13 +43,27 @@ public class UserService {
 		return userRepository.findAll();
 	}
 
+	public List<User> findAllWithoutAdmins() {
+		List<User> users = userRepository.findAll();
+		List<User> usersWithoutAdmins = new ArrayList<>();
+		for (User user : users) {
+			List<Role> roles = user.getRoles();
+			for (Role role : roles) {
+				if (role.getName().equals("ROLE_USER") || role.getName().equals("ROLE_DISQUALIFIED")) {
+					usersWithoutAdmins.add(user);
+				}
+			}
+		}
+		return usersWithoutAdmins;
+	}
+
 	public List<User> findActivePlayers() {
 		List<User> users = userRepository.findAll();
 		List<User> usersWithoutAdmins = new ArrayList<>();
 		for (User user : users) {
 			List<Role> roles = user.getRoles();
 			for (Role role : roles) {
-				if (role.getName().equals("ROLE_USER")) {
+				if (role.getName().equals("ROLE_USER") || role.getName().equals("ROLE_DISQUALIFIED")) {
 					usersWithoutAdmins.add(user);
 				}
 			}
@@ -100,18 +115,26 @@ public class UserService {
 	}
 
 	public void disqualifie(String login) {
-		User user = userRepository.findOne(login);
-		user.setEnabled(false);
+		User disqualified = userRepository.findOne(login);
+		disqualified.setEnabled(false);
 		List<Role> rolesList = new ArrayList<>();
 		rolesList.add(roleRepository.findByName("ROLE_DISQUALIFIED"));
-		user.setRoles(rolesList);
-		List<Match> matches = user.getMatches();
+		disqualified.setRoles(rolesList);
+		List<Match> matches = disqualified.getMatches();
 		for (Match match : matches) {
+			List<User> users = match.getUsers();
+			User user1 = users.get(0);
+			User user2 = users.get(1);
 			if (!match.isCompleted()) {
-				matchService.approve(match.getId(), user);
+				if (disqualified.getLogin().equals(user1.getLogin())) {
+					matchService.disqualifiedFromMatch(match, disqualified, user2);
+				} else if (disqualified.getLogin().equals(user2.getLogin())) {
+					matchService.disqualifiedFromMatch(match, disqualified, user1);
+				} else {
+					throw new ImpossibleResultException();
+				}
 			}
 		}
-		userRepository.save(user);
+		userRepository.save(disqualified);
 	}
-
 }

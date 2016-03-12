@@ -8,8 +8,10 @@ import org.springframework.web.servlet.ModelAndView;
 
 import pl.karolkolarczyk.lgs.exception.UnacceptableResultException;
 
+
+
 @ControllerAdvice
-public class GlobalDefaultExceptionHandler {
+public class DefaultExceptionHandler {
 	public static final String DEFAULT_ERROR_VIEW = "error";
 
 	@ExceptionHandler(UnacceptableResultException.class)

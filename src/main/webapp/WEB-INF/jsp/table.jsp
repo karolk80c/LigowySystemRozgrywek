@@ -52,7 +52,7 @@
 		<c:forEach items="${users}" var="user">
 			<c:forEach items="${user.roles}" var="role">
 				<c:if
-					test="${role.name == 'ROLE_USER' || role.name == 'ROLE_DISQUALIFIED' }">
+					test="${role.name == 'ROLE_USER' or role.name == 'ROLE_DISQUALIFIED' }">
 					<tr>
 						<td>${user.rankingPosition }</td>
 						<c:choose>

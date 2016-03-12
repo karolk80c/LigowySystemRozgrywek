@@ -52,13 +52,36 @@ public class MatchService {
 		return match;
 	}
 
-	public void disqualifiedFromMatch(Integer id, User diqualified, User winner) {
-
+	public void disqualifiedFromMatch(Match match, User disqualified, User winner) {
+		winner.setWonSets(winner.getWonSets() + 3);
+		winner.setWonMatches(winner.getWonMatches() + 1);
+		winner.setWonSmallPoints(winner.getWonSmallPoints() + 33);
+		disqualified.setLostMatches(disqualified.getLostMatches() + 1);
+		disqualified.setLostSets(disqualified.getLostSets() + 3);
+		disqualified.setLostSmallPoints(disqualified.getLostSmallPoints() + 33);
+		if (match.getFirstName().equals(winner.getFullName())) {
+			match.setFirstPoints(3);
+			match.setSecondPoints(0);
+		} else if (match.getSecondName().equals(winner.getFullName())) {
+			match.setFirstPoints(0);
+			match.setSecondPoints(3);
+		} else {
+			throw new RuntimeException();
+		}
+		match.setCompleted(true);
+		match.setFirstApproved(true);
+		match.setSecondApproved(true);
+		matchRepository.save(match);
+		userRepository.save(winner);
 	}
 
 	@Transactional
 	public void approve(Integer id, User user) {
 		Match match = findOne(id);
+		if (match.getFirstPoints() - Math.abs(match.getSecondPoints()) > 3
+				|| match.getFirstPoints() + Math.abs(match.getSecondPoints()) < 3) {
+			throw new UnacceptableResultException(match.getFirstPoints(), match.getSecondPoints());
+		}
 		List<User> users = match.getUsers();
 		User user1 = users.get(0);
 		User user2 = users.get(1);
@@ -70,7 +93,7 @@ public class MatchService {
 			secondSmallPoints += set.getSecondPlayerScore();
 		}
 
-		if ((user.getFirstName().concat(" ").concat(user.getLastName())).equals(match.getFirstName())) {
+		if ((user.getFullName()).equals(match.getFirstName())) {
 			match.setFirstApproved(true);
 			if (!match.isSecondApproved()) {
 				if (user.getLogin().equals(user1.getLogin())) {
@@ -84,9 +107,9 @@ public class MatchService {
 				} else if (user.getLogin().equals(user2.getLogin())) {
 					updatePoints(match, firstSmallPoints, secondSmallPoints, user2, user1);
 				}
-				saveUsers(user1, user2);
+				saveUsers(user1, user2, match);
 			}
-		} else if ((user.getFirstName().concat(" ").concat(user.getLastName())).equals(match.getSecondName())) {
+		} else if ((user.getFullName()).equals(match.getSecondName())) {
 			match.setSecondApproved(true);
 			if (!match.isFirstApproved()) {
 				if (user.getLogin().equals(user1.getLogin())) {
@@ -100,13 +123,15 @@ public class MatchService {
 				} else if (user.getLogin().equals(user2.getLogin())) {
 					updatePoints(match, firstSmallPoints, secondSmallPoints, user1, user2);
 				}
-				saveUsers(user1, user2);
+				saveUsers(user1, user2, match);
 			}
 		}
 
 	}
 
-	private void saveUsers(User user1, User user2) {
+	private void saveUsers(User user1, User user2, Match match) {
+		match.setCompleted(true);
+		matchRepository.save(match);
 		userRepository.save(user1);
 		userRepository.save(user2);
 		updateUsersRanking();
@@ -145,10 +170,6 @@ public class MatchService {
 			user1.setLostMatches(user1.getLostMatches() + 1);
 			user2.setWonMatches(user2.getWonMatches() + 1);
 		}
-		if (match.getFirstPoints() - Math.abs(match.getSecondPoints()) > 3
-				|| match.getFirstPoints() + Math.abs(match.getSecondPoints()) < 3) {
-			throw new UnacceptableResultException(match.getFirstPoints(), match.getSecondPoints());
-		}
 	}
 
 	public void updateUsersRanking() {
@@ -162,7 +183,7 @@ public class MatchService {
 	}
 
 	public List<User> compareAndSortUsers() {
-		List<User> usersList = userService.findActivePlayers();
+		List<User> usersList = userService.findAllWithoutAdmins();
 		Comparator<User> comparator = Comparator.comparing(User::getWonMatches).thenComparing(User::getBalanceSets)
 				.thenComparing(User::getBalanceSmallPoints);
 		Collections.sort(usersList, comparator.reversed());

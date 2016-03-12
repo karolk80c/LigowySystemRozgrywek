@@ -27,7 +27,7 @@ public class TableController {
 	MatchService matchService;
 
 	@RequestMapping
-	public String showTable(Model model) {
+	public String showTable() {
 		return "table";
 	}
 

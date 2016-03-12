@@ -23,7 +23,7 @@ public class TimetableController {
 
 	@RequestMapping
 	public String showTimetable(Model model) {
-		List<Round> rounds = roundService.findAll();
+		List<Round> rounds = roundService.findAllWithMatchesWithSets();
 		model.addAttribute("round", rounds);
 		return "timetable";
 	}

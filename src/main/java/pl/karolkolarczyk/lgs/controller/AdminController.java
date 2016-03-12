@@ -27,14 +27,21 @@ public class AdminController {
 
 	@RequestMapping("/users/remove/{login}")
 	public String removeUser(@PathVariable String login) {
+		// User user = userService.findOne(login);
+		// List<Role> roles = user.getRoles();
+		// for (Role role : roles) {
+		// if (role.getName().equals("ROLE_USER")) {
+		// userService.disqualifie(login);
+		// }
+		// }
 		userService.delete(login);
-		matchService.updateUsersRanking();
 		return "redirect:/users.html";
 	}
 
 	@RequestMapping("/users/disqualifie/{login}")
 	public String diqualifieeUser(@PathVariable String login) {
 		userService.disqualifie(login);
+		matchService.updateUsersRanking();
 		return "redirect:/users.html";
 	}
 
