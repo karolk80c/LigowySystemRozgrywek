@@ -32,10 +32,11 @@
 				<c:choose>
 					<c:when
 						test="${(match.firstApproved eq true && match.firstName eq user.fullName && match.secondApproved eq false) || (match.secondApproved eq true && match.secondName eq user.fullName  && match.firstApproved eq false)}">
-						<td style="vertical-align: middle"><a class="btn btn-secondary btn-lg"
+						<td style="vertical-align: middle"><a
+							class="btn btn-secondary btn-lg"
 							href='<spring:url value="/matches/${match.id}.html" />'>Szczegoly</a></td>
-						<td style="vertical-align: middle">Zaakceptowane, oczekuje na potwierdzenie
-							drugiego zawodnika <a class="btn btn-danger"
+						<td style="vertical-align: middle">Zaakceptowane, oczekuje na
+							potwierdzenie drugiego zawodnika <a class="btn btn-danger"
 							href='<spring:url value="/matches/${match.id}/cancel.html" />'>Anuluj
 						</a>
 						</td>
@@ -67,11 +68,11 @@
 				</c:choose>
 				<c:choose>
 					<c:when test="${ not empty match.matchDate }">
-						<td style="vertical-align: middle">Data: <b><fmt:formatDate
-									pattern="yyyy-MM-dd HH:mm:ss"
-									value="${match.matchDate}" /></b><br>Miejsce: <b>${match.matchPlace}</b>
+						<td><b><fmt:formatDate value="${match.matchDate}"
+								pattern="dd-MM-yyyy HH:mm" /> </b> <br>Miejsce: <b>${match.matchPlace}</b>
 							<a class="btn btn-primary btn-danger"
-							href='<spring:url value="/matches/${match.id}/dateAndPlace.html" />'>Zmień</a></td>
+							href='<spring:url value="/matches/${match.id}/dateAndPlace.html" />'>Zmień</a>
+						</td>
 					</c:when>
 					<c:otherwise>
 						<td style="vertical-align: middle"><a

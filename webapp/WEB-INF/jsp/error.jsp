@@ -10,7 +10,8 @@
 	<p>
 		<spring:message code="error.content" />
 	</p>
-
+	<br>
+	<h3>Failed URL: ${url} Exception: ${exception.message}</h3>
 	<!--
     Failed URL: ${url}
     Exception:  ${exception.message}

@@ -12,7 +12,7 @@
 		adres email</div>
 </c:if>
 <br>
-<form:form commandName="user" cssClass="form-horizontal">
+<form:form commandName="user" cssClass="form-horizontal register-form">
 
 	<div class="form-group">
 		<label class="control-label col-sm-2" for="name">Imię:</label>
@@ -65,3 +65,48 @@
 	</div>
 
 </form:form>
+
+<script type="text/javascript">
+	$(document).ready(
+			function() {
+				$(".register-form").validate(
+						{
+							rules : {
+								firstName : {
+									required : true
+								},
+								lastName : {
+									required : true
+								},
+								emailAdress : {
+									required : true,
+									email : true
+								},
+								login : {
+									required : true
+								},
+								password : {
+									required : true
+								}
+							},
+							messages : {
+								firstName : {
+									required : "To pole jest wymagane"
+								},
+								lastName : {
+									required : "To pole jest wymagane"
+								},
+								emailAdress : {
+									required : "To pole jest wymagane",
+									email : "Podaj właściwy adres email"
+								},
+								login : {
+									required : "To pole jest wymagane"
+								},
+								password : {
+									required : "To pole jest wymagane"
+								}
+							}
+						});
+			});
+</script>

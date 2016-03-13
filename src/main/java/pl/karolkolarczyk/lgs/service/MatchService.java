@@ -1,5 +1,6 @@
 package pl.karolkolarczyk.lgs.service;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -10,8 +11,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import pl.karolkolarczyk.lgs.entity.Match;
+import pl.karolkolarczyk.lgs.entity.Role;
 import pl.karolkolarczyk.lgs.entity.Set;
 import pl.karolkolarczyk.lgs.entity.User;
+import pl.karolkolarczyk.lgs.exception.ImpossibleResultException;
 import pl.karolkolarczyk.lgs.exception.UnacceptableResultException;
 import pl.karolkolarczyk.lgs.repository.MatchRepository;
 import pl.karolkolarczyk.lgs.repository.SetRepository;
@@ -53,33 +56,91 @@ public class MatchService {
 	}
 
 	public void disqualifiedFromMatch(Match match, User disqualified, User winner) {
-		winner.setWonSets(winner.getWonSets() + 3);
-		winner.setWonMatches(winner.getWonMatches() + 1);
-		winner.setWonSmallPoints(winner.getWonSmallPoints() + 33);
-		disqualified.setLostMatches(disqualified.getLostMatches() + 1);
-		disqualified.setLostSets(disqualified.getLostSets() + 3);
-		disqualified.setLostSmallPoints(disqualified.getLostSmallPoints() + 33);
+		int firstSmallPoint = 0;
+		int secondSmallPoint = 0;
 		if (match.getFirstName().equals(winner.getFullName())) {
-			match.setFirstPoints(3);
+			match.setFirstPoints(4);
 			match.setSecondPoints(0);
+			firstSmallPoint = 11;
 		} else if (match.getSecondName().equals(winner.getFullName())) {
 			match.setFirstPoints(0);
-			match.setSecondPoints(3);
+			match.setSecondPoints(4);
+			secondSmallPoint = 11;
 		} else {
 			throw new RuntimeException();
 		}
-		match.setCompleted(true);
-		match.setFirstApproved(true);
-		match.setSecondApproved(true);
-		matchRepository.save(match);
-		userRepository.save(winner);
+		winner.setWonSets(winner.getWonSets() + 4);
+		winner.setWonMatches(winner.getWonMatches() + 1);
+		winner.setWonSmallPoints(winner.getWonSmallPoints() + 44);
+		disqualified.setLostMatches(disqualified.getLostMatches() + 1);
+		disqualified.setLostSets(disqualified.getLostSets() + 4);
+		disqualified.setLostSmallPoints(disqualified.getLostSmallPoints() + 44);
+		List<Set> sets = new ArrayList<>();
+		for (int i = 0; i < 4; i++) {
+			Set set = new Set(firstSmallPoint, secondSmallPoint, match);
+			setRepository.save(set);
+			sets.add(set);
+		}
+		match.setSets(sets);
+	}
+
+	public void disqualifiedFromCompletedMatch(Match match, User disqualified, User second) {
+		boolean isTwoPlayerDisqualified = false;
+		List<Role> roles = second.getRoles();
+		for (Role role : roles) {
+			if (("ROLE_DISQUALIFIED").equals(role.getName())) {
+				isTwoPlayerDisqualified = true;
+			}
+		}
+		if (match.getFirstName().equals(second.getFullName())) {
+			resetPointsForMatch(match, disqualified, second);
+		} else if (match.getSecondName().equals(second.getFullName())) {
+			resetPointsForMatch(match, second, disqualified);
+		} else {
+			throw new ImpossibleResultException();
+		}
+		if (!isTwoPlayerDisqualified) {
+			updateSecondPointAfterDisqualification(second);
+		}
+	}
+
+	private void updateSecondPointAfterDisqualification(User second) {
+		second.setWonSets(second.getWonSets() + 4);
+		second.setWonSmallPoints(second.getWonSmallPoints() + 44);
+		second.setWonMatches(second.getWonMatches() + 1);
+	}
+
+	private void resetPointsForMatch(Match match, User disqualified, User second) {
+		int firstSmallPoints = 0;
+		int secondSmallPoints = 0;
+
+		for (Set set : match.getSets()) {
+			firstSmallPoints += set.getFirstPlayerScore();
+			secondSmallPoints += set.getSecondPlayerScore();
+		}
+
+		if (match.getFirstPoints() > match.getSecondPoints()) {
+			second.setWonMatches(second.getWonMatches() - 1);
+			disqualified.setLostMatches(disqualified.getLostMatches() - 1);
+		} else {
+			disqualified.setWonMatches(disqualified.getWonMatches() - 1);
+			second.setLostMatches(second.getLostMatches() - 1);
+		}
+		second.setWonSets(second.getWonSets() - match.getFirstPoints());
+		second.setLostSets(second.getLostSets() - match.getSecondPoints());
+		second.setWonSmallPoints(second.getWonSmallPoints() - firstSmallPoints);
+		second.setLostSmallPoints(second.getLostSmallPoints() - secondSmallPoints);
+		disqualified.setLostSets(disqualified.getLostSets() - match.getFirstPoints());
+		disqualified.setWonSets(disqualified.getWonSets() - match.getSecondPoints());
+		disqualified.setWonSmallPoints(disqualified.getWonSmallPoints() - secondSmallPoints);
+		disqualified.setLostSmallPoints(disqualified.getLostSmallPoints() - firstSmallPoints);
 	}
 
 	@Transactional
 	public void approve(Integer id, User user) {
 		Match match = findOne(id);
-		if (match.getFirstPoints() - Math.abs(match.getSecondPoints()) > 3
-				|| match.getFirstPoints() + Math.abs(match.getSecondPoints()) < 3) {
+		if ((match.getFirstPoints() < 4 && match.getSecondPoints() < 4) || match.getFirstPoints() > 4
+				|| match.getSecondPoints() > 4) {
 			throw new UnacceptableResultException(match.getFirstPoints(), match.getSecondPoints());
 		}
 		List<User> users = match.getUsers();
@@ -144,17 +205,6 @@ public class MatchService {
 	}
 
 	private void updatePoints(Match match, int firstSmallPoints, int secondSmallPoints, User user1, User user2) {
-		if (match.getFirstPoints() == 3 && (match.getSecondPoints() == 1 || match.getSecondPoints() == 0)) {
-			user1.setVolleyballPoints(user1.getVolleyballPoints() + 3);
-		} else if (match.getFirstPoints() == 3 && match.getSecondPoints() == 2) {
-			user1.setVolleyballPoints(user1.getVolleyballPoints() + 2);
-			user2.setVolleyballPoints(user2.getVolleyballPoints() + 1);
-		} else if (match.getSecondPoints() == 3 && (match.getFirstPoints() == 1 || match.getFirstPoints() == 0)) {
-			user2.setVolleyballPoints(user2.getVolleyballPoints() + 3);
-		} else if (match.getSecondPoints() == 3 && match.getFirstPoints() == 2) {
-			user2.setVolleyballPoints(user2.getVolleyballPoints() + 2);
-			user1.setVolleyballPoints(user1.getVolleyballPoints() + 1);
-		}
 		user1.setWonSmallPoints(user1.getWonSmallPoints() + firstSmallPoints);
 		user1.setLostSmallPoints(user1.getLostSmallPoints() + secondSmallPoints);
 		user2.setWonSmallPoints(user2.getWonSmallPoints() + secondSmallPoints);

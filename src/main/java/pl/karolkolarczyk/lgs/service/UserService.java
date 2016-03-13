@@ -57,7 +57,7 @@ public class UserService {
 		return usersWithoutAdmins;
 	}
 
-	public List<User> findActivePlayers() {
+	public List<User> findActiveAndDisqualifiedPlayers() {
 		List<User> users = userRepository.findAll();
 		List<User> usersWithoutAdmins = new ArrayList<>();
 		for (User user : users) {
@@ -69,6 +69,20 @@ public class UserService {
 			}
 		}
 		return usersWithoutAdmins;
+	}
+
+	public List<User> findActivePlayers() {
+		List<User> users = userRepository.findAll();
+		List<User> activeUsersWithoutAdmins = new ArrayList<>();
+		for (User user : users) {
+			List<Role> roles = user.getRoles();
+			for (Role role : roles) {
+				if (role.getName().equals("ROLE_USER")) {
+					activeUsersWithoutAdmins.add(user);
+				}
+			}
+		}
+		return activeUsersWithoutAdmins;
 	}
 
 	public List<String> getNamesList() {
@@ -133,8 +147,14 @@ public class UserService {
 				} else {
 					throw new ImpossibleResultException();
 				}
+				match.setCompleted(true);
+			} else {
+				if (disqualified.getLogin().equals(user1.getLogin())) {
+					matchService.disqualifiedFromCompletedMatch(match, user1, user2);
+				} else if (disqualified.getLogin().equals(user2.getLogin())) {
+					matchService.disqualifiedFromCompletedMatch(match, user2, user1);
+				}
 			}
 		}
-		userRepository.save(disqualified);
 	}
 }

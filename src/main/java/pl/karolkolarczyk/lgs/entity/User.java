@@ -79,10 +79,6 @@ public class User {
 
 	private int balanceSmallPoints;
 
-	private int footballPoints;
-
-	private int volleyballPoints;
-
 	private int rankingPosition;
 
 	public int getRankingPosition() {
@@ -93,28 +89,11 @@ public class User {
 		this.rankingPosition = rankingPosition;
 	}
 
-	public int getVolleyballPoints() {
-		return volleyballPoints;
-	}
-
-	public void setVolleyballPoints(int volleyballPoints) {
-		this.volleyballPoints = volleyballPoints;
-	}
-
-	public int getFootballPoints() {
-		return footballPoints;
-	}
-
-	public void setFootballPoints(int footballPoints) {
-		this.footballPoints = footballPoints;
-	}
-
 	@PreUpdate
 	public void updateBalance() {
 		this.setBalanceSmallPoints(wonSmallPoints - lostSmallPoints);
 		this.setBalanceMatches(wonMatches - lostMatches);
 		this.setBalanceSets(wonSets - lostSets);
-		this.setFootballPoints(this.getWonMatches() * 3);
 	}
 
 	public String getLogin() {

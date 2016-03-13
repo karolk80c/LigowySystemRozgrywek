@@ -1,8 +1,5 @@
 package pl.karolkolarczyk.lgs.entity;
 
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
@@ -53,25 +50,6 @@ public class Match {
 	int secondPoints;
 	int firstPoints;
 	boolean completed;
-
-	public String getHours() {
-		DateFormat formatter = new SimpleDateFormat("HH:mm");
-		if (matchDate != null) {
-			return formatter.format(getMatchDate());
-		} else {
-			return formatter.format(new Date());
-		}
-
-	}
-
-	public String getDate() throws ParseException {
-		DateFormat formatter = new SimpleDateFormat("MM/dd/yyyy");
-		if (matchDate != null) {
-			return formatter.format(getMatchDate());
-		} else {
-			return formatter.format(new Date());
-		}
-	}
 
 	public boolean isCompleted() {
 		return completed;

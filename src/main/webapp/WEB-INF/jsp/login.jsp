@@ -53,24 +53,64 @@
 	<div class="alert alert-danger">Niepoprawny login lub haslo</div>
 </c:if>
 
-
-<form class="form-signin" role="form"
+<form class="form-horizontal form-signin login-form" role="form"
 	action="<c:url value='j_spring_security_check' />" method="POST">
-	<h2 class="form-signin-heading">
-		<spring:message code="placeholder.pleaseSignIn" />
-	</h2>
-	<label for="username" class="sr-only"><spring:message
-			code="placeholder.pleaseSignIn" /></label> <input type="text"
-		name="j_username" class="form-control"
-		placeholder=<spring:message
+	<div class="form-group">
+		<h2 style="text-align: center" class="form-signin-heading">
+			<spring:message code="placeholder.pleaseSignIn" /><br>
+		</h2>
+	</div>
+	<div class="form-group">
+		<label for="username" class="sr-only"><spring:message
+				code="placeholder.pleaseSignIn" /></label> <input type="text"
+			name="j_username" class="form-control"
+			placeholder=<spring:message
 			code="placeholder.login" /> required
-		autofocus> <label for="inputPassword" class="sr-only"><spring:message
-			code="placeholder.password" /></label> <input type="password"
-		name="j_password" class="form-control"
-		placeholder=<spring:message
+			autofocus>
+	</div>
+	<div class="form-group">
+		<label for="inputPassword" class="sr-only"><spring:message
+				code="placeholder.password" /></label> <input type="password"
+			name="j_password" class="form-control"
+			placeholder=<spring:message
 			code="placeholder.password" />
-		required>
+			required>
+	</div>
 	<button class="btn btn-lg btn-primary btn-block" type="submit">
 		<spring:message code="placeholder.signIn" />
 	</button>
 </form>
+
+<script type="text/javascript">
+	$(document).ready(
+			function() {
+				$(".login-form").validate(
+						{
+							rules : {
+								j_username : {
+									required : true
+								},
+								j_password : {
+									required : true
+								}
+							},
+							messages : {
+								j_username : {
+									required : "To pole jest wymagane"
+								},
+								j_password : {
+									required : "To pole jest wymagane"
+								}
+							},
+							highlight : function(element) {
+								$(element).closest('.form-group').removeClass(
+										'has-success').addClass('has-error');
+							},
+							unhighlight : function(element) {
+								$(element).closest('.form-group').removeClass(
+										'has-error').addClass('has-success');
+							}
+						});
+			});
+</script>
+

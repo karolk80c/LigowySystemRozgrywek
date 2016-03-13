@@ -1,6 +1,5 @@
 package pl.karolkolarczyk.lgs.entity;
 
-
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -15,13 +14,27 @@ public class Set {
 	private Integer id;
 
 	private int firstPlayerScore;
-	
+
 	private int secondPlayerScore;
 
 	@ManyToOne
-	@JoinColumn(name="match_id")
+	@JoinColumn(name = "match_id")
 	private Match match;
-	
+
+	public Set() {
+
+	}
+
+	public Set(int firstPoints, int secondPoints) {
+		firstPlayerScore = firstPoints;
+		secondPlayerScore = secondPoints;
+	}
+
+	public Set(int firstPoints, int secondPoints, Match match) {
+		firstPlayerScore = firstPoints;
+		secondPlayerScore = secondPoints;
+		setMatch(match);
+	}
 
 	public int getFirstPlayerScore() {
 		return firstPlayerScore;
@@ -54,6 +67,5 @@ public class Set {
 	public void setId(Integer id) {
 		this.id = id;
 	}
-
 
 }

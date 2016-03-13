@@ -2,7 +2,6 @@ package pl.karolkolarczyk.lgs.exception;
 
 public class UnacceptableResultException extends RuntimeException {
 
-	private static final long serialVersionUID = 14323424L;
 	int firstPlayerScore;
 	int secondPlayerScore;
 

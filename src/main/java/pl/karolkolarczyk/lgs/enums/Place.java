@@ -1,7 +1,7 @@
 package pl.karolkolarczyk.lgs.enums;
 
 public enum Place {
-	A("Skrzyd³o A"), F("Skrzyd³o F"), G("Skrzyd³o G"), OTHER("Poza budynkiem");
+	A("Segment A"), F("Segment F"), G("Segment G"), OTHER("Poza budynkiem");
 	String name;
 
 

@@ -7,7 +7,7 @@
 
 <h1 class="center">Wiadomosc do ${user.firstName} ${user.lastName}</h1>
 <br>
-<form:form commandName="email" cssClass="form-horizontal">
+<form:form commandName="email" cssClass="form-horizontal email-form">
 
 	<form:hidden path="recipient" value="${user.emailAdress}" />
 	<div class="form-group">
@@ -26,7 +26,40 @@
 	<div class="form-group">
 		<div class="col-sm-10 col-sm-offset-2">
 			<input id="submit" name="submit" type="submit" value="Wyslij"
-				class="btn btn-primary">
+				class="btn btn-lg btn-primary">
 		</div>
 	</div>
 </form:form>
+
+<script type="text/javascript">
+	$(document).ready(
+			function() {
+				$(".email-form").validate(
+						{
+							rules : {
+								content : {
+									required : true,
+								},
+								topic : {
+									required : true,
+								}
+							},
+							messages : {
+								content : {
+									required : "To pole jest wymagane"
+								},
+								topic : {
+									required : "To pole jest wymagane"
+								}
+							},
+							highlight : function(element) {
+								$(element).closest('.form-group').removeClass(
+										'has-success').addClass('has-error');
+							},
+							unhighlight : function(element) {
+								$(element).closest('.form-group').removeClass(
+										'has-error').addClass('has-success');
+							}
+						});
+			});
+</script>

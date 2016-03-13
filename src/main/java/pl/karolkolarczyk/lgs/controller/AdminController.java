@@ -6,7 +6,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import pl.karolkolarczyk.lgs.entity.User;
-import pl.karolkolarczyk.lgs.service.MatchService;
 import pl.karolkolarczyk.lgs.service.UserService;
 
 @Controller
@@ -15,8 +14,6 @@ public class AdminController {
 	@Autowired
 	private UserService userService;
 
-	@Autowired
-	private MatchService matchService;
 
 	@RequestMapping("/users/update/{login}")
 	public String updateRole(@PathVariable String login) {
@@ -27,21 +24,21 @@ public class AdminController {
 
 	@RequestMapping("/users/remove/{login}")
 	public String removeUser(@PathVariable String login) {
-		// User user = userService.findOne(login);
-		// List<Role> roles = user.getRoles();
-		// for (Role role : roles) {
-		// if (role.getName().equals("ROLE_USER")) {
-		// userService.disqualifie(login);
-		// }
-		// }
 		userService.delete(login);
 		return "redirect:/users.html";
 	}
 
 	@RequestMapping("/users/disqualifie/{login}")
 	public String diqualifieeUser(@PathVariable String login) {
+		User disqualified = userService.findOne(login);
 		userService.disqualifie(login);
-		matchService.updateUsersRanking();
+		int size = userService.findActivePlayers().size();
+		disqualified.setLostMatches(size);
+		disqualified.setLostSets(size * 4);
+		disqualified.setLostSmallPoints(size * 11);
+		disqualified.setWonMatches(0);
+		disqualified.setWonSets(0);
+		disqualified.setWonMatches(0);
 		return "redirect:/users.html";
 	}
 

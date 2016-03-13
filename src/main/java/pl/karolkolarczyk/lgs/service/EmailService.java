@@ -37,7 +37,7 @@ public class EmailService {
 	}
 
 	public void sendEmailToAllActive(String topic, String content, Principal principal) {
-		List<User> users = userService.findActivePlayers();
+		List<User> users = userService.findActiveAndDisqualifiedPlayers();
 		String senderLogin = principal.getName();
 		for (User user : users) {
 			sendEmail(senderLogin, user.getEmailAdress(), topic, content);
@@ -55,7 +55,7 @@ public class EmailService {
 	}
 
 	public void sendNotificationToAllPlayers(String topic, String content) {
-		List<User> users = userService.findActivePlayers();
+		List<User> users = userService.findActiveAndDisqualifiedPlayers();
 		for (User user : users) {
 			sendNotification("leaguegamesystem@gmail.com", user.getEmailAdress(), topic, content);
 		}
