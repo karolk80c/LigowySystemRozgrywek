@@ -32,9 +32,20 @@ public class SetService {
 	}
 
 	@Transactional
-	public void save(Set set, Integer id, User principal) throws UnacceptableResultException {
+	public void save(Set set, Integer id, User principal) {
 		Match match = matchRepository.findOne(id);
 		set.setMatch(match);
+		if ((set.getFirstPlayerScore() < 11 && set.getSecondPlayerScore() < 11)
+				|| ((set.getFirstPlayerScore() - set.getSecondPlayerScore() > 2
+						|| (set.getFirstPlayerScore() - set.getSecondPlayerScore()) == 1)
+						&& (set.getFirstPlayerScore() >= 11 && set.getSecondPlayerScore() > 9))
+				|| ((set.getSecondPlayerScore() - set.getFirstPlayerScore() > 2
+						|| (set.getSecondPlayerScore() - set.getFirstPlayerScore()) == 1)
+						&& (set.getSecondPlayerScore() >= 11 && set.getFirstPlayerScore() > 9))
+				|| (set.getFirstPlayerScore() > 11 && set.getSecondPlayerScore() < 10)
+				|| (set.getSecondPlayerScore() > 11 && set.getFirstPlayerScore() < 10)) {
+			throw new UnacceptableResultException(set.getFirstPlayerScore(), set.getSecondPlayerScore());
+		}
 		setRepository.save(set);
 		if (set.getFirstPlayerScore() > set.getSecondPlayerScore()) {
 			match.setFirstPoints(match.getFirstPoints() + 1);

@@ -9,7 +9,6 @@
 	<br>
 	<p class="center">
 		<b>Niedopuszczalny wynik ${firstPlayerScore}:${secondPlayerScore}</b>
-		<br>Rozgrywka odbywa się do czterech wygranych setów.
 	</p>
 	<br>
 

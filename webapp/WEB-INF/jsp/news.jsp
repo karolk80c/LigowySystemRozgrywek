@@ -10,24 +10,21 @@
 <table class="table table-bordered table-hover table-striped">
 	<thead>
 		<tr>
-			<th>Data</th>
-			<th>Miejsce</th>
 			<th>Zawodnik</th>
 			<th>Wynik</th>
 			<th>Zawodnik</th>
+			<th>Miejsce</th>
+			<th>Data</th>
 		</tr>
 	</thead>
 	<tbody>
-		<c:forEach items="${round.matches}" var="match">
+		<c:forEach items="${incomingMatches}" var="match">
 			<tr>
-				<td>${match.matchDate}</td>
-				<td>${match.matchPlace}</td>
 				<td>${match.firstName}</td>
-				<td><b>${match.firstPoints}:${match.secondPoints}</b>&nbsp;<c:forEach
-						var="set" items="${match.sets}">
-							(${set.firstPlayerScore}:${set.secondPlayerScore})
-							</c:forEach></td>
+				<td><b>${match.firstPoints}:${match.secondPoints}</b></td>
 				<td>${match.secondName}</td>
+				<td>${match.matchPlace}</td>
+				<td>${match.matchDate}</td>
 			</tr>
 		</c:forEach>
 	</tbody>
@@ -41,24 +38,21 @@
 <table class="table table-bordered table-hover table-striped">
 	<thead>
 		<tr>
-			<th>Data</th>
-			<th>Miejsce</th>
 			<th>Zawodnik</th>
 			<th>Wynik</th>
 			<th>Zawodnik</th>
+			<th>Miejsce</th>
+			<th>Data</th>
 		</tr>
 	</thead>
 	<tbody>
-		<c:forEach items="${round.matches}" var="match">
+		<c:forEach items="${latestMatches}" var="match">
 			<tr>
-				<td>${match.matchDate}</td>
-				<td>${match.matchPlace}</td>
 				<td>${match.firstName}</td>
-				<td><b>${match.firstPoints}:${match.secondPoints}</b>&nbsp;<c:forEach
-						var="set" items="${match.sets}">
-							(${set.firstPlayerScore}:${set.secondPlayerScore})
-							</c:forEach></td>
+				<td><b>${match.firstPoints}:${match.secondPoints}</b></td>
 				<td>${match.secondName}</td>
+				<td>${match.matchPlace}</td>
+				<td>${match.matchDate}</td>
 			</tr>
 		</c:forEach>
 	</tbody>

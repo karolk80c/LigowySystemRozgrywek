@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import pl.karolkolarczyk.lgs.entity.Match;
 import pl.karolkolarczyk.lgs.entity.Set;
 import pl.karolkolarczyk.lgs.entity.User;
-import pl.karolkolarczyk.lgs.exception.UnacceptableResultException;
 import pl.karolkolarczyk.lgs.service.MatchService;
 import pl.karolkolarczyk.lgs.service.SetService;
 import pl.karolkolarczyk.lgs.service.UserService;
@@ -39,11 +38,7 @@ public class SetController {
 	@RequestMapping(value = "/{id}", method = RequestMethod.POST)
 	public String addSet(Model model, @PathVariable Integer id, @ModelAttribute("set") Set set, Principal principal) {
 		User user = userService.findOne(principal.getName());
-		try {
-			setService.save(set, id, user);
-		} catch (UnacceptableResultException e) {
-			e.printStackTrace();
-		}
+		setService.save(set, id, user);
 		return "redirect:/matches/" + id + ".html";
 	}
 
@@ -59,6 +54,5 @@ public class SetController {
 		setService.delete(setId, id);
 		return "redirect:/matches/" + id + ".html";
 	}
-
 
 }

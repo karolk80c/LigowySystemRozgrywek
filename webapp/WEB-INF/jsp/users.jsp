@@ -8,7 +8,6 @@
 		<tr>
 			<th>Nazwa_Uzytkownika</th>
 			<th>Zaakceptuj</th>
-			<th>Usuń</th>
 			<th>Dyskwalifikuj</th>
 			<th>Kontakt</th>
 		</tr>
@@ -34,12 +33,9 @@
 								Aktywny
 							</c:otherwise>
 							</c:choose></td>
-						<td><a
-							href=" <spring:url value="/users/remove/${user.login}.html" />"
-							class="btn btn-danger">Usun</a></td>
 						<c:choose>
 							<c:when test="${role.name == 'ROLE_DISQUALIFIED' }">
-							<td>Zdyskfalifikowany</td>
+							<td>Zdyskwalifikowany</td>
 							</c:when>
 							<c:otherwise>
 								<td><a
@@ -49,8 +45,8 @@
 						</c:choose>
 
 						<td><a class="btn btn-info"
-							href='<spring:url value="email/${user.login }.html" />'>Wyslij
-								wiadomosc</a></td>
+							href='<spring:url value="email/${user.login }.html" />'>Wyślij
+								wiadomość</a></td>
 					</tr>
 				</c:if>
 			</c:forEach>

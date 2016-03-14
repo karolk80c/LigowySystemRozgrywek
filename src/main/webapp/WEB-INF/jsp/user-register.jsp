@@ -58,55 +58,52 @@
 		</div>
 	</div>
 	<br>
-	<div class="form-group">
-		<div class="col-sm-2">
-			<input type="submit" value="Save" class="btn btn-lg btn-primary " />
-		</div>
+
+	<div class="col-sm-2">
+		<input type="submit" value="Save" class="btn btn-lg btn-primary " />
 	</div>
 
 </form:form>
 
 <script type="text/javascript">
-	$(document).ready(
-			function() {
-				$(".register-form").validate(
-						{
-							rules : {
-								firstName : {
-									required : true
-								},
-								lastName : {
-									required : true
-								},
-								emailAdress : {
-									required : true,
-									email : true
-								},
-								login : {
-									required : true
-								},
-								password : {
-									required : true
-								}
-							},
-							messages : {
-								firstName : {
-									required : "To pole jest wymagane"
-								},
-								lastName : {
-									required : "To pole jest wymagane"
-								},
-								emailAdress : {
-									required : "To pole jest wymagane",
-									email : "Podaj właściwy adres email"
-								},
-								login : {
-									required : "To pole jest wymagane"
-								},
-								password : {
-									required : "To pole jest wymagane"
-								}
-							}
-						});
-			});
+	$(document).ready(function() {
+		$(".register-form").validate({
+			rules : {
+				firstName : {
+					required : true
+				},
+				lastName : {
+					required : true
+				},
+				emailAdress : {
+					required : true,
+					email : true
+				},
+				login : {
+					required : true
+				},
+				password : {
+					required : true
+				}
+			},
+			messages : {
+				firstName : {
+					required : "To pole jest wymagane"
+				},
+				lastName : {
+					required : "To pole jest wymagane"
+				},
+				emailAdress : {
+					required : "To pole jest wymagane",
+					email : "Podaj właściwy adres email"
+				},
+				login : {
+					required : "To pole jest wymagane"
+				},
+				password : {
+					required : "To pole jest wymagane"
+				}
+			}
+		});
+	});
 </script>

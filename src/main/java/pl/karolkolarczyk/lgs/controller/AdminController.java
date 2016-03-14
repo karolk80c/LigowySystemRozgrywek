@@ -14,7 +14,6 @@ public class AdminController {
 	@Autowired
 	private UserService userService;
 
-
 	@RequestMapping("/users/update/{login}")
 	public String updateRole(@PathVariable String login) {
 		User user = userService.findOne(login);
@@ -30,15 +29,7 @@ public class AdminController {
 
 	@RequestMapping("/users/disqualifie/{login}")
 	public String diqualifieeUser(@PathVariable String login) {
-		User disqualified = userService.findOne(login);
 		userService.disqualifie(login);
-		int size = userService.findActivePlayers().size();
-		disqualified.setLostMatches(size);
-		disqualified.setLostSets(size * 4);
-		disqualified.setLostSmallPoints(size * 11);
-		disqualified.setWonMatches(0);
-		disqualified.setWonSets(0);
-		disqualified.setWonMatches(0);
 		return "redirect:/users.html";
 	}
 

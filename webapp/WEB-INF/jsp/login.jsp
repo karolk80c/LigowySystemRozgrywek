@@ -50,14 +50,16 @@
 </div>
 
 <c:if test="${param.error eq true }">
-	<div class="alert alert-danger">Niepoprawny login lub haslo</div>
+	<div class="alert alert-danger">Niepoprawny login, hasło lub
+		użytkownik został zablokowany.</div>
 </c:if>
 
 <form class="form-horizontal form-signin login-form" role="form"
 	action="<c:url value='j_spring_security_check' />" method="POST">
 	<div class="form-group">
 		<h2 style="text-align: center" class="form-signin-heading">
-			<spring:message code="placeholder.pleaseSignIn" /><br>
+			<spring:message code="placeholder.pleaseSignIn" />
+			<br>
 		</h2>
 	</div>
 	<div class="form-group">
@@ -76,9 +78,11 @@
 			code="placeholder.password" />
 			required>
 	</div>
-	<button class="btn btn-lg btn-primary btn-block" type="submit">
-		<spring:message code="placeholder.signIn" />
-	</button>
+	<div class="form-group">
+		<button class="btn btn-lg btn-primary btn-block" type="submit">
+			<spring:message code="placeholder.signIn" />
+		</button>
+	</div>
 </form>
 
 <script type="text/javascript">

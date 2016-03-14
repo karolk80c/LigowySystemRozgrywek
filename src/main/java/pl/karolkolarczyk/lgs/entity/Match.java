@@ -11,6 +11,8 @@ import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.PrePersist;
+import javax.persistence.PreUpdate;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
@@ -24,16 +26,11 @@ public class Match {
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date matchDate;
 
+	@Temporal(TemporalType.TIMESTAMP)
+	private Date lastModificationDate;
+
 	@OneToMany(mappedBy = "match", cascade = CascadeType.REMOVE)
 	private List<Set> sets;
-
-	public List<Set> getSets() {
-		return sets;
-	}
-
-	public void setSets(List<Set> sets) {
-		this.sets = sets;
-	}
 
 	@ManyToMany(mappedBy = "matches")
 	private List<User> users;
@@ -43,13 +40,34 @@ public class Match {
 
 	String firstName;
 	String secondName;
-
 	String matchPlace;
 	boolean firstApproved;
 	boolean secondApproved;
 	int secondPoints;
 	int firstPoints;
 	boolean completed;
+
+	@PreUpdate
+	@PrePersist
+	public void triggers() {
+		lastModificationDate = new Date();
+	}
+
+	public Date getLastModificationDate() {
+		return lastModificationDate;
+	}
+
+	public void setLastModificationDate(Date lastModificationDate) {
+		this.lastModificationDate = lastModificationDate;
+	}
+
+	public List<Set> getSets() {
+		return sets;
+	}
+
+	public void setSets(List<Set> sets) {
+		this.sets = sets;
+	}
 
 	public boolean isCompleted() {
 		return completed;

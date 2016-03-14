@@ -112,7 +112,7 @@ public class UserService {
 		user.setEnabled(true);
 		user.setRoles(roles);
 		String emailMessagecontent = "Poprawnie zarejestrowano uzytkownika ".concat(user.getLogin()).concat(
-				" w systemie, od tej pory mo¿esz zalogowac sie w systemie, powiadomimy Cie kiedy wystartuje sezon.");
+				" w systemie, od tej pory moï¿½esz zalogowac sie w systemie, powiadomimy Cie kiedy wystartuje sezon.");
 		emailService.sendNotification("leaguegamesystem@gmail.com", user.getEmailAdress(),
 				"Rejestracja w systemie ligowych rozgrywek", emailMessagecontent);
 		userRepository.save(user);
@@ -128,12 +128,14 @@ public class UserService {
 		return userRepository.findAll(new PageRequest(0, 30, order, properties));
 	}
 
+	@Transactional
 	public void disqualifie(String login) {
 		User disqualified = userRepository.findOne(login);
 		disqualified.setEnabled(false);
 		List<Role> rolesList = new ArrayList<>();
 		rolesList.add(roleRepository.findByName("ROLE_DISQUALIFIED"));
 		disqualified.setRoles(rolesList);
+		userRepository.save(disqualified);
 		List<Match> matches = disqualified.getMatches();
 		for (Match match : matches) {
 			List<User> users = match.getUsers();
@@ -141,20 +143,40 @@ public class UserService {
 			User user2 = users.get(1);
 			if (!match.isCompleted()) {
 				if (disqualified.getLogin().equals(user1.getLogin())) {
-					matchService.disqualifiedFromMatch(match, disqualified, user2);
+					matchService.updateSecondPointAfterDisqualification(match, user2);
 				} else if (disqualified.getLogin().equals(user2.getLogin())) {
-					matchService.disqualifiedFromMatch(match, disqualified, user1);
+					matchService.updateSecondPointAfterDisqualification(match, user1);
 				} else {
 					throw new ImpossibleResultException();
 				}
 				match.setCompleted(true);
 			} else {
 				if (disqualified.getLogin().equals(user1.getLogin())) {
-					matchService.disqualifiedFromCompletedMatch(match, user1, user2);
+					matchService.disqualifiedFromCompletedMatch(match, user2);
 				} else if (disqualified.getLogin().equals(user2.getLogin())) {
-					matchService.disqualifiedFromCompletedMatch(match, user2, user1);
+					matchService.disqualifiedFromCompletedMatch(match, user1);
+				}
+			}
+		}
+		updateDisqualifieUser();
+		matchService.updateUsersRanking();
+	}
+
+	private void updateDisqualifieUser() {
+		List<User> allUsers = userRepository.findAll();
+		int size = findActivePlayers().size();
+		for (User disqualified : allUsers) {
+			for (Role role : disqualified.getRoles()) {
+				if (("ROLE_DISQUALIFIED").equals(role.getName())) {
+					disqualified.setLostMatches(size);
+					disqualified.setLostSets(size * 4);
+					disqualified.setLostSmallPoints(size * 11 * 4);
+					disqualified.setWonMatches(0);
+					disqualified.setWonSets(0);
+					disqualified.setWonSmallPoints(0);
 				}
 			}
 		}
 	}
+
 }

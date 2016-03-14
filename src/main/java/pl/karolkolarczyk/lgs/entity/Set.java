@@ -13,9 +13,9 @@ public class Set {
 	@GeneratedValue
 	private Integer id;
 
-	private int firstPlayerScore;
+	private Integer firstPlayerScore;
 
-	private int secondPlayerScore;
+	private Integer secondPlayerScore;
 
 	@ManyToOne
 	@JoinColumn(name = "match_id")
@@ -36,19 +36,19 @@ public class Set {
 		setMatch(match);
 	}
 
-	public int getFirstPlayerScore() {
+	public Integer getFirstPlayerScore() {
 		return firstPlayerScore;
 	}
 
-	public void setFirstPlayerScore(int firstPlayerScore) {
+	public void setFirstPlayerScore(Integer firstPlayerScore) {
 		this.firstPlayerScore = firstPlayerScore;
 	}
 
-	public int getSecondPlayerScore() {
+	public Integer getSecondPlayerScore() {
 		return secondPlayerScore;
 	}
 
-	public void setSecondPlayerScore(int secondPlayerScore) {
+	public void setSecondPlayerScore(Integer secondPlayerScore) {
 		this.secondPlayerScore = secondPlayerScore;
 	}
 

@@ -1,20 +1,29 @@
 package pl.karolkolarczyk.lgs.service;
 
-import java.util.ArrayList;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 
 import pl.karolkolarczyk.lgs.entity.Match;
 import pl.karolkolarczyk.lgs.entity.Role;
 import pl.karolkolarczyk.lgs.entity.Set;
 import pl.karolkolarczyk.lgs.entity.User;
+import pl.karolkolarczyk.lgs.enums.Place;
 import pl.karolkolarczyk.lgs.exception.ImpossibleResultException;
+import pl.karolkolarczyk.lgs.exception.NotExistingPlaceException;
+import pl.karolkolarczyk.lgs.exception.ParseDateException;
 import pl.karolkolarczyk.lgs.exception.UnacceptableResultException;
 import pl.karolkolarczyk.lgs.repository.MatchRepository;
 import pl.karolkolarczyk.lgs.repository.SetRepository;
@@ -55,7 +64,7 @@ public class MatchService {
 		return match;
 	}
 
-	public void disqualifiedFromMatch(Match match, User disqualified, User winner) {
+	public void updateSecondPointAfterDisqualification(Match match, User winner) {
 		int firstSmallPoint = 0;
 		int secondSmallPoint = 0;
 		if (match.getFirstName().equals(winner.getFullName())) {
@@ -72,19 +81,23 @@ public class MatchService {
 		winner.setWonSets(winner.getWonSets() + 4);
 		winner.setWonMatches(winner.getWonMatches() + 1);
 		winner.setWonSmallPoints(winner.getWonSmallPoints() + 44);
-		disqualified.setLostMatches(disqualified.getLostMatches() + 1);
-		disqualified.setLostSets(disqualified.getLostSets() + 4);
-		disqualified.setLostSmallPoints(disqualified.getLostSmallPoints() + 44);
-		List<Set> sets = new ArrayList<>();
+
+		List<Set> sets = setRepository.findByMatch(match);
+		for (Set set : sets) {
+			setRepository.delete(set);
+		}
 		for (int i = 0; i < 4; i++) {
 			Set set = new Set(firstSmallPoint, secondSmallPoint, match);
 			setRepository.save(set);
 			sets.add(set);
 		}
 		match.setSets(sets);
+		match.setFirstApproved(true);
+		match.setSecondApproved(true);
+		matchRepository.save(match);
 	}
 
-	public void disqualifiedFromCompletedMatch(Match match, User disqualified, User second) {
+	public void disqualifiedFromCompletedMatch(Match match, User second) {
 		boolean isTwoPlayerDisqualified = false;
 		List<Role> roles = second.getRoles();
 		for (Role role : roles) {
@@ -93,24 +106,18 @@ public class MatchService {
 			}
 		}
 		if (match.getFirstName().equals(second.getFullName())) {
-			resetPointsForMatch(match, disqualified, second);
+			resetPointsForMatch(match, second);
 		} else if (match.getSecondName().equals(second.getFullName())) {
-			resetPointsForMatch(match, second, disqualified);
+			resetPointsForMatch(match, second);
 		} else {
 			throw new ImpossibleResultException();
 		}
 		if (!isTwoPlayerDisqualified) {
-			updateSecondPointAfterDisqualification(second);
+			updateSecondPointAfterDisqualification(match, second);
 		}
 	}
 
-	private void updateSecondPointAfterDisqualification(User second) {
-		second.setWonSets(second.getWonSets() + 4);
-		second.setWonSmallPoints(second.getWonSmallPoints() + 44);
-		second.setWonMatches(second.getWonMatches() + 1);
-	}
-
-	private void resetPointsForMatch(Match match, User disqualified, User second) {
+	private void resetPointsForMatch(Match match, User second) {
 		int firstSmallPoints = 0;
 		int secondSmallPoints = 0;
 
@@ -121,19 +128,13 @@ public class MatchService {
 
 		if (match.getFirstPoints() > match.getSecondPoints()) {
 			second.setWonMatches(second.getWonMatches() - 1);
-			disqualified.setLostMatches(disqualified.getLostMatches() - 1);
 		} else {
-			disqualified.setWonMatches(disqualified.getWonMatches() - 1);
 			second.setLostMatches(second.getLostMatches() - 1);
 		}
 		second.setWonSets(second.getWonSets() - match.getFirstPoints());
 		second.setLostSets(second.getLostSets() - match.getSecondPoints());
 		second.setWonSmallPoints(second.getWonSmallPoints() - firstSmallPoints);
 		second.setLostSmallPoints(second.getLostSmallPoints() - secondSmallPoints);
-		disqualified.setLostSets(disqualified.getLostSets() - match.getFirstPoints());
-		disqualified.setWonSets(disqualified.getWonSets() - match.getSecondPoints());
-		disqualified.setWonSmallPoints(disqualified.getWonSmallPoints() - secondSmallPoints);
-		disqualified.setLostSmallPoints(disqualified.getLostSmallPoints() - firstSmallPoints);
 	}
 
 	@Transactional
@@ -261,6 +262,34 @@ public class MatchService {
 			match.setSecondApproved(false);
 		}
 		matchRepository.save(match);
+	}
+
+	public void addDateAndPlace(HttpServletRequest request, Match matchFromRepository) {
+		SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy HH:mm");
+		try {
+			Date date = dateFormat.parse(request.getParameter("matchDate"));
+			matchFromRepository.setMatchDate(date);
+		} catch (ParseException e) {
+			throw new ParseDateException("Nie uda³o siê zapisaæ daty w podanym formacie");
+		}
+		String matchPlaceParameter = request.getParameter("matchPlace");
+		if (matchPlaceParameter.equals(Place.A.getName())) {
+			matchFromRepository.setMatchPlace(Place.A.getName());
+		} else if (matchPlaceParameter.equals(Place.F.getName())) {
+			matchFromRepository.setMatchPlace(Place.F.getName());
+		} else if (matchPlaceParameter.equals(Place.G.getName())) {
+			matchFromRepository.setMatchPlace(Place.G.getName());
+		} else if (matchPlaceParameter.equals(Place.OTHER.getName())) {
+			matchFromRepository.setMatchPlace(Place.OTHER.getName());
+		} else {
+			throw new NotExistingPlaceException("Nie znaleziono takiego miejsca");
+		}
+		matchRepository.save(matchFromRepository);
+	}
+
+	@Transactional
+	public Page<Match> findRequestMatches(Direction direction, int size, String properties) {
+		return matchRepository.findAll(new PageRequest(0, size, direction, properties));
 	}
 
 }

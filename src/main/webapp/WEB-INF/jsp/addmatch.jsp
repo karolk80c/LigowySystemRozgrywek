@@ -32,8 +32,17 @@
 							i++;
 					%>
 				</td>
-				<td>${set.firstPlayerScore }</td>
-				<td>${set.secondPlayerScore }</td>
+				<c:choose>
+					<c:when test="${set.firstPlayerScore > set.secondPlayerScore }">
+						<td><b>${set.firstPlayerScore}</b></td>
+						<td>${set.secondPlayerScore }</td>
+					</c:when>
+					<c:otherwise>
+						<td>${set.firstPlayerScore }</td>
+						<td><b>${set.secondPlayerScore}</b></td>
+					</c:otherwise>
+				</c:choose>
+
 				<c:if
 					test="${match.firstApproved eq false && match.secondApproved eq false }">
 					<td><a class="btn btn-danger btn"
@@ -79,19 +88,20 @@
 				</div>
 				<div class="modal-body">
 					<div class="form-group">
-						<label for="firstPlayerScore" class="col-sm-2 control-label">${match.firstName}:
+						<label for="firstPlayerScore" class="col-sm-4 control-label">${match.firstName}
 						</label>
-						<div class="col-sm-10">
-							<form:input path="firstPlayerScore" cssClass="form-control" />
+						<div class="col-sm-2">
+							<form:input path="firstPlayerScore" id="firstTextArea"
+								autocomplete='off' cssClass="form-control" />
 						</div>
-					</div>
-					<div class="form-group">
-						<label for="secondPlayerScore" class="col-sm-2 control-label">${match.secondName}:
+						<div class="col-sm-2">
+							<form:input path="secondPlayerScore" autocomplete='off'
+								cssClass="form-control" />
+						</div>
+						<label for="secondPlayerScore" class="control-label">${match.secondName}
 						</label>
-						<div class="col-sm-10">
-							<form:input path="secondPlayerScore" cssClass="form-control" />
-						</div>
 					</div>
+
 				</div>
 				<form:hidden path="id" />
 				<div class="modal-footer">
@@ -103,3 +113,9 @@
 		</div>
 	</div>
 </form:form>
+
+<script>
+	$('#myModal').on('shown.bs.modal', function() {
+		$('#firstTextArea').focus();
+	})
+</script>
