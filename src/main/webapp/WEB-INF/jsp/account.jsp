@@ -11,8 +11,11 @@
 </h3>
 
 
+
 <br>
-<h1><b>Statystyka</b></h1>
+<h1>
+	<b>Statystyka</b>
+</h1>
 <br>
 
 <table class="table table-bordered table-hover table-striped">

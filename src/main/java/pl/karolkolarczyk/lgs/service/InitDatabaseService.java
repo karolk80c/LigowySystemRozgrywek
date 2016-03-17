@@ -7,6 +7,7 @@ import java.util.List;
 import javax.annotation.PostConstruct;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -34,6 +35,7 @@ public class InitDatabaseService {
 
 	@PostConstruct
 	public void init() {
+		BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 
 		if (roleRepository.count() == 0 && userRepository.count() == 0) {
 			Role roleUser = new Role();
@@ -61,7 +63,7 @@ public class InitDatabaseService {
 			userAdmin.setFirstName("Admin");
 			userAdmin.setLastName("Administrator");
 			userAdmin.setLogin("admin");
-			userAdmin.setPassword("admin");
+			userAdmin.setPassword(encoder.encode("admin"));
 			userAdmin.setEnabled(true);
 			userAdmin.setCreateDate(new Date());
 			userRepository.save(userAdmin);
@@ -73,7 +75,7 @@ public class InitDatabaseService {
 			userHelp.setFirstName("Pomoc");
 			userHelp.setLastName("Techniczna");
 			userHelp.setLogin("karol");
-			userHelp.setPassword("admin");
+			userHelp.setPassword(encoder.encode("admin"));
 			userHelp.setEnabled(true);
 			userHelp.setCreateDate(new Date());
 			userRepository.save(userHelp);
@@ -85,35 +87,35 @@ public class InitDatabaseService {
 			userDirector.setFirstName("Dyrektor");
 			userDirector.setLastName("Turnieju");
 			userDirector.setLogin("director");
-			userDirector.setPassword("admin");
+			userDirector.setPassword(encoder.encode("admin"));
 			userDirector.setEnabled(true);
 			userDirector.setCreateDate(new Date());
 			userRepository.save(userDirector);
 
-			List<Role> testUserRolesList = new ArrayList<Role>();
-			testUserRolesList.add(roleUser);
-
-			int howManyUserGenerate = 8;
-
-			for (int i = 1; i <= howManyUserGenerate; i++) {
-				User userTest = new User();
-				userTest.setContactNumber("999999999");
-				if (i != 1) {
-					userTest.setEmailAdress("supertestowy" + i + "@gmail.com");
-				} else {
-					userTest.setEmailAdress("supertestowy@gmail.com");
-				}
-				userTest.setFirstName("Imie" + i);
-				userTest.setLastName("Nazwisko" + i);
-				userTest.setRoles(testUserRolesList);
-				userTest.setLogin("test" + i);
-				userTest.setPassword("admin");
-				userTest.setEnabled(true);
-				userTest.setCreateDate(new Date());
-				userRepository.save(userTest);
-			}
-
-			drawService.draw();
+			// List<Role> testUserRolesList = new ArrayList<Role>();
+			// testUserRolesList.add(roleUser);
+			//
+			// int howManyUserGenerate = 8;
+			//
+			// for (int i = 1; i <= howManyUserGenerate; i++) {
+			// User userTest = new User();
+			// userTest.setContactNumber("999999999");
+			// if (i != 1) {
+			// userTest.setEmailAdress("supertestowy" + i + "@gmail.com");
+			// } else {
+			// userTest.setEmailAdress("supertestowy@gmail.com");
+			// }
+			// userTest.setFirstName("Imie" + i);
+			// userTest.setLastName("Nazwisko" + i);
+			// userTest.setRoles(testUserRolesList);
+			// userTest.setLogin("test" + i);
+			// userTest.setPassword(encoder.encode("admin"));
+			// userTest.setEnabled(true);
+			// userTest.setCreateDate(new Date());
+			// userRepository.save(userTest);
+			// }
+			//
+			// drawService.draw();
 
 		}
 

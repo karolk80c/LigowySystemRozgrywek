@@ -15,6 +15,7 @@
 			<props>
 				<prop key="mail.smtp.auth">true</prop>
 				<prop key="mail.smtp.starttls.enable">true</prop>
+				<prop key="defaultEncoding">UTF-8</prop> 
 			</props>
 		</property>
 	</bean>

@@ -209,8 +209,7 @@ public class MatchService {
 	}
 
 	private void sendNotificationTo(User user) {
-		emailService.sendNotification("leaguegamesystem@gmail.com", user.getEmailAdress(),
-				"Aktualizacja meczu ping-pong",
+		emailService.sendNotification(user.getEmailAdress(), "Aktualizacja meczu ping-pong",
 				"Twoj przeciwnik wlasnie zaaktualizowal wynik meczu, sprawdz szczegoly spotkania i jesli wszystko sie zgadza zaakceptuj wynik.");
 	}
 

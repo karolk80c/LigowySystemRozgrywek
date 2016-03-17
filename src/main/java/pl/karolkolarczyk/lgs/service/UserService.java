@@ -4,12 +4,15 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.transaction.Transactional;
 
+import org.apache.commons.lang.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort.Direction;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import pl.karolkolarczyk.lgs.entity.Match;
@@ -89,6 +92,8 @@ public class UserService {
 		roles.add(roleRepository.findByName("ROLE_AWAIT"));
 		user.setRoles(roles);
 		user.setCreateDate(new Date());
+		BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+		user.setPassword(encoder.encode(user.getPassword()));
 		userRepository.save(user);
 	}
 
@@ -97,10 +102,10 @@ public class UserService {
 		roles.add(roleRepository.findByName("ROLE_USER"));
 		user.setEnabled(true);
 		user.setRoles(roles);
-		String emailMessagecontent = "Poprawnie zarejestrowano użytkownika ".concat(user.getLogin()).concat(
-				" w systemie, od tej pory możesz zalogowaś się w systemie, powiadomimy Cię kiedy wystartuje sezon.");
-		emailService.sendNotification("leaguegamesystem@gmail.com", user.getEmailAdress(),
-				"Rejestracja w systemie ligowych rozgrywek ping-ponga", emailMessagecontent);
+		String emailMessagecontent = "Poprawnie zarejestrowano użytkownika ".concat(user.getLogin())
+				.concat(", od tej pory możesz zalogowaś się w systemie, powiadomimy Cię kiedy wystartuje sezon.");
+		emailService.sendNotification(user.getEmailAdress(), "Rejestracja w systemie ligowych rozgrywek ping-ponga",
+				emailMessagecontent);
 		userRepository.save(user);
 	}
 
@@ -118,7 +123,7 @@ public class UserService {
 	public void disqualifie(String login) {
 		User disqualified = userRepository.findOne(login);
 		disqualified.setEnabled(false);
-		emailService.sendNotification("leaguegamesystem@gmail.com", disqualified.getEmailAdress(), "Dyskwalifikacja",
+		emailService.sendNotification(disqualified.getEmailAdress(), "Dyskwalifikacja",
 				"Zostałeś zdyskwalifikowany z turnieju.");
 		List<Role> rolesList = new ArrayList<>();
 		rolesList.add(roleRepository.findByName("ROLE_DISQUALIFIED"));
@@ -141,8 +146,7 @@ public class UserService {
 				} else {
 					if (disqualified.getLogin().equals(user1.getLogin())) {
 						matchService.disqualifiedFromCompletedMatch(match, user2);
-						emailService.sendNotification("leaguegamesystem@gmail.com", user2.getEmailAdress(),
-								"Wiadomość dotycząca spotkania",
+						emailService.sendNotification(user2.getEmailAdress(), "Wiadomość dotycząca spotkania",
 								"Twoj przeciwnik: " + user1.getFullName() + " został zdyskfalifikowany z turnieju");
 					} else if (disqualified.getLogin().equals(user2.getLogin())) {
 						matchService.disqualifiedFromCompletedMatch(match, user1);
@@ -195,6 +199,24 @@ public class UserService {
 			user.setLostSmallPoints(0);
 			user.setWonSmallPoints(0);
 			userRepository.save(user);
+		}
+	}
+
+	public void resetPassword(HttpServletRequest request) {
+		String newPassword = RandomStringUtils.randomAlphabetic(7);
+		String login = request.getParameter("login");
+		String email = request.getParameter("emailAdress");
+		User user = userRepository.findOne(login);
+		if (user != null) {
+			if (user.getEmailAdress().equals(email)) {
+				BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+				user.setPassword(encoder.encode(newPassword));
+				emailService.sendNotification(email, "Nowe Hasło", "Nowe Hasło: ".concat(newPassword));
+			} else {
+				throw new RuntimeException("Nieprawidłowy adres email do podanego loginu");
+			}
+		} else {
+			throw new RuntimeException("Użytkownik z podanym loginem nie istnieje");
 		}
 	}
 

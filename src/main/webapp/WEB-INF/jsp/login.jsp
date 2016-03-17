@@ -49,6 +49,11 @@
 	<spring:message code="login.info" />
 </div>
 
+<c:if test="${param.reset eq true }">
+	<div class="alert alert-success">Poprawnie zresetowano hasło.
+		Została wysłana wiadomość na podany adres email</div>
+</c:if>
+
 <c:if test="${param.error eq true }">
 	<div class="alert alert-danger">Niepoprawny login, hasło lub
 		użytkownik został zablokowany.</div>
@@ -83,7 +88,15 @@
 			<spring:message code="placeholder.signIn" />
 		</button>
 	</div>
+	<div class="form-group">
+		<a class="btn btn-info btn-block"
+			href='<spring:url value="/resetPassword.html" />'>Przypomnij
+			hasło</a>
+	</div>
 </form>
+
+
+
 
 <script type="text/javascript">
 	$(document).ready(

@@ -19,9 +19,11 @@
 		<intercept-url pattern="/management/**" access="hasRole('ROLE_ADMIN')" />
 		<intercept-url pattern="/management**" access="hasRole('ROLE_ADMIN')" />
 	</http>
+	
 
 	<authentication-manager>
 		<authentication-provider>
+		<password-encoder hash="bcrypt" />
 			<jdbc-user-service data-source-ref="datasource"
 				authorities-by-username-query="SELECT uzytkownik.login, rola_uzytkownika.name from uzytkownik,uzytkownik_rola_uzytkownika,rola_uzytkownika
 				where uzytkownik_rola_uzytkownika.users_login=uzytkownik.login and rola_uzytkownika.id = uzytkownik_rola_uzytkownika.roles_id and uzytkownik.login=?"

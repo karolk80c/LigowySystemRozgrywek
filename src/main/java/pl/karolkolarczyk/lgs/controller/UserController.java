@@ -2,11 +2,14 @@ package pl.karolkolarczyk.lgs.controller;
 
 import java.security.Principal;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 
 import pl.karolkolarczyk.lgs.entity.User;
 import pl.karolkolarczyk.lgs.service.UserService;
@@ -39,6 +42,17 @@ public class UserController {
 		String name = principal.getName();
 		model.addAttribute("user", userService.findOne(name));
 		return "account";
+	}
+
+	@RequestMapping("/resetPassword")
+	public String showResetPassword(Model model, Principal principal) {
+		return "reset-password";
+	}
+
+	@RequestMapping(value = "/resetPassword", method = RequestMethod.POST)
+	public String resetPassword(Model model, HttpServletRequest request) {
+		userService.resetPassword(request);
+		return "redirect:/login.html?reset=true";
 	}
 
 }

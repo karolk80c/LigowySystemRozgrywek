@@ -23,6 +23,10 @@ import pl.karolkolarczyk.lgs.annotation.UniqueLogin;
 @Entity(name = "uzytkownik")
 public class User {
 
+	public User() {
+		this.notify = true;
+	}
+
 	@Id
 	@Column(nullable = false, unique = true)
 	@Size(min = 3, message = "Login powinien miec conajmniej 3 znaki!")
@@ -59,18 +63,9 @@ public class User {
 	@JoinTable(name = "uzytkownik_mecz")
 	private List<Match> matches;
 
-	// @PreRemove
-	// private void removeMatchFromUser() {
-	// for (Match m : matches) {
-	// List<User> users = m.getUsers();
-	// if (m.getUsers().contains(this)) {
-	// users.remove(1);
-	// users.remove(0);
-	// }
-	// }
-	// }
-
 	private boolean enabled;
+
+	private boolean notify;
 
 	private int wonSmallPoints;
 
@@ -92,19 +87,27 @@ public class User {
 
 	private int rankingPosition;
 
+	@PreUpdate
+	public void updateBalance() {
+		this.setBalanceSmallPoints(wonSmallPoints - lostSmallPoints);
+		this.setBalanceMatches(wonMatches - lostMatches);
+		this.setBalanceSets(wonSets - lostSets);
+	}
+
+	public boolean isNotify() {
+		return notify;
+	}
+
+	public void setNotify(boolean notify) {
+		this.notify = notify;
+	}
+
 	public int getRankingPosition() {
 		return rankingPosition;
 	}
 
 	public void setRankingPosition(int rankingPosition) {
 		this.rankingPosition = rankingPosition;
-	}
-
-	@PreUpdate
-	public void updateBalance() {
-		this.setBalanceSmallPoints(wonSmallPoints - lostSmallPoints);
-		this.setBalanceMatches(wonMatches - lostMatches);
-		this.setBalanceSets(wonSets - lostSets);
 	}
 
 	public String getLogin() {

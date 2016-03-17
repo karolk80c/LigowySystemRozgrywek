@@ -4,6 +4,8 @@ import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.mail.MessagingException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -30,6 +32,11 @@ public class MailController {
 	@Autowired
 	UserRepository userRepository;
 
+	@ModelAttribute("email")
+	public SingleEmail construct() {
+		return new SingleEmail();
+	}
+
 	@RequestMapping("/email")
 	public String showEmailForm(Model model, Principal principal) {
 		User user = userService.findOne(principal.getName());
@@ -49,30 +56,26 @@ public class MailController {
 	public String showEmailForm(Model model, @PathVariable String login) {
 		User user = userService.findOne(login);
 		model.addAttribute("user", user);
-		model.addAttribute("recipientEmail", user.getEmailAdress());
 		return "email-to";
 	}
 
 	@RequestMapping(value = "/email/{login}", method = RequestMethod.POST)
 	public String submitEmailFormToSelectedUser(Model model, @ModelAttribute("email") SingleEmail email,
-			Principal principal, @PathVariable String login) {
+			Principal principal, @PathVariable String login) throws MessagingException {
 		emailService.sendEmail(principal.getName(), email.getRecipient(), email.getTopic(), email.getContent());
 		return "redirect:/email/" + login + ".html?success=true";
 	}
 
-	@ModelAttribute("email")
-	public SingleEmail construct() {
-		return new SingleEmail();
-	}
-
 	@RequestMapping(value = "/email", method = RequestMethod.POST)
-	public String submitEmailForm(Model model, @ModelAttribute("email") SingleEmail email, Principal principal) {
+	public String submitEmailForm(Model model, @ModelAttribute("email") SingleEmail email, Principal principal)
+			throws MessagingException {
 		emailService.sendEmail(principal.getName(), email.getRecipient(), email.getTopic(), email.getContent());
 		return "redirect:/email.html?success=true";
 	}
 
 	@RequestMapping(value = "/email/users", method = RequestMethod.POST)
-	public String submitEmailToAll(Model model, @ModelAttribute("email") SingleEmail email, Principal principal) {
+	public String submitEmailToAll(Model model, @ModelAttribute("email") SingleEmail email, Principal principal)
+			throws MessagingException {
 		emailService.sendEmailToAllActive(email.getTopic(), email.getContent(), principal);
 		return "redirect:/management.html?success=true";
 	}
