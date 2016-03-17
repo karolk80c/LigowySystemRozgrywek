@@ -19,7 +19,7 @@
 <ul class="nav nav-tabs">
 	<c:forEach items="${round}" var="round">
 		<li><a href="#round${round.id}" data-toggle="tab">Kolejka
-				${round.id }</a></li>
+				${round.number }</a></li>
 	</c:forEach>
 </ul>
 
@@ -34,7 +34,7 @@
 						<th>Wynik</th>
 						<th>Zawodnik</th>
 						<th>Miejsce</th>
-						<th>Data</th>
+						<th>Data</th>	
 					</tr>
 				</thead>
 				<tbody>

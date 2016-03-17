@@ -11,9 +11,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 
 import pl.karolkolarczyk.lgs.entity.Match;
@@ -21,7 +18,6 @@ import pl.karolkolarczyk.lgs.entity.Role;
 import pl.karolkolarczyk.lgs.entity.Set;
 import pl.karolkolarczyk.lgs.entity.User;
 import pl.karolkolarczyk.lgs.enums.Place;
-import pl.karolkolarczyk.lgs.exception.ImpossibleResultException;
 import pl.karolkolarczyk.lgs.exception.NotExistingPlaceException;
 import pl.karolkolarczyk.lgs.exception.ParseDateException;
 import pl.karolkolarczyk.lgs.exception.UnacceptableResultException;
@@ -64,6 +60,20 @@ public class MatchService {
 		return match;
 	}
 
+	public void disqualifiedFromCompletedMatch(Match match, User second) {
+		boolean isTwoPlayerDisqualified = false;
+		List<Role> roles = second.getRoles();
+		for (Role role : roles) {
+			if (("ROLE_DISQUALIFIED").equals(role.getName())) {
+				isTwoPlayerDisqualified = true;
+			}
+		}
+		resetPointsForMatch(match, second);
+		if (!isTwoPlayerDisqualified) {
+			updateSecondPointAfterDisqualification(match, second);
+		}
+	}
+
 	public void updateSecondPointAfterDisqualification(Match match, User winner) {
 		int firstSmallPoint = 0;
 		int secondSmallPoint = 0;
@@ -83,38 +93,18 @@ public class MatchService {
 		winner.setWonSmallPoints(winner.getWonSmallPoints() + 44);
 
 		List<Set> sets = setRepository.findByMatch(match);
-		for (Set set : sets) {
-			setRepository.delete(set);
+		if (sets != null) {
+			for (Set set : sets) {
+				setRepository.delete(set);
+			}
 		}
 		for (int i = 0; i < 4; i++) {
 			Set set = new Set(firstSmallPoint, secondSmallPoint, match);
 			setRepository.save(set);
-			sets.add(set);
 		}
-		match.setSets(sets);
 		match.setFirstApproved(true);
 		match.setSecondApproved(true);
 		matchRepository.save(match);
-	}
-
-	public void disqualifiedFromCompletedMatch(Match match, User second) {
-		boolean isTwoPlayerDisqualified = false;
-		List<Role> roles = second.getRoles();
-		for (Role role : roles) {
-			if (("ROLE_DISQUALIFIED").equals(role.getName())) {
-				isTwoPlayerDisqualified = true;
-			}
-		}
-		if (match.getFirstName().equals(second.getFullName())) {
-			resetPointsForMatch(match, second);
-		} else if (match.getSecondName().equals(second.getFullName())) {
-			resetPointsForMatch(match, second);
-		} else {
-			throw new ImpossibleResultException();
-		}
-		if (!isTwoPlayerDisqualified) {
-			updateSecondPointAfterDisqualification(match, second);
-		}
 	}
 
 	private void resetPointsForMatch(Match match, User second) {
@@ -125,16 +115,35 @@ public class MatchService {
 			firstSmallPoints += set.getFirstPlayerScore();
 			secondSmallPoints += set.getSecondPlayerScore();
 		}
-
 		if (match.getFirstPoints() > match.getSecondPoints()) {
-			second.setWonMatches(second.getWonMatches() - 1);
-		} else {
-			second.setLostMatches(second.getLostMatches() - 1);
+			if (match.getFirstName().equals(second.getFullName())) {
+				second.setWonMatches(second.getWonMatches() - 1);
+				second.setWonSets(second.getWonSets() - match.getFirstPoints());
+				second.setLostSets(second.getLostSets() - match.getSecondPoints());
+				second.setWonSmallPoints(second.getWonSmallPoints() - firstSmallPoints);
+				second.setLostSmallPoints(second.getLostSmallPoints() - secondSmallPoints);
+			} else {
+				second.setLostMatches(second.getLostMatches() - 1);
+				second.setWonSets(second.getWonSets() - match.getSecondPoints());
+				second.setLostSets(second.getLostSets() - match.getFirstPoints());
+				second.setWonSmallPoints(second.getWonSmallPoints() - secondSmallPoints);
+				second.setLostSmallPoints(second.getLostSmallPoints() - firstSmallPoints);
+			}
+		} else if (match.getFirstPoints() < match.getSecondPoints()) {
+			if (match.getFirstName().equals(second.getFullName())) {
+				second.setLostMatches(second.getLostMatches() - 1);
+				second.setWonSets(second.getWonSets() - match.getSecondPoints());
+				second.setLostSets(second.getLostSets() - match.getFirstPoints());
+				second.setWonSmallPoints(second.getWonSmallPoints() - secondSmallPoints);
+				second.setLostSmallPoints(second.getLostSmallPoints() - firstSmallPoints);
+			} else {
+				second.setWonMatches(second.getWonMatches() - 1);
+				second.setWonSets(second.getWonSets() - match.getFirstPoints());
+				second.setLostSets(second.getLostSets() - match.getSecondPoints());
+				second.setWonSmallPoints(second.getWonSmallPoints() - firstSmallPoints);
+				second.setLostSmallPoints(second.getLostSmallPoints() - secondSmallPoints);
+			}
 		}
-		second.setWonSets(second.getWonSets() - match.getFirstPoints());
-		second.setLostSets(second.getLostSets() - match.getSecondPoints());
-		second.setWonSmallPoints(second.getWonSmallPoints() - firstSmallPoints);
-		second.setLostSmallPoints(second.getLostSmallPoints() - secondSmallPoints);
 	}
 
 	@Transactional
@@ -234,7 +243,7 @@ public class MatchService {
 	}
 
 	public List<User> compareAndSortUsers() {
-		List<User> usersList = userService.findAllWithoutAdmins();
+		List<User> usersList = userService.findActiveAndDisqualifiedPlayers();
 		Comparator<User> comparator = Comparator.comparing(User::getWonMatches).thenComparing(User::getBalanceSets)
 				.thenComparing(User::getBalanceSmallPoints);
 		Collections.sort(usersList, comparator.reversed());
@@ -287,9 +296,8 @@ public class MatchService {
 		matchRepository.save(matchFromRepository);
 	}
 
-	@Transactional
-	public Page<Match> findRequestMatches(Direction direction, int size, String properties) {
-		return matchRepository.findAll(new PageRequest(0, size, direction, properties));
+	public void delete(Match match) {
+		matchRepository.delete(match.getId());
 	}
 
 }

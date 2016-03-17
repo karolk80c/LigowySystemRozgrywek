@@ -69,10 +69,11 @@
 							</c:otherwise>
 						</c:choose>
 						<td><b><fmt:formatDate value="${match.matchDate}"
-									pattern="dd-MM-yyyy HH:mm" /> </b> <br>Miejsce: <b>${match.matchPlace}<br></b>
-							<a class="btn btn-primary btn-danger"
-							href='<spring:url value="/matches/${match.id}/dateAndPlace.html" />'>Zmień</a>
-						</td>
+									pattern="dd-MM-yyyy HH:mm" /> </b> <br>Miejsce: <b>${match.matchPlace}</b><br>
+							<c:if test="${match.matchPlace ne 'Mecz się nie odbył'}">
+								<a class="btn btn-primary btn-danger"
+									href='<spring:url value="/matches/${match.id}/dateAndPlace.html" />'>Zmień</a>
+							</c:if></td>
 					</c:when>
 					<c:otherwise>
 						<td style="vertical-align: middle">Najpierw uzupełnij

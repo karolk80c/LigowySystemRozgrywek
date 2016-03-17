@@ -27,9 +27,9 @@ public class EmailService {
 		ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("Spring-mail.xml");
 		Mailer mailer = (Mailer) context.getBean("Mailer");
 		content = content
-				.concat("\n\n ----------------------------------------------------- \n\nWiadomosc wys³ana przez ligowy system rozgrywek ping-ponga.")
-				.concat("\nJeœli chcesz odpowiedziec na wiadomosc mozesz skontaktowac sie z nadawca: "
-						+ "\nImie nazwisko: " + sender.getFirstName() + " " + sender.getLastName() + "\nAdres email: "
+				.concat("\n\n ----------------------------------------------------- \n\nWiadomoœæ wys³ana przez ligowy system rozgrywek ping-ponga.")
+				.concat("\nJeœli chcesz odpowiedzieæ na wiadomoœæ mo¿esz skontaktowaæ siæ z nadawc¹: "
+						+ "\nImiê nazwisko: " + sender.getFirstName() + " " + sender.getLastName() + "\nAdres email: "
 						+ sender.getEmailAdress() + "\nNumer kontaktowy: " + sender.getContactNumber() + "\n")
 				.concat(siteUrl);
 		mailer.sendMail(sender.getEmailAdress(), recipient, topic, content);
@@ -37,7 +37,7 @@ public class EmailService {
 	}
 
 	public void sendEmailToAllActive(String topic, String content, Principal principal) {
-		List<User> users = userService.findActiveAndDisqualifiedPlayers();
+		List<User> users = userService.findActivePlayers();
 		String senderLogin = principal.getName();
 		for (User user : users) {
 			sendEmail(senderLogin, user.getEmailAdress(), topic, content);
@@ -48,7 +48,7 @@ public class EmailService {
 		ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("Spring-mail.xml");
 		Mailer mailer = (Mailer) context.getBean("Mailer");
 		content = content
-				.concat("\n\n ----------------------------------------------------- \n\nWiadomosc wygenerowana automatycznie przez ligowy system rozgrywek ping-ponga.\n")
+				.concat("\n\n ----------------------------------------------------- \n\nWiadomoœæ wygenerowana automatycznie przez ligowy system rozgrywek ping-ponga.\n")
 				.concat(siteUrl);
 		mailer.sendMail(login, recipient, topic, content);
 		context.close();

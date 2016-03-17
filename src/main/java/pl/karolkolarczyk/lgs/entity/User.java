@@ -59,6 +59,17 @@ public class User {
 	@JoinTable(name = "uzytkownik_mecz")
 	private List<Match> matches;
 
+	// @PreRemove
+	// private void removeMatchFromUser() {
+	// for (Match m : matches) {
+	// List<User> users = m.getUsers();
+	// if (m.getUsers().contains(this)) {
+	// users.remove(1);
+	// users.remove(0);
+	// }
+	// }
+	// }
+
 	private boolean enabled;
 
 	private int wonSmallPoints;

@@ -7,4 +7,7 @@ import pl.karolkolarczyk.lgs.entity.User;
 public interface UserRepository extends JpaRepository<User, String> {
 
 	User findByEmailAdress(String emailAdress);
+
+	User findByFirstName(String firstName);
+
 }

@@ -12,6 +12,7 @@ import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.PrePersist;
+import javax.persistence.PreRemove;
 import javax.persistence.PreUpdate;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -32,7 +33,7 @@ public class Match {
 	@OneToMany(mappedBy = "match", cascade = CascadeType.REMOVE)
 	private List<Set> sets;
 
-	@ManyToMany(mappedBy = "matches")
+	@ManyToMany
 	private List<User> users;
 
 	@ManyToOne(fetch = FetchType.EAGER)
@@ -51,6 +52,13 @@ public class Match {
 	@PrePersist
 	public void triggers() {
 		lastModificationDate = new Date();
+	}
+
+	@PreRemove
+	private void removeUsersFromMatches() {
+		for (User u : users) {
+			u.getMatches().remove(this);
+		}
 	}
 
 	public Date getLastModificationDate() {

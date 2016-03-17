@@ -6,19 +6,23 @@
 	<div class="alert alert-success">Poprawnie wyslano wiadomosc</div>
 </c:if>
 
-<h1 class="center">Wyslij wiadomosc</h1>
+<h1 class="center">Wyślij wiadomość</h1>
 <br>
 
-<form:form commandName="email" cssClass="form-horizontal email-form" >
+<form:form commandName="email"  cssClass="form-horizontal email-form" >
 	<div class="form-group">
 		<label for="recipient" class="col-sm-2 control-label">Do</label>
 		<div class="col-sm-10">
+			
 			<form:select cssClass="form-control" path="recipient" multiple="false" size="1">
 				<ul>
-					<li><form:options items="${usersList}" itemValue="emailAdress"
+					<li>
+					<form:options items="${usersList}" itemValue="emailAdress"
 							itemLabel="fullName" /></li>
 				</ul>
 			</form:select>
+			
+			
 		</div>
 	</div>
 	<div class="form-group">
@@ -41,6 +45,7 @@
 		</div>
 	</div>
 </form:form>
+
 
 <script type="text/javascript">
 	$(document).ready(function() {

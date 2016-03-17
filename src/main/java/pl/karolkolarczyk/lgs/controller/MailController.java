@@ -1,6 +1,8 @@
 package pl.karolkolarczyk.lgs.controller;
 
 import java.security.Principal;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -12,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import pl.karolkolarczyk.lgs.common.SingleEmail;
 import pl.karolkolarczyk.lgs.entity.User;
+import pl.karolkolarczyk.lgs.repository.UserRepository;
 import pl.karolkolarczyk.lgs.service.EmailService;
 import pl.karolkolarczyk.lgs.service.UserService;
 
@@ -24,9 +27,21 @@ public class MailController {
 	@Autowired
 	UserService userService;
 
+	@Autowired
+	UserRepository userRepository;
+
 	@RequestMapping("/email")
-	public String showEmailForm(Model model) {
-		model.addAttribute("usersList", userService.findAll());
+	public String showEmailForm(Model model, Principal principal) {
+		User user = userService.findOne(principal.getName());
+		List<User> usersList = new ArrayList<>();
+		if ("ROLE_ADMIN".equals(user.getRoles().get(0).getName())) {
+			usersList = userService.findActivePlayers();
+		} else {
+			usersList.add(userRepository.findByFirstName("Admin"));
+			usersList.add(userRepository.findByFirstName("Pomoc"));
+			usersList.add(userRepository.findByFirstName("Dyrektor"));
+		}
+		model.addAttribute("usersList", usersList);
 		return "email";
 	}
 
@@ -54,6 +69,12 @@ public class MailController {
 	public String submitEmailForm(Model model, @ModelAttribute("email") SingleEmail email, Principal principal) {
 		emailService.sendEmail(principal.getName(), email.getRecipient(), email.getTopic(), email.getContent());
 		return "redirect:/email.html?success=true";
+	}
+
+	@RequestMapping(value = "/email/users", method = RequestMethod.POST)
+	public String submitEmailToAll(Model model, @ModelAttribute("email") SingleEmail email, Principal principal) {
+		emailService.sendEmailToAllActive(email.getTopic(), email.getContent(), principal);
+		return "redirect:/management.html?success=true";
 	}
 
 }

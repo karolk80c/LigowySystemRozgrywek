@@ -1,10 +1,11 @@
 package pl.karolkolarczyk.lgs.controller;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Date;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -26,22 +27,16 @@ public class NewsController {
 
 	@RequestMapping
 	public String showNews(Model model) {
-		Page<Match> findIncomingMatches = matchService.findRequestMatches(Direction.ASC, 30, "matchDate");
-		List<Match> incomingMatchList = new ArrayList<>();
-		List<Match> latestMatchList = new ArrayList<>();
-		for (Match match : findIncomingMatches) {
-			if (match.getMatchPlace() != null) {
-				incomingMatchList.add(match);
-			}
-		}
-		Page<Match> findLatestMatches = matchService.findRequestMatches(Direction.ASC, 30, "lastModificationDate");
-		for (Match match : findLatestMatches) {
-			if (match.getMatchPlace() != null) {
-				latestMatchList.add(match);
-			}
-		}
-		model.addAttribute("latestMatches", latestMatchList);
-		model.addAttribute("incomingMatches", latestMatchList);
+		Date currentTime = new Date();
+		Pageable incomingMatchesPage = new PageRequest(0, 10, Direction.ASC, "matchDate");
+		Page<Match> incomingMatches = matchRepository.findByCompletedAndMatchDateAfter(false, currentTime,
+				incomingMatchesPage);
+
+		Pageable latestMatchesPage = new PageRequest(0, 10, Direction.DESC, "lastModificationDate");
+		Page<Match> latestMatches = matchRepository.findByCompletedAndMatchDateNotNull(true, latestMatchesPage);
+
+		model.addAttribute("latestMatches", latestMatches.getContent());
+		model.addAttribute("incomingMatches", incomingMatches.getContent());
 		return "news";
 	}
 

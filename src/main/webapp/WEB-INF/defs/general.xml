@@ -14,12 +14,6 @@
 		<put-attribute name="current" value="index" />
 	</definition>
 
-	<definition name="draw" extends="common">
-		<put-attribute name="title" value="Losowanie" />
-		<put-attribute name="body" value="/WEB-INF/jsp/draw.jsp" />
-		<put-attribute name="current" value="draw" />
-	</definition>
-
 	<definition name="login" extends="common">
 		<put-attribute name="title" value="Logowanie" />
 		<put-attribute name="body" value="/WEB-INF/jsp/login.jsp" />

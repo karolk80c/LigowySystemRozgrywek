@@ -54,7 +54,6 @@ public class SetService {
 		} else {
 			throw new UnacceptableResultException(set.getFirstPlayerScore(), set.getSecondPlayerScore());
 		}
-
 		matchRepository.save(match);
 	}
 

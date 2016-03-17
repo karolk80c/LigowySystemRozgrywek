@@ -48,10 +48,6 @@ public class InitDatabaseService {
 			roleAwait.setName("ROLE_AWAIT");
 			roleRepository.save(roleAwait);
 
-			Role roleService = new Role();
-			roleService.setName("ROLE_SERVICE");
-			roleRepository.save(roleService);
-
 			Role roleDisqualified = new Role("ROLE_DISQUALIFIED");
 			roleRepository.save(roleDisqualified);
 
@@ -82,6 +78,18 @@ public class InitDatabaseService {
 			userHelp.setCreateDate(new Date());
 			userRepository.save(userHelp);
 
+			User userDirector = new User();
+			userDirector.setRoles(rolesList);
+			userDirector.setContactNumber("12312312");
+			userDirector.setEmailAdress("director@test.com");
+			userDirector.setFirstName("Dyrektor");
+			userDirector.setLastName("Turnieju");
+			userDirector.setLogin("director");
+			userDirector.setPassword("admin");
+			userDirector.setEnabled(true);
+			userDirector.setCreateDate(new Date());
+			userRepository.save(userDirector);
+
 			List<Role> testUserRolesList = new ArrayList<Role>();
 			testUserRolesList.add(roleUser);
 
@@ -90,7 +98,7 @@ public class InitDatabaseService {
 			for (int i = 1; i <= howManyUserGenerate; i++) {
 				User userTest = new User();
 				userTest.setContactNumber("999999999");
-				if (i != 0) {
+				if (i != 1) {
 					userTest.setEmailAdress("supertestowy" + i + "@gmail.com");
 				} else {
 					userTest.setEmailAdress("supertestowy@gmail.com");

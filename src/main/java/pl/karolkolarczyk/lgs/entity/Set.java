@@ -17,7 +17,7 @@ public class Set {
 
 	private Integer secondPlayerScore;
 
-	@ManyToOne
+	@ManyToOne()
 	@JoinColumn(name = "match_id")
 	private Match match;
 
@@ -33,7 +33,7 @@ public class Set {
 	public Set(int firstPoints, int secondPoints, Match match) {
 		firstPlayerScore = firstPoints;
 		secondPlayerScore = secondPoints;
-		setMatch(match);
+		this.match = match;
 	}
 
 	public Integer getFirstPlayerScore() {
