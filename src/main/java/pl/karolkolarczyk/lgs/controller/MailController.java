@@ -44,9 +44,8 @@ public class MailController {
 		if ("ROLE_ADMIN".equals(user.getRoles().get(0).getName())) {
 			usersList = userService.findActivePlayers();
 		} else {
-			usersList.add(userRepository.findByFirstName("Admin"));
 			usersList.add(userRepository.findByFirstName("Pomoc"));
-			usersList.add(userRepository.findByFirstName("Dyrektor"));
+			usersList.add(userRepository.findByFirstName("Administrator"));
 		}
 		model.addAttribute("usersList", usersList);
 		return "email";

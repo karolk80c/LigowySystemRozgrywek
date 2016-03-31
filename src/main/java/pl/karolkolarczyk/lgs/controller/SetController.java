@@ -50,7 +50,7 @@ public class SetController {
 	}
 
 	@RequestMapping("/{id}/deleteSet/{setId}")
-	public String addMatchStatistics(Model model, @PathVariable Integer id, @PathVariable Integer setId) {
+	public String deleteSet(Model model, @PathVariable Integer id, @PathVariable Integer setId) {
 		setService.delete(setId, id);
 		return "redirect:/matches/" + id + ".html";
 	}

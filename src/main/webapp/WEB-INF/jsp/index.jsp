@@ -9,6 +9,9 @@
 }
 </style>
 
+<div class="alert alert-info">
+	<spring:message code="index.beta" />
+</div>
 
 
 <div class="center">

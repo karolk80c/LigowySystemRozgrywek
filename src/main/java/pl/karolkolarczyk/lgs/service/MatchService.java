@@ -92,12 +92,8 @@ public class MatchService {
 		winner.setWonMatches(winner.getWonMatches() + 1);
 		winner.setWonSmallPoints(winner.getWonSmallPoints() + 44);
 
-		List<Set> sets = setRepository.findByMatch(match);
-		if (sets != null) {
-			for (Set set : sets) {
-				setRepository.delete(set);
-			}
-		}
+		removeSetsFromMatch(match);
+
 		for (int i = 0; i < 4; i++) {
 			Set set = new Set(firstSmallPoint, secondSmallPoint, match);
 			setRepository.save(set);
@@ -105,6 +101,15 @@ public class MatchService {
 		match.setFirstApproved(true);
 		match.setSecondApproved(true);
 		matchRepository.save(match);
+	}
+
+	public void removeSetsFromMatch(Match match) {
+		List<Set> sets = setRepository.findByMatch(match);
+		if (sets != null) {
+			for (Set set : sets) {
+				setRepository.delete(set);
+			}
+		}
 	}
 
 	private void resetPointsForMatch(Match match, User second) {
@@ -147,6 +152,31 @@ public class MatchService {
 	}
 
 	@Transactional
+	public void approveMatchByAdmin(Integer id) {
+		Match match = findOne(id);
+		List<User> users = match.getUsers();
+		User user1 = users.get(0);
+		User user2 = users.get(1);
+		sendNotificationTo(user1);
+		sendNotificationTo(user2);
+		List<Set> sets = setRepository.findByMatch(match);
+		int firstSmallPoints = 0;
+		int secondSmallPoints = 0;
+		if (sets.size() > 0) {
+			for (Set set : sets) {
+				firstSmallPoints += set.getFirstPlayerScore();
+				secondSmallPoints += set.getSecondPlayerScore();
+			}
+		}
+		if ((user1.getFullName()).equals(match.getFirstName())) {
+			updatePoints(match, firstSmallPoints, secondSmallPoints, user1, user2);
+		} else if ((user2.getFullName()).equals(match.getFirstName())) {
+			updatePoints(match, firstSmallPoints, secondSmallPoints, user2, user1);
+		}
+		saveUsers(user1, user2, match);
+	}
+
+	@Transactional
 	public void approve(Integer id, User user) {
 		Match match = findOne(id);
 		if ((match.getFirstPoints() < 4 && match.getSecondPoints() < 4) || match.getFirstPoints() > 4
@@ -159,9 +189,11 @@ public class MatchService {
 		List<Set> sets = setRepository.findByMatch(match);
 		int firstSmallPoints = 0;
 		int secondSmallPoints = 0;
-		for (Set set : sets) {
-			firstSmallPoints += set.getFirstPlayerScore();
-			secondSmallPoints += set.getSecondPlayerScore();
+		if (sets.size() > 0) {
+			for (Set set : sets) {
+				firstSmallPoints += set.getFirstPlayerScore();
+				secondSmallPoints += set.getSecondPlayerScore();
+			}
 		}
 
 		if ((user.getFullName()).equals(match.getFirstName())) {
@@ -210,7 +242,7 @@ public class MatchService {
 
 	private void sendNotificationTo(User user) {
 		emailService.sendNotification(user.getEmailAdress(), "Aktualizacja meczu ping-pong",
-				"Twoj przeciwnik wlasnie zaaktualizowal wynik meczu, sprawdz szczegoly spotkania i jesli wszystko sie zgadza zaakceptuj wynik.");
+				"Twój przeciwnik w³aœnie zaktualizowa³ wynik meczu, sprawdŸ szczegó³y spotkania i jeœli wszystko siê zgadza zaakceptuj wynik.");
 	}
 
 	private void updatePoints(Match match, int firstSmallPoints, int secondSmallPoints, User user1, User user2) {
@@ -297,6 +329,32 @@ public class MatchService {
 
 	public void delete(Match match) {
 		matchRepository.delete(match.getId());
+	}
+
+	public void clearMatchesData() {
+		List<Match> matches = matchRepository.findAll();
+		for (Match match : matches) {
+			clearMatchData(match.getId());
+		}
+	}
+
+	public void clearMatchData(int id) {
+		Match match = findOneWithSets(id);
+		match.setFirstPoints(0);
+		match.setSecondPoints(0);
+		match.setCompleted(false);
+		match.setFirstApproved(false);
+		match.setSecondApproved(false);
+		match.setMatchDate(null);
+		match.setMatchPlace("");
+		List<Set> sets = match.getSets();
+		if (sets.size() > 0) {
+			for (Set set : sets) {
+				setRepository.delete(set.getId());
+			}
+		}
+		match.setSets(null);
+		matchRepository.save(match);
 	}
 
 }

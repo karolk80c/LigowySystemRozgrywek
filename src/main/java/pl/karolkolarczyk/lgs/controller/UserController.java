@@ -45,7 +45,7 @@ public class UserController {
 	}
 
 	@RequestMapping("/resetPassword")
-	public String showResetPassword(Model model, Principal principal) {
+	public String showResetPassword() {
 		return "reset-password";
 	}
 
@@ -53,6 +53,30 @@ public class UserController {
 	public String resetPassword(Model model, HttpServletRequest request) {
 		userService.resetPassword(request);
 		return "redirect:/login.html?reset=true";
+	}
+
+	@RequestMapping("/account/changePassword")
+	public String showChangePassword() {
+		return "change-password";
+	}
+
+	@RequestMapping(value = "/account/changePassword", method = RequestMethod.POST)
+	public String changePassword(Model model, HttpServletRequest request, Principal principal) {
+		userService.changePassword(request, principal);
+		return "redirect:/account.html?change=true";
+	}
+
+	@RequestMapping("/account/changePersonalData")
+	public String showchangePersonalData(Principal principal,Model model) {
+		User user = userService.findOne(principal.getName());
+		model.addAttribute("user", user);
+		return "change-detail";
+	}
+
+	@RequestMapping(value = "/account/changePersonalData", method = RequestMethod.POST)
+	public String changePersonalData(Model model, HttpServletRequest request, Principal principal) {
+		userService.changePersonalData(request, principal);
+		return "redirect:/account.html?changeData=true";
 	}
 
 }

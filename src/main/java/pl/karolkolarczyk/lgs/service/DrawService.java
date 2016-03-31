@@ -141,7 +141,7 @@ public class DrawService {
 			season.setNumber(seasonNumber);
 			seasonRepository.save(season);
 			emailService.sendNotificationToAllPlayers("Wystartowa³ sezon ping-pongowy ".concat(seasonNumber),
-					"Wystartowa³ sezon ping-ponga, od tej chwili mo¿esz ustalac miejsce i date spotkan oraz aktualizowac wyniki swoich rozgrywek ");
+					"Wystartowa³ sezon ping-ponga, od tej chwili mo¿esz ustalaæ miejsce i datê spotkañ oraz aktualizowaæ wyniki swoich rozgrywek ");
 		}
 	}
 

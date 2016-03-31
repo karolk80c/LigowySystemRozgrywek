@@ -29,7 +29,7 @@ public class EmailService {
 		String emailTo = "<a href=mailto:" + sender.getEmailAdress() + ">" + sender.getEmailAdress() + "</a>";
 		content = content
 				.concat("<br><br> ----------------------------------------------------- <br><br>Wiadomoœæ wys³ana przez ligowy system rozgrywek ping-ponga.")
-				.concat("<br>Jeœli chcesz odpowiedzieæ na wiadomoœæ mo¿esz skontaktowaæ siæ z nadawc¹: "
+				.concat("<br>Jeœli chcesz odpowiedzieæ na wiadomoœæ mo¿esz skontaktowaæ siê z nadawc¹: "
 						+ "<br>Imiê nazwisko: " + sender.getFirstName() + " " + sender.getLastName()
 						+ "<br>Adres email: " + emailTo + "<br>Numer kontaktowy: " + sender.getContactNumber() + "\n")
 				.concat("<br>Adres Url: " + siteUrl);

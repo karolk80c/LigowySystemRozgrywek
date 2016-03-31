@@ -51,7 +51,7 @@
 
 <c:if test="${param.reset eq true }">
 	<div class="alert alert-success">Poprawnie zresetowano hasło.
-		Została wysłana wiadomość na podany adres email</div>
+		Nowe hasło zostało wysłane na Twój adres email</div>
 </c:if>
 
 <c:if test="${param.error eq true }">

@@ -6,5 +6,5 @@ import pl.karolkolarczyk.lgs.entity.Round;
 
 public interface RoundRepository extends JpaRepository<Round, Integer> {
 
-
+	Round findByNumber(int number);
 }

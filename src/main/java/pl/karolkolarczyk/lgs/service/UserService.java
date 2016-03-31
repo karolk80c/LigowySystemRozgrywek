@@ -1,5 +1,6 @@
 package pl.karolkolarczyk.lgs.service;
 
+import java.security.Principal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -103,7 +104,7 @@ public class UserService {
 		user.setEnabled(true);
 		user.setRoles(roles);
 		String emailMessagecontent = "Poprawnie zarejestrowano użytkownika ".concat(user.getLogin())
-				.concat(", od tej pory możesz zalogowaś się w systemie, powiadomimy Cię kiedy wystartuje sezon.");
+				.concat(", od tej pory możesz zalogować się w systemie, powiadomimy Cię kiedy wystartuje sezon.");
 		emailService.sendNotification(user.getEmailAdress(), "Rejestracja w systemie ligowych rozgrywek ping-ponga",
 				emailMessagecontent);
 		userRepository.save(user);
@@ -111,7 +112,12 @@ public class UserService {
 
 	public void delete(String login) {
 		User user = userRepository.findOne(login);
-		userRepository.delete(user);
+		if (user.getMatches().size() == 0) {
+			userRepository.delete(user);
+		} else {
+			throw new RuntimeException("Nie można usunąć użytkownika który posiada mecze w aktywnym sezonie.");
+		}
+
 	}
 
 	@Transactional
@@ -147,7 +153,7 @@ public class UserService {
 					if (disqualified.getLogin().equals(user1.getLogin())) {
 						matchService.disqualifiedFromCompletedMatch(match, user2);
 						emailService.sendNotification(user2.getEmailAdress(), "Wiadomość dotycząca spotkania",
-								"Twoj przeciwnik: " + user1.getFullName() + " został zdyskfalifikowany z turnieju");
+								"Twój przeciwnik: " + user1.getFullName() + " został zdyskwalifikowany z turnieju");
 					} else if (disqualified.getLogin().equals(user2.getLogin())) {
 						matchService.disqualifiedFromCompletedMatch(match, user1);
 					}
@@ -157,9 +163,9 @@ public class UserService {
 				match.setMatchPlace("Mecz się nie odbył");
 				matchRepository.save(match);
 			}
+			updateDisqualifieUser();
+			matchService.updateUsersRanking();
 		}
-		updateDisqualifieUser();
-		matchService.updateUsersRanking();
 	}
 
 	private void updateDisqualifieUser() {
@@ -181,7 +187,6 @@ public class UserService {
 
 	public void deactivate(String login) {
 		User user = userRepository.findOne(login);
-		disqualifie(login);
 		List<Role> roles = new ArrayList<Role>();
 		roles.add(roleRepository.findByName("ROLE_AWAIT"));
 		user.setRoles(roles);
@@ -198,6 +203,7 @@ public class UserService {
 			user.setWonSets(0);
 			user.setLostSmallPoints(0);
 			user.setWonSmallPoints(0);
+			user.setRankingPosition(0);
 			userRepository.save(user);
 		}
 	}
@@ -220,4 +226,40 @@ public class UserService {
 		}
 	}
 
+	public void changePassword(HttpServletRequest request, Principal principal) {
+		String oldPassword = request.getParameter("oldPassword");
+		String newPassword = request.getParameter("newPassword");
+		User user = userRepository.findOne(principal.getName());
+		BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+		if (encoder.matches(oldPassword, user.getPassword())) {
+			user.setPassword(encoder.encode(newPassword));
+			emailService.sendNotification(user.getEmailAdress(), "Poprawnie zmieniono hasło",
+					"Poprawnie zmieniono hasło<br> Twoje nowe hasło: " + newPassword);
+		} else {
+			throw new RuntimeException("Podane stare hasło nie zgadza się z obecnym");
+		}
+	}
+
+	public void changePersonalData(HttpServletRequest request, Principal principal) {
+		String firstName = request.getParameter("firstName");
+		String lastName = request.getParameter("lastName");
+		String contactNumber = request.getParameter("contactNumber");
+		User user = userRepository.findOne(principal.getName());
+		int count = 0;
+		if ((!firstName.trim().isEmpty()) && (!firstName.equals(user.getFirstName()))) {
+			user.setFirstName(firstName);
+			count++;
+		}
+		if ((!lastName.trim().isEmpty()) && (!lastName.equals(user.getLastName()))) {
+			user.setLastName(lastName);
+			count++;
+		}
+		if (!contactNumber.equals(user.getContactNumber())) {
+			user.setContactNumber(contactNumber);
+			count++;
+		}
+		if (count > 0) {
+			userRepository.save(user);
+		}
+	}
 }

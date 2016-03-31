@@ -124,6 +124,7 @@ tr th {
 				<!--/.container-fluid -->
 			</nav>
 			<tiles:insertAttribute name="body"></tiles:insertAttribute>
+
 			<br> <br>
 			<div class="footer">
 				<tiles:insertAttribute name="footer"></tiles:insertAttribute>
@@ -132,3 +133,4 @@ tr th {
 	</div>
 </body>
 </html>
+

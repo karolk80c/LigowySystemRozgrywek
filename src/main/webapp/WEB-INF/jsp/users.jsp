@@ -11,6 +11,7 @@
 			<th>Nazwa_Uzytkownika</th>
 			<th>Stan</th>
 			<th>Dyskwalifikacja</th>
+			<th>Usunięcie</th>
 			<th>Kontakt</th>
 		</tr>
 	</thead>
@@ -32,7 +33,7 @@
 								<c:otherwise>
 									<a
 										href=" <spring:url value="/users/deactivate/${user.login}.html" />"
-										class="btn btn-warning"> Dezaktywuj </a>
+										class="btn btn-warning triggerRemove"> Dezaktywuj </a>
 								</c:otherwise>
 							</c:choose></td>
 						<c:choose>
@@ -45,9 +46,11 @@
 							<c:otherwise>
 								<td><a
 									href=" <spring:url value="/users/disqualifie/${user.login}.html" />"
-									class="btn btn-danger"> Zdyskwalifikuj </a></td>
+									class="btn btn-danger triggerRemove"> Zdyskwalifikuj </a></td>
 							</c:otherwise>
 						</c:choose>
+						<td><a class="btn btn-danger"
+							href='<spring:url value="/users/remove/${user.login}.html" />'>Usuń</a></td>
 						<td><a class="btn btn-info"
 							href='<spring:url value="email/${user.login }.html" />'>Wyślij
 								wiadomość</a></td>
@@ -57,3 +60,33 @@
 		</c:forEach>
 	</tbody>
 </table>
+
+<!-- Modal -->
+<div class="modal fade" id="modalRemove" tabindex="-1" role="dialog"
+	aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal"
+					aria-hidden="true">&times;</button>
+				<h4 class="modal-title" id="myModalLabel">Wiadomość</h4>
+			</div>
+			<div class="modal-body">Jesteś pewny że chcesz wykonać wybraną
+				akcję?</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default" data-dismiss="modal">Anuluj</button>
+				<a href="" class="btn btn-danger removeBtn">Wykonaj</a>
+			</div>
+		</div>
+	</div>
+</div>
+
+<script type="text/javascript">
+	$(document).ready(function() {
+		$(".triggerRemove").click(function(e) {
+			e.preventDefault();
+			$("#modalRemove .removeBtn").attr("href", $(this).attr("href"));
+			$("#modalRemove").modal();
+		});
+	});
+</script>
