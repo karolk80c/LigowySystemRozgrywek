@@ -25,6 +25,8 @@ public class Round {
 	@JoinColumn(name = "season_id")
 	Season season;
 
+	int number;
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -70,8 +72,6 @@ public class Round {
 		}
 		return true;
 	}
-
-	int number;
 
 	public int getNumber() {
 		return number;

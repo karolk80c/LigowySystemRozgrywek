@@ -78,30 +78,30 @@ public class InitDatabaseService {
 			userHelp.setCreateDate(new Date());
 			userRepository.save(userHelp);
 
-			// List<Role> testUserRolesList = new ArrayList<Role>();
-			// testUserRolesList.add(roleUser);
-			//
-			// int howManyUserGenerate = 8;
-			//
-			// for (int i = 1; i <= howManyUserGenerate; i++) {
-			// User userTest = new User();
-			// userTest.setContactNumber("999999999");
-			// if (i != 1) {
-			// userTest.setEmailAdress("supertestowy" + i + "@gmail.com");
-			// } else {
-			// userTest.setEmailAdress("supertestowy@gmail.com");
-			// }
-			// userTest.setFirstName("Imie" + i);
-			// userTest.setLastName("Nazwisko" + i);
-			// userTest.setRoles(testUserRolesList);
-			// userTest.setLogin("test" + i);
-			// userTest.setPassword(encoder.encode("admin"));
-			// userTest.setEnabled(true);
-			// userTest.setCreateDate(new Date());
-			// userRepository.save(userTest);
-			// }
-			//
-			// drawService.draw();
+			List<Role> testUserRolesList = new ArrayList<Role>();
+			testUserRolesList.add(roleUser);
+
+			int howManyUserGenerate = 4;
+
+			for (int i = 1; i <= howManyUserGenerate; i++) {
+				User userTest = new User();
+				userTest.setContactNumber("999999999");
+				if (i != 1) {
+					userTest.setEmailAdress("supertestowy" + i + "@gmail.com");
+				} else {
+					userTest.setEmailAdress("supertestowy@gmail.com");
+				}
+				userTest.setFirstName("Imie" + i);
+				userTest.setLastName("Nazwisko" + i);
+				userTest.setRoles(testUserRolesList);
+				userTest.setLogin("test" + i);
+				userTest.setPassword(encoder.encode("admin"));
+				userTest.setEnabled(true);
+				userTest.setCreateDate(new Date());
+				userRepository.save(userTest);
+			}
+
+			drawService.draw();
 
 		}
 	}

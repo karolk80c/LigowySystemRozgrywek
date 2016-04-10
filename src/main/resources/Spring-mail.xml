@@ -9,7 +9,7 @@
 		<property name="host" value="smtp.gmail.com" />
 		<property name="port" value="587" />
 		<property name="username" value="leaguegamesystem@gmail.com" />
-		<property name="password" value="Kolakola1" />
+		<property name="password" value="p1nk-p0nk" />
 
 		<property name="javaMailProperties">
 			<props>

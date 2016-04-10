@@ -2,6 +2,7 @@ package pl.karolkolarczyk.lgs.service;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
@@ -15,6 +16,7 @@ import org.springframework.stereotype.Service;
 
 import pl.karolkolarczyk.lgs.entity.Match;
 import pl.karolkolarczyk.lgs.entity.Role;
+import pl.karolkolarczyk.lgs.entity.Round;
 import pl.karolkolarczyk.lgs.entity.Set;
 import pl.karolkolarczyk.lgs.entity.User;
 import pl.karolkolarczyk.lgs.enums.Place;
@@ -355,6 +357,37 @@ public class MatchService {
 		}
 		match.setSets(null);
 		matchRepository.save(match);
+	}
+
+	public void save(Match match) {
+		matchRepository.save(match);
+	}
+
+	public void saveMatchToRound(Round round, HttpServletRequest request) {
+		Match match = new Match();
+		match.setRound(round);
+		String firstLogin = request.getParameter("firstLogin");
+		String secondLogin = request.getParameter("secondLogin");
+		User user = userService.findOne(firstLogin);
+		User user2 = userService.findOne(secondLogin);
+		if (user.getLogin().equals(user2.getLogin())) {
+			throw new RuntimeException("Nie mo¿na dodaæ meczu w którym pierwszy i drugi zawodnik jest ten sam");
+		}
+		List<User> usersList = new ArrayList<>();
+		usersList.add(user);
+		usersList.add(user2);
+		match.setUsers(usersList);
+		match.setFirstName(user.getFullName());
+		match.setSecondName(user2.getFullName());
+		save(match);
+		List<Match> firstUserMatches = user.getMatches();
+		List<Match> secondUserMatches = user2.getMatches();
+		firstUserMatches.add(match);
+		secondUserMatches.add(match);
+		user.setMatches(firstUserMatches);
+		user2.setMatches(secondUserMatches);
+		userService.saveUserToRepository(user);
+		userService.saveUserToRepository(user2);
 	}
 
 }

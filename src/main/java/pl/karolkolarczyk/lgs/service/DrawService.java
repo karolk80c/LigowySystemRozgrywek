@@ -16,7 +16,6 @@ import pl.karolkolarczyk.lgs.entity.Season;
 import pl.karolkolarczyk.lgs.entity.User;
 import pl.karolkolarczyk.lgs.repository.MatchRepository;
 import pl.karolkolarczyk.lgs.repository.RoundRepository;
-import pl.karolkolarczyk.lgs.repository.SeasonRepository;
 import pl.karolkolarczyk.lgs.repository.UserRepository;
 
 @Transactional
@@ -27,7 +26,7 @@ public class DrawService {
 	private UserRepository userRepository;
 
 	@Autowired
-	private SeasonRepository seasonRepository;
+	private SeasonService seasonService;
 
 	@Autowired
 	private MatchRepository matchRepository;
@@ -42,6 +41,19 @@ public class DrawService {
 
 	public void draw() {
 		Season season = new Season();
+		int roundNumber = 1;
+		String seasonNumber = Calendar.getInstance().get(Calendar.YEAR) + "/"
+				+ Calendar.getInstance().get(Calendar.MONTH);
+		Season seasonByNumber = seasonService.findOneByNumber(seasonNumber);
+		if (seasonByNumber == null) {
+			season.setNumber(seasonNumber);
+		} else {
+			season = seasonByNumber;
+			List<Round> roundsFromSeason = season.getRounds();
+			if (roundsFromSeason != null) {
+				roundNumber = roundsFromSeason.size() + 1;
+			}
+		}
 		List<User> users = userRepository.findAll();
 		List<String> userListLogin = generateLoginList(users);
 		int iloscSpotkan = numMatches(userListLogin.size());
@@ -68,12 +80,11 @@ public class DrawService {
 
 			int usersInMatchesSize = usersInMatches.size();
 			List<Round> rounds = new ArrayList<>();
-
 			for (int roundNr = 0; roundNr < numRounds; roundNr++) {
 				logger.info("Kolejka " + (roundNr + 1));
 				Round round = new Round();
 				List<Match> matches = new ArrayList<>();
-				round.setNumber((roundNr + 1));
+				round.setNumber(roundNumber++);
 
 				int usersID = roundNr % usersInMatchesSize;
 				if (!("null".equals(usersInMatches.get(usersID))) && !("null".equals(userListLogin.get(0)))) {
@@ -136,10 +147,7 @@ public class DrawService {
 				rounds.add(round);
 
 			}
-			String seasonNumber = Calendar.getInstance().get(Calendar.YEAR) + "/"
-					+ Calendar.getInstance().get(Calendar.MONTH);
-			season.setNumber(seasonNumber);
-			seasonRepository.save(season);
+			seasonService.save(season);
 			emailService.sendNotificationToAllPlayers("Wystartowa³ sezon ping-pongowy ".concat(seasonNumber),
 					"Wystartowa³ sezon ping-ponga, od tej chwili mo¿esz ustalaæ miejsce i datê spotkañ oraz aktualizowaæ wyniki swoich rozgrywek ");
 		}

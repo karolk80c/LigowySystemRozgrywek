@@ -122,7 +122,7 @@ public class UserService {
 
 	@Transactional
 	public Page<User> findAllWithStatistics(String properties, Direction order) {
-		return userRepository.findAll(new PageRequest(0, 30, order, properties));
+		return userRepository.findAll(new PageRequest(0, 1000, order, properties));
 	}
 
 	@Transactional
@@ -261,5 +261,9 @@ public class UserService {
 		if (count > 0) {
 			userRepository.save(user);
 		}
+	}
+
+	public void saveUserToRepository(User user) {
+		userRepository.save(user);
 	}
 }

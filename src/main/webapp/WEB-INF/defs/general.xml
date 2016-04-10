@@ -32,6 +32,12 @@
 		<put-attribute name="current" value="detail" />
 	</definition>
 
+	<definition name="addMatchToRound" extends="common">
+		<put-attribute name="title" value="Dodaj mecz" />
+		<put-attribute name="body" value="/WEB-INF/jsp/addmatchtoround.jsp" />
+		<put-attribute name="current" value="timetable" />
+	</definition>
+
 	<definition name="change-detail" extends="common">
 		<put-attribute name="title" value="Zmiana danych osobowych" />
 		<put-attribute name="body" value="/WEB-INF/jsp/change-detail.jsp" />

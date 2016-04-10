@@ -3,8 +3,6 @@ package pl.karolkolarczyk.lgs.service;
 import java.util.List;
 import java.util.Random;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,9 +26,6 @@ public class RoundService {
 
 	@Autowired
 	SetRepository setRepository;
-
-	@PersistenceContext
-	EntityManager em;
 
 	@Autowired
 	private MatchService matchService;
@@ -93,7 +88,7 @@ public class RoundService {
 		}
 	}
 
-	private void updateRoundNumberInformation() {
+	public void updateRoundNumberInformation() {
 		List<Round> findAll = roundRepository.findAll();
 		int number = 0;
 		for (Round round : findAll) {
@@ -120,6 +115,25 @@ public class RoundService {
 				delete(round);
 			}
 		}
+	}
+
+	public Round findOneByNumber(int roundNumber) {
+		return roundRepository.findByNumber(roundNumber);
+	}
+
+	public void save(Round round) {
+		roundRepository.save(round);
+	}
+
+	public void removeRound(int id) {
+		Round round = roundRepository.findOne(id);
+		removeMatchesFromRound(round);
+		delete(round);
+		updateRoundNumberInformation();
+	}
+
+	public Round findOne(int roundId) {
+		return roundRepository.findOne(roundId);
 	}
 
 }

@@ -21,6 +21,7 @@ public class Mailer {
 			MimeMessageHelper helper = new MimeMessageHelper(message, true);
 			helper.setFrom(new InternetAddress(from));
 			helper.setTo(new InternetAddress(to));
+			helper.setReplyTo(new InternetAddress(from));
 			helper.setSubject(subject);
 			helper.setText("<html><body>" + bodyText + "</body></html>", true);
 			sender.send(message);

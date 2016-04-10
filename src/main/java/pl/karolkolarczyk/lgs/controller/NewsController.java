@@ -28,11 +28,11 @@ public class NewsController {
 	@RequestMapping
 	public String showNews(Model model) {
 		Date currentTime = new Date();
-		Pageable incomingMatchesPage = new PageRequest(0, 10, Direction.ASC, "matchDate");
+		Pageable incomingMatchesPage = new PageRequest(0, 20, Direction.ASC, "matchDate");
 		Page<Match> incomingMatches = matchRepository.findByCompletedAndMatchDateAfter(false, currentTime,
 				incomingMatchesPage);
 
-		Pageable latestMatchesPage = new PageRequest(0, 10, Direction.DESC, "lastModificationDate");
+		Pageable latestMatchesPage = new PageRequest(0, 20, Direction.DESC, "lastModificationDate");
 		Page<Match> latestMatches = matchRepository.findByCompletedAndMatchDateNotNull(true, latestMatchesPage);
 
 		model.addAttribute("latestMatches", latestMatches.getContent());
