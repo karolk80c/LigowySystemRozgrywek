@@ -30,7 +30,7 @@
 	</table>
 </div>
 
-<div style="float: left; margin-left: 8%;">
+<div style="float: left; margin-left: 4%;">
 	<h1 style="text-align: left">
 		<b>Ostatnio dodane wyniki</b>
 	</h1>

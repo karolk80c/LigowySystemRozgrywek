@@ -18,6 +18,12 @@ public interface MatchRepository extends JpaRepository<Match, Integer> {
 
 	Page<Match> findByCompletedAndMatchDateAfter(boolean completed, Date date, Pageable pageable);
 
+	Page<Match> findByCompletedAndMatchDateAfterAndFirstNameOrSecondName(boolean completed, Date date,
+			Pageable pageable, String firstName, String secondName);
+
 	Page<Match> findByCompletedAndMatchDateNotNull(boolean completed, Pageable pageable);
+
+	Page<Match> findByCompletedAndMatchDateNotNullAndFirstNameOrSecondName(boolean completed, Pageable pageable,
+			String firstName, String secondName);
 
 }

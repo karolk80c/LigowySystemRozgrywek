@@ -263,7 +263,12 @@ public class UserService {
 		}
 	}
 
+	public String returnLoginByFullName(String firstName,String lastName) {
+		return userRepository.findByFirstNameAndLastName(firstName, lastName).getLogin();
+	}
+
 	public void saveUserToRepository(User user) {
 		userRepository.save(user);
 	}
+
 }

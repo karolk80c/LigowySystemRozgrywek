@@ -1,17 +1,24 @@
 package pl.karolkolarczyk.lgs.controller;
 
 import java.security.Principal;
+import java.util.Date;
 
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import pl.karolkolarczyk.lgs.entity.Match;
 import pl.karolkolarczyk.lgs.entity.User;
+import pl.karolkolarczyk.lgs.repository.MatchRepository;
 import pl.karolkolarczyk.lgs.service.UserService;
 
 @Controller
@@ -19,6 +26,9 @@ public class UserController {
 
 	@Autowired
 	private UserService userService;
+
+	@Autowired
+	private MatchRepository matchRepository;
 
 	@RequestMapping("/users")
 	public String users(Model model, Principal principal) {
@@ -29,18 +39,52 @@ public class UserController {
 	@RequestMapping("/users/{login}")
 	public String detail(Model model, @PathVariable String login, Principal principal) {
 		User user = userService.findOne(login);
-		if (principal.getName().equals(user.getLogin())) {
+
+		Date currentTime = new Date();
+		Pageable incomingMatchesPage = new PageRequest(0, 10, Direction.ASC, "matchDate");
+		Page<Match> incomingMatches = matchRepository.findByCompletedAndMatchDateAfterAndFirstNameOrSecondName(false,
+				currentTime, incomingMatchesPage, user.getFullName(), user.getFullName());
+
+		Pageable latestMatchesPage = new PageRequest(0, 10, Direction.DESC, "lastModificationDate");
+		Page<Match> latestMatches = matchRepository.findByCompletedAndMatchDateNotNullAndFirstNameOrSecondName(true,
+				latestMatchesPage, user.getFullName(), user.getFullName());
+
+		model.addAttribute("latestMatches", latestMatches.getContent());
+		model.addAttribute("incomingMatches", incomingMatches.getContent());
+		User visitor = userService.findOne(principal.getName());
+
+		if (visitor.getLogin().equals(user.getLogin())) {
 			return "redirect:/account.html";
 		} else {
 			model.addAttribute("user", user);
+			model.addAttribute("principalName", visitor.getFullName());
 			return "user-detail";
 		}
 	}
 
+	@RequestMapping("/users/find/{fullName}")
+	public String findUser(Model model, Principal principal, @PathVariable String fullName) {
+		String[] split = fullName.split(" ");
+		String login = userService.returnLoginByFullName(split[0], split[1]);
+		return "redirect:/users/" + login + ".html";
+	}
+
 	@RequestMapping("/account")
 	public String account(Model model, Principal principal) {
-		String name = principal.getName();
-		model.addAttribute("user", userService.findOne(name));
+		User user = userService.findOne(principal.getName());
+
+		Date currentTime = new Date();
+		Pageable incomingMatchesPage = new PageRequest(0, 10, Direction.ASC, "matchDate");
+		Page<Match> incomingMatches = matchRepository.findByCompletedAndMatchDateAfterAndFirstNameOrSecondName(false,
+				currentTime, incomingMatchesPage, user.getFullName(), user.getFullName());
+
+		Pageable latestMatchesPage = new PageRequest(0, 10, Direction.DESC, "lastModificationDate");
+		Page<Match> latestMatches = matchRepository.findByCompletedAndMatchDateNotNullAndFirstNameOrSecondName(true,
+				latestMatchesPage, user.getFullName(), user.getFullName());
+
+		model.addAttribute("latestMatches", latestMatches.getContent());
+		model.addAttribute("incomingMatches", incomingMatches.getContent());
+		model.addAttribute("user", user);
 		return "account";
 	}
 
@@ -67,7 +111,7 @@ public class UserController {
 	}
 
 	@RequestMapping("/account/changePersonalData")
-	public String showchangePersonalData(Principal principal,Model model) {
+	public String showchangePersonalData(Principal principal, Model model) {
 		User user = userService.findOne(principal.getName());
 		model.addAttribute("user", user);
 		return "change-detail";

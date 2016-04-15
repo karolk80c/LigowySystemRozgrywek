@@ -1,5 +1,6 @@
 package pl.karolkolarczyk.lgs.controller;
 
+import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,7 +34,7 @@ public class TableController {
 
 	@RequestMapping(method = RequestMethod.GET)
 	public String sortColumn(@RequestParam(defaultValue = "mainPoints") String properties,
-			@RequestParam(defaultValue = "desc") String order, Model model) throws Exception {
+			@RequestParam(defaultValue = "desc") String order, Model model, Principal principal) throws Exception {
 		List<User> usersList = new ArrayList<>();
 		if (properties.equals("mainPoints") && order.equals("desc")) {
 			usersList = matchService.compareAndSortUsers();
@@ -54,8 +55,10 @@ public class TableController {
 			for (User user : users) {
 				usersList.add(user);
 			}
-
 			model.addAttribute("users", usersList);
+		}
+		if (principal != null) {
+			model.addAttribute("principalName", userService.findOne(principal.getName()).getFullName());
 		}
 		return "table";
 	}

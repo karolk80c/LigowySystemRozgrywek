@@ -35,7 +35,7 @@ public class SetController {
 		return new Set();
 	}
 
-	@RequestMapping(value = "/{id}", method = RequestMethod.POST)
+	@RequestMapping(value = "/{id}/addSet", method = RequestMethod.POST)
 	public String addSet(Model model, @PathVariable Integer id, @ModelAttribute("set") Set set, Principal principal) {
 		User user = userService.findOne(principal.getName());
 		setService.save(set, id, user);

@@ -63,7 +63,15 @@
 				<tbody>
 					<c:forEach items="${round.matches}" var="match">
 						<tr>
-							<td>${match.firstName}</td>
+							<c:choose>
+								<c:when test="${principalName eq match.firstName }">
+									<td style="font-size: 105%;"><b>${match.firstName}</b></td>
+								</c:when>
+								<c:otherwise>
+									<td><a
+										href='<spring:url value="/users/find/${match.firstName}.html" />'>${match.firstName}</a></td>
+								</c:otherwise>
+							</c:choose>
 							<c:choose>
 								<c:when test="${ match.completed == true}">
 									<td><b>${match.firstPoints}:${match.secondPoints}</b>&nbsp;<c:forEach
@@ -75,7 +83,20 @@
 									<td></td>
 								</c:otherwise>
 							</c:choose>
-							<td>${match.secondName}</td>
+
+							<c:choose>
+								<c:when test="${principalName eq match.secondName }">
+									<td style="font-size: 105%;"><b>${match.secondName}</b></td>
+								</c:when>
+								<c:otherwise>
+									<td><a
+										href='<spring:url value="/users/find/${match.secondName}.html" />'>${match.secondName}</a></td>
+								</c:otherwise>
+							</c:choose>
+
+
+
+
 							<td>${match.matchPlace}</td>
 							<td><fmt:formatDate value="${match.matchDate}"
 									pattern="dd-MM-yyyy HH:mm" /></td>

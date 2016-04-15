@@ -175,71 +175,76 @@ public class MatchService {
 		} else if ((user2.getFullName()).equals(match.getFirstName())) {
 			updatePoints(match, firstSmallPoints, secondSmallPoints, user2, user1);
 		}
-		saveUsers(user1, user2, match);
+		match.setCompleted(true);
+		save(match);
+		userRepository.save(user1);
+		userRepository.save(user2);
 	}
 
 	@Transactional
 	public void approve(Integer id, User user) {
 		Match match = findOne(id);
-		if ((match.getFirstPoints() < 4 && match.getSecondPoints() < 4) || match.getFirstPoints() > 4
-				|| match.getSecondPoints() > 4) {
-			throw new UnacceptableResultException(match.getFirstPoints(), match.getSecondPoints());
-		}
-		List<User> users = match.getUsers();
-		User user1 = users.get(0);
-		User user2 = users.get(1);
-		List<Set> sets = setRepository.findByMatch(match);
-		int firstSmallPoints = 0;
-		int secondSmallPoints = 0;
-		if (sets.size() > 0) {
-			for (Set set : sets) {
-				firstSmallPoints += set.getFirstPlayerScore();
-				secondSmallPoints += set.getSecondPlayerScore();
+		if (!match.isCompleted()) {
+			if ((match.getFirstPoints() < 4 && match.getSecondPoints() < 4) || match.getFirstPoints() > 4
+					|| match.getSecondPoints() > 4) {
+				throw new UnacceptableResultException(match.getFirstPoints(), match.getSecondPoints());
 			}
-		}
+			List<User> users = match.getUsers();
+			User user1 = users.get(0);
+			User user2 = users.get(1);
+			List<Set> sets = setRepository.findByMatch(match);
+			int firstSmallPoints = 0;
+			int secondSmallPoints = 0;
+			if (sets.size() > 0) {
+				for (Set set : sets) {
+					firstSmallPoints += set.getFirstPlayerScore();
+					secondSmallPoints += set.getSecondPlayerScore();
+				}
+			}
 
-		if ((user.getFullName()).equals(match.getFirstName())) {
-			match.setFirstApproved(true);
-			if (!match.isSecondApproved()) {
-				if (user.getLogin().equals(user1.getLogin())) {
-					sendNotificationTo(user2);
+			if ((user.getFullName()).equals(match.getFirstName())) {
+				match.setFirstApproved(true);
+				if (!match.isSecondApproved()) {
+					if (user.getLogin().equals(user1.getLogin())) {
+						sendNotificationTo(user2);
+					} else {
+						sendNotificationTo(user1);
+					}
 				} else {
-					sendNotificationTo(user1);
+					if (user.getLogin().equals(user1.getLogin())) {
+						updatePoints(match, firstSmallPoints, secondSmallPoints, user1, user2);
+					} else if (user.getLogin().equals(user2.getLogin())) {
+						updatePoints(match, firstSmallPoints, secondSmallPoints, user2, user1);
+					}
+					match.setCompleted(true);
+					save(match);
+					userRepository.save(user1);
+					userRepository.save(user2);
+					updateUsersRanking();
 				}
-			} else {
-				if (user.getLogin().equals(user1.getLogin())) {
-					updatePoints(match, firstSmallPoints, secondSmallPoints, user1, user2);
-				} else if (user.getLogin().equals(user2.getLogin())) {
-					updatePoints(match, firstSmallPoints, secondSmallPoints, user2, user1);
-				}
-				saveUsers(user1, user2, match);
-			}
-		} else if ((user.getFullName()).equals(match.getSecondName())) {
-			match.setSecondApproved(true);
-			if (!match.isFirstApproved()) {
-				if (user.getLogin().equals(user1.getLogin())) {
-					sendNotificationTo(user2);
+			} else if ((user.getFullName()).equals(match.getSecondName())) {
+				match.setSecondApproved(true);
+				if (!match.isFirstApproved()) {
+					if (user.getLogin().equals(user1.getLogin())) {
+						sendNotificationTo(user2);
+					} else {
+						sendNotificationTo(user1);
+					}
 				} else {
-					sendNotificationTo(user1);
+					if (user.getLogin().equals(user1.getLogin())) {
+						updatePoints(match, firstSmallPoints, secondSmallPoints, user2, user1);
+					} else if (user.getLogin().equals(user2.getLogin())) {
+						updatePoints(match, firstSmallPoints, secondSmallPoints, user1, user2);
+					}
+					match.setCompleted(true);
+					save(match);
+					userRepository.save(user1);
+					userRepository.save(user2);
+					updateUsersRanking();
 				}
-			} else {
-				if (user.getLogin().equals(user1.getLogin())) {
-					updatePoints(match, firstSmallPoints, secondSmallPoints, user2, user1);
-				} else if (user.getLogin().equals(user2.getLogin())) {
-					updatePoints(match, firstSmallPoints, secondSmallPoints, user1, user2);
-				}
-				saveUsers(user1, user2, match);
 			}
 		}
 
-	}
-
-	private void saveUsers(User user1, User user2, Match match) {
-		match.setCompleted(true);
-		matchRepository.save(match);
-		userRepository.save(user1);
-		userRepository.save(user2);
-		updateUsersRanking();
 	}
 
 	private void sendNotificationTo(User user) {
@@ -389,5 +394,6 @@ public class MatchService {
 		userService.saveUserToRepository(user);
 		userService.saveUserToRepository(user2);
 	}
+
 
 }

@@ -12,8 +12,9 @@
 	<thead>
 		<tr>
 			<th>Set</th>
-			<th>${match.firstName}</th>
-			<th>${match.secondName}</th>
+			<th>Zawodnik</th>
+			<th>Wynik</th>
+			<th>Zawodnik</th>
 			<c:if
 				test="${match.firstApproved eq false && match.secondApproved eq false }">
 				<th>Usuniecie</th>
@@ -33,13 +34,29 @@
 					%>
 				</td>
 				<c:choose>
-					<c:when test="${set.firstPlayerScore > set.secondPlayerScore }">
-						<td><b>${set.firstPlayerScore}</b></td>
-						<td>${set.secondPlayerScore }</td>
+					<c:when test="${principalName eq match.firstName }">
+						<td style="font-size: 105%;"><b>${match.firstName}</b></td>
+						<c:choose>
+							<c:when test="${set.firstPlayerScore > set.secondPlayerScore }">
+								<td><b>${set.firstPlayerScore}</b> : ${set.secondPlayerScore }</td>
+							</c:when>
+							<c:otherwise>
+								<td>${set.firstPlayerScore } : <b>${set.secondPlayerScore}</b></td>
+							</c:otherwise>
+						</c:choose>
+						<td>${match.secondName}</td>
 					</c:when>
 					<c:otherwise>
-						<td>${set.firstPlayerScore }</td>
-						<td><b>${set.secondPlayerScore}</b></td>
+						<td>${match.firstName}</td>
+						<c:choose>
+							<c:when test="${set.firstPlayerScore > set.secondPlayerScore }">
+								<td><b>${set.firstPlayerScore}</b> : ${set.secondPlayerScore }</td>
+							</c:when>
+							<c:otherwise>
+								<td>${set.firstPlayerScore } : <b>${set.secondPlayerScore}</b></td>
+							</c:otherwise>
+						</c:choose>
+						<td style="font-size: 105%;"><b>${match.secondName}</b></td>
 					</c:otherwise>
 				</c:choose>
 
@@ -72,7 +89,9 @@
 	href='<spring:url value="/matches.html" />'>Wróć</a>
 
 
-<form:form commandName="set" cssClass="form-horizontal">
+<form:form commandName="set"
+	action="/ping-pong/matches/${match.id}/addSet.html"
+	cssClass="form-horizontal">
 	<!-- Modal -->
 	<div class="modal fade" id="myModal" tabindex="-1" role="dialog"
 		aria-labelledby="myModalLabel">

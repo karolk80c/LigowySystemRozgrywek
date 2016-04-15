@@ -21,7 +21,7 @@
 	</div>	
 	<br>
 	<div class="col-sm-2">
-		<input type="submit" value="Save" class="btn btn-lg btn-primary " />
+		<input type="submit" value="Zapisz" class="btn btn-lg btn-primary " />
 	</div>
 
 </form:form>

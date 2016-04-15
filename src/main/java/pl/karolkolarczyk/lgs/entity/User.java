@@ -3,6 +3,7 @@ package pl.karolkolarczyk.lgs.entity;
 import java.util.Date;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -12,6 +13,7 @@ import javax.persistence.ManyToMany;
 import javax.persistence.PreUpdate;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
 import org.hibernate.validator.constraints.Email;
@@ -31,6 +33,7 @@ public class User {
 	@Column(nullable = false, unique = true)
 	@Size(min = 3, message = "Login powinien miec conajmniej 3 znaki!")
 	@UniqueLogin(message = "Podany login jest ju¿ zajêty")
+	@Pattern(regexp = "[a-zA-Z0-9_.\\-@]*", message = "Dopuszczalne znaki [A-Z][a-z][0-9][._-@], Niedopuszczalne s¹ polskie znaki w loginie")
 	private String login;
 
 	@Column(nullable = false)
@@ -56,10 +59,10 @@ public class User {
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date createDate;
 
-	@ManyToMany(fetch = FetchType.EAGER)
+	@ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	private List<Role> roles;
 
-	@ManyToMany(fetch = FetchType.EAGER)
+	@ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	@JoinTable(name = "uzytkownik_mecz")
 	private List<Match> matches;
 

@@ -26,9 +26,22 @@
 	<tbody>
 		<c:forEach items="${user.matches}" var="match">
 			<tr>
-				<td style="vertical-align: middle">${match.firstName}</td>
-				<td style="vertical-align: middle"><b>${match.firstPoints}:${match.secondPoints}</b></td>
-				<td style="vertical-align: middle">${match.secondName}</td>
+				<c:choose>
+					<c:when test="${user.fullName eq match.firstName}">
+						<td style="vertical-align: middle"><b>${match.firstName}</b></td>
+						<td style="vertical-align: middle"><b>${match.firstPoints}:${match.secondPoints}</b></td>
+						<td style="vertical-align: middle"><a
+							href='<spring:url value="/users/find/${match.secondName}.html" />'>${match.secondName}</a>
+						</td>
+					</c:when>
+					<c:otherwise>
+						<td style="vertical-align: middle"><a
+							href='<spring:url value="/users/find/${match.firstName}.html" />'>${match.firstName}</a></td>
+						<td style="vertical-align: middle"><b>${match.firstPoints}:${match.secondPoints}</b></td>
+						<td style="vertical-align: middle"><b>${match.secondName }</b></td>
+					</c:otherwise>
+				</c:choose>
+
 				<c:choose>
 					<c:when test="${ not empty match.matchDate }">
 						<c:choose>
@@ -49,7 +62,7 @@
 									class="btn btn-secondary btn-lg"
 									href='<spring:url value="/matches/${match.id}.html" />'>Szczegoly</a></td>
 								<td style="vertical-align: middle"><a
-									class="btn btn-success btn-lg"
+									class="btn btn-success btn-lg approve"
 									href='<spring:url value="/matches/${match.id}/approve.html" />'>Akceptuj</a></td>
 							</c:when>
 							<c:when
@@ -96,4 +109,3 @@
 		</c:forEach>
 	</tbody>
 </table>
-

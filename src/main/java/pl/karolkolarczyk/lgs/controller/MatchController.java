@@ -62,13 +62,8 @@ public class MatchController {
 	@RequestMapping("/{id}/approve")
 	public String approveMatch(Model model, @PathVariable Integer id, Principal principal) {
 		User user = userService.findOne(principal.getName());
-		if (user.getLogin().equals("admin")) {
-			matchService.approveMatchByAdmin(id);
-			return "redirect:/admin-matches.html?success=true";
-		} else {
-			matchService.approve(id, user);
-			return "redirect:/matches.html?success=true";
-		}
+		matchService.approve(id, user);
+		return "redirect:/matches.html?success=true";
 	}
 
 	@RequestMapping("/{id}/clear")

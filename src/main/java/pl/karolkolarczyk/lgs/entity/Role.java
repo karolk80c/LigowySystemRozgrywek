@@ -11,17 +11,17 @@ import javax.persistence.ManyToMany;
 
 @Entity(name = "rola_uzytkownika")
 public class Role {
-	
+
 	@Id
 	@GeneratedValue
 	int id;
-	
+
 	@Column(nullable = false, unique = true)
 	private String name;
-	
+
 	@ManyToMany(mappedBy = "roles", fetch = FetchType.EAGER)
 	private List<User> users;
-	
+
 	public Role() {
 
 	}
@@ -53,7 +53,5 @@ public class Role {
 	public void setUsers(List<User> users) {
 		this.users = users;
 	}
-
-	
 
 }

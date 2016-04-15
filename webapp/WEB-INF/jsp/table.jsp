@@ -61,9 +61,16 @@
 								</td>
 							</c:when>
 							<c:otherwise>
-								<td><a
-									href='<spring:url value="/users/${user.login}.html" />'>
-										${user.firstName}&nbsp;${ user.lastName }</a></td>
+								<c:choose>
+									<c:when test="${principalName eq user.fullName }">
+										<td style="font-size: 105%;"><b>${user.fullName}</b></td>
+									</c:when>
+									<c:otherwise>
+										<td><a
+											href='<spring:url value="/users/${user.login}.html" />'>
+												${user.fullName}</a></td>
+									</c:otherwise>
+								</c:choose>
 							</c:otherwise>
 						</c:choose>
 

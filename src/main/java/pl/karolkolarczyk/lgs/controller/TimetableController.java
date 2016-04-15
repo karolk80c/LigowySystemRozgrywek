@@ -1,5 +1,6 @@
 package pl.karolkolarczyk.lgs.controller;
 
+import java.security.Principal;
 import java.util.Calendar;
 import java.util.List;
 
@@ -36,13 +37,15 @@ public class TimetableController {
 	UserService userService;
 
 	@RequestMapping
-	public String showTimetable(Model model) {
+	public String showTimetable(Model model, Principal principal) {
 		List<Round> rounds = roundService.findAllWithMatchesWithSets();
 		int newRoundNumber = 1;
 		if (rounds.size() > 0) {
 			newRoundNumber = rounds.get(rounds.size() - 1).getNumber() + 1;
 		}
-
+		if (principal != null) {
+			model.addAttribute("principalName", userService.findOne(principal.getName()).getFullName());
+		}
 		model.addAttribute("newNumber", newRoundNumber);
 		model.addAttribute("round", rounds);
 		return "timetable";
