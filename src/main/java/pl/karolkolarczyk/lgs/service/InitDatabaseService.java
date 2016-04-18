@@ -81,7 +81,7 @@ public class InitDatabaseService {
 			List<Role> testUserRolesList = new ArrayList<Role>();
 			testUserRolesList.add(roleUser);
 
-			int howManyUserGenerate = 4;
+			int howManyUserGenerate = 8;
 
 			for (int i = 1; i <= howManyUserGenerate; i++) {
 				User userTest = new User();

@@ -12,6 +12,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 
 import pl.karolkolarczyk.lgs.entity.Match;
@@ -395,5 +399,63 @@ public class MatchService {
 		userService.saveUserToRepository(user2);
 	}
 
+	@Transactional
+	public List<Match> findIncomingByPrincipal(User user) {
+		Date currentTime = new Date();
+		List<Match> matches = matchRepository
+				.findByCompletedFalseAndMatchDateAfterAndFirstNameOrCompletedFalseAndMatchDateAfterAndSecondNameOrderByMatchDateAsc(
+						currentTime, user.getFullName(), currentTime, user.getFullName());
+		List<Match> matchesToReturn = new ArrayList<>();
+		for (Match match : matches) {
+			List<Set> sets = setRepository.findByMatch(match);
+			match.setSets(sets);
+			matchesToReturn.add(match);
+		}
+		return matchesToReturn;
+	}
+
+	@Transactional
+	public List<Match> findLatestByPrincipal(User user) {
+		List<Match> matches = matchRepository
+				.findByCompletedTrueAndMatchDateNotNullAndFirstNameOrCompletedTrueAndMatchDateNotNullAndSecondNameOrderByLastModificationDateDesc(
+						user.getFullName(), user.getFullName());
+		List<Match> matchesToReturn = new ArrayList<>();
+		for (Match match : matches) {
+			List<Set> sets = setRepository.findByMatch(match);
+			match.setSets(sets);
+			matchesToReturn.add(match);
+		}
+		return matchesToReturn;
+	}
+
+	@Transactional
+	public List<Match> findIncoming() {
+		Date currentTime = new Date();
+		Pageable incomingMatchesPage = new PageRequest(0, 10, Direction.ASC, "matchDate");
+		Page<Match> findByCompletedAndMatchDateAfter = matchRepository.findByCompletedAndMatchDateAfter(false,
+				currentTime, incomingMatchesPage);
+		List<Match> matches = findByCompletedAndMatchDateAfter.getContent();
+		List<Match> matchesToReturn = new ArrayList<>();
+		for (Match match : matches) {
+			List<Set> sets = setRepository.findByMatch(match);
+			match.setSets(sets);
+			matchesToReturn.add(match);
+		}
+		return matchesToReturn;
+	}
+
+	@Transactional
+	public List<Match> findLatest() {
+		Pageable latestMatchesPage = new PageRequest(0, 10, Direction.DESC, "lastModificationDate");
+		Page<Match> latestMatches = matchRepository.findByCompletedAndMatchDateNotNull(true, latestMatchesPage);
+		List<Match> matches = latestMatches.getContent();
+		List<Match> matchesToReturn = new ArrayList<>();
+		for (Match match : matches) {
+			List<Set> sets = setRepository.findByMatch(match);
+			match.setSets(sets);
+			matchesToReturn.add(match);
+		}
+		return matchesToReturn;
+	}
 
 }

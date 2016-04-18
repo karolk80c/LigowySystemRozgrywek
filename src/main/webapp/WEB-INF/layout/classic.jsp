@@ -6,6 +6,9 @@
 <!DOCTYPE html>
 <html>
 <head>
+
+<link rel="shortcut icon" href="assets/image/favicon.ico" type="image/x-icon">
+<link rel="icon" href="assets/image/favicon.ico" type="image/x-icon">
 <style>
 .center {
 	text-align: center;

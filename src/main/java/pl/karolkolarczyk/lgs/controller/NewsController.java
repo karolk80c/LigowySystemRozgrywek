@@ -1,19 +1,18 @@
 package pl.karolkolarczyk.lgs.controller;
 
-import java.util.Date;
+import java.security.Principal;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import pl.karolkolarczyk.lgs.entity.Match;
+import pl.karolkolarczyk.lgs.entity.User;
 import pl.karolkolarczyk.lgs.repository.MatchRepository;
 import pl.karolkolarczyk.lgs.service.MatchService;
+import pl.karolkolarczyk.lgs.service.UserService;
 
 @Controller
 @RequestMapping("/news")
@@ -25,18 +24,20 @@ public class NewsController {
 	@Autowired
 	MatchService matchService;
 
+	@Autowired
+	UserService userService;
+
 	@RequestMapping
-	public String showNews(Model model) {
-		Date currentTime = new Date();
-		Pageable incomingMatchesPage = new PageRequest(0, 20, Direction.ASC, "matchDate");
-		Page<Match> incomingMatches = matchRepository.findByCompletedAndMatchDateAfter(false, currentTime,
-				incomingMatchesPage);
+	public String showNews(Model model, Principal principal) {
 
-		Pageable latestMatchesPage = new PageRequest(0, 20, Direction.DESC, "lastModificationDate");
-		Page<Match> latestMatches = matchRepository.findByCompletedAndMatchDateNotNull(true, latestMatchesPage);
-
-		model.addAttribute("latestMatches", latestMatches.getContent());
-		model.addAttribute("incomingMatches", incomingMatches.getContent());
+		List<Match> incomingMatches = matchService.findIncoming();
+		List<Match> latestMatches = matchService.findLatest();
+		if (principal != null) {
+			User principalUser = userService.findOne(principal.getName());
+			model.addAttribute("principalName", principalUser.getFullName());
+		}
+		model.addAttribute("latestMatches", latestMatches);
+		model.addAttribute("incomingMatches", incomingMatches);
 		return "news";
 	}
 

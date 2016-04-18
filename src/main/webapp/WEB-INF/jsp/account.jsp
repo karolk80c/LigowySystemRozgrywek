@@ -55,7 +55,7 @@
 
 <div style="float: left;">
 	<h1 style="text-align: left">
-		<b>Nadchodzące mecze</b>
+		<b>Umówione spotkania</b>
 	</h1>
 	<br>
 	<table class="table table-bordered table-hover table-striped">
@@ -90,7 +90,7 @@
 
 <div style="float: left; margin-left: 5%;">
 	<h1 style="text-align: left">
-		<b>Ostatnio rozegrane mecze</b>
+		<b>Dotychczas rozegrane mecze</b>
 	</h1>
 	<br>
 	<table class="table table-bordered table-hover table-striped">
@@ -106,16 +106,22 @@
 				<tr>
 					<c:choose>
 						<c:when test="${user.fullName eq match.firstName }">
-							<td style="font-size: 105%;"><b>${match.firstName}</b></td>
-							<td><b>${match.firstPoints} : ${match.secondPoints}</b></td>
+							<td style="color: red; font-size: 105%;"><b>${match.firstName}</b></td>
+							<td><b>${match.firstPoints}:${match.secondPoints}</b>&nbsp;<c:forEach
+									var="set" items="${match.sets}">
+							(${set.firstPlayerScore}:${set.secondPlayerScore})
+							</c:forEach></td>
 							<td><a
 								href='<spring:url value="/users/find/${match.secondName}.html" />'>${match.secondName}</a></td>
 						</c:when>
 						<c:otherwise>
 							<td><a
 								href='<spring:url value="/users/find/${match.firstName}.html" />'>${match.firstName}</a></td>
-							<td><b>${match.firstPoints} : ${match.secondPoints}</b></td>
-							<td style="font-size: 105%;"><b>${match.secondName}</b></td>
+							<td><b>${match.firstPoints}:${match.secondPoints}</b>&nbsp;<c:forEach
+									var="set" items="${match.sets}">
+							(${set.firstPlayerScore}:${set.secondPlayerScore})
+							</c:forEach></td>
+							<td style="color: red; font-size: 105%;"><b>${match.secondName}</b></td>
 						</c:otherwise>
 					</c:choose>
 

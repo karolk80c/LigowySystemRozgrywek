@@ -63,7 +63,7 @@
 							<c:otherwise>
 								<c:choose>
 									<c:when test="${principalName eq user.fullName }">
-										<td style="font-size: 105%;"><b>${user.fullName}</b></td>
+										<td style="color: red; font-size: 105%;"><b>${user.fullName}</b></td>
 									</c:when>
 									<c:otherwise>
 										<td><a

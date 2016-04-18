@@ -65,7 +65,7 @@
 						<tr>
 							<c:choose>
 								<c:when test="${principalName eq match.firstName }">
-									<td style="font-size: 105%;"><b>${match.firstName}</b></td>
+									<td style="color: red; font-size: 105%;"><b>${match.firstName}</b></td>
 								</c:when>
 								<c:otherwise>
 									<td><a
@@ -86,7 +86,7 @@
 
 							<c:choose>
 								<c:when test="${principalName eq match.secondName }">
-									<td style="font-size: 105%;"><b>${match.secondName}</b></td>
+									<<td style="color: red; font-size: 105%;"><b>${match.secondName}</b></td>
 								</c:when>
 								<c:otherwise>
 									<td><a
