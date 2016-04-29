@@ -33,14 +33,14 @@
 		</div>
 	</div>
 	<div class="form-group">
-		<label for="content" class="col-sm-2 control-label">Wiadomosc</label>
+		<label for="content" class="col-sm-2 control-label">Wiadomość</label>
 		<div class="col-sm-10">
-			<textarea class="form-control" rows="4" name="content" id="content" placeholder="Tutaj wpisz tresc wiadomosci"></textarea>
+			<textarea class="form-control" rows="4" name="content" id="content" placeholder="Tutaj wpisz treść wiadomości"></textarea>
 		</div>
 	</div>
 	<div class="form-group">
 		<div class="col-sm-10 col-sm-offset-2">
-			<input id="submit" name="submit" type="submit" value="Wyslij"
+			<input id="submit" name="submit" type="submit" value="Wyślij"
 				class="btn-lg btn btn-primary" >
 		</div>
 	</div>

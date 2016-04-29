@@ -7,7 +7,8 @@
 <html>
 <head>
 
-<link rel="shortcut icon" href="assets/image/favicon.ico" type="image/x-icon">
+<link rel="shortcut icon" href="assets/image/favicon.ico"
+	type="image/x-icon">
 <link rel="icon" href="assets/image/favicon.ico" type="image/x-icon">
 <style>
 .center {
@@ -32,10 +33,20 @@ tr {
 tr th {
 	text-align: center;
 }
+
+.ts-row-fixed {
+	position: fixed;
+	/* top: 0; */
+	visibility: hidden;
+	z-index: 1020; /* 10 less than .navbar-fixed to prevent any overlap */
+	border-bottom: 1px solid #dddddd;
+	background-color: #ffffff;
+}
 </style>
 
 <!-- Jquery -->
 <script src="//ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
+<script src="assets/js/table-section.js"></script>
 <script
 	src="http://cdn.jsdelivr.net/jquery.validation/1.15.0/jquery.validate.min.js"></script>
 <!-- Bootstrap -->
@@ -71,9 +82,6 @@ tr th {
 					</div>
 					<div id="navbar" class="navbar-collapse collapse">
 						<ul class="nav navbar-nav">
-							<li class="${current == 'index' ? 'active' : ' ' }"><a
-								href='<spring:url value="/" />'><spring:message
-										code="nav.homePage" /></a></li>
 							<li class="${current == 'news' ? 'active' : ' ' }"><a
 								href='<spring:url value="/news.html" />'><spring:message
 										code="nav.news" /></a></li>
@@ -116,6 +124,9 @@ tr th {
 									href='<spring:url value="/register.html" />'><spring:message
 											code="nav.register" /></a></li>
 							</security:authorize>
+							<li class="${current == 'rules' ? 'active' : ' ' }"><a
+								href='<spring:url value="/rules.html" />'><spring:message
+										code="nav.rules" /></a></li>
 							<security:authorize access="isAuthenticated()">
 								<li><a href='<spring:url value="/logout.html" />'><spring:message
 											code="nav.logout" /></a></li>

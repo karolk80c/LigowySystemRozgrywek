@@ -11,9 +11,9 @@
 	<div class="alert alert-success">Zatwierdzono wynik meczu</div>
 </c:if>
 
-<table class="table table-bordered table-hover table-striped">
+<table class="table table-bordered table-hover table-striped ts-table-section">
 	<thead>
-		<tr>
+		<tr class="ts-row-section">
 			<th>Zawodnik</th>
 			<th>Wynik</th>
 			<th>Zawodnik</th>
@@ -109,3 +109,10 @@
 		</c:forEach>
 	</tbody>
 </table>
+
+
+<script>
+	$(document).ready(function() {
+		$(document).tableSection();
+	});
+</script>

@@ -5,9 +5,9 @@
 <div class="alert alert-info">Tylko aktywni użytkownicy są brani
 	pod uwagę podczas losowania spotkań do sezonu.</div>
 
-<table class="table table-bordered table-hover table-striped">
+<table class="table table-bordered table-hover table-striped ts-table-section">
 	<thead>
-		<tr>
+		<tr class="ts-row-section">
 			<th>Nazwa_Uzytkownika</th>
 			<th>Stan</th>
 			<th>Dyskwalifikacja</th>
@@ -22,7 +22,7 @@
 					<tr>
 						<td><a
 							href=" <spring:url value="/users/${user.login}.html" />">
-								${user.login }</a></td>
+								${user.fullName} (${user.login})</a></td>
 						<td><c:choose>
 								<c:when test="${user.enabled eq false }">
 									<a
@@ -88,5 +88,10 @@
 			$("#modalRemove .removeBtn").attr("href", $(this).attr("href"));
 			$("#modalRemove").modal();
 		});
+	});
+</script>
+<script>
+	$(document).ready(function() {
+		$(document).tableSection();
 	});
 </script>

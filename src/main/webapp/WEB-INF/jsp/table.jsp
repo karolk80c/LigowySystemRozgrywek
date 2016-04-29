@@ -2,6 +2,7 @@
 	pageEncoding="UTF-8"%>
 <%@ include file="../layout/taglib.jsp"%>
 
+
 <div class="alert alert-info">
 	<spring:message code="table.info" />
 </div>
@@ -9,9 +10,10 @@
 	<b><spring:message code="table.header" /> 2016</b> <br>
 </h1>
 <br>
-<table class="table table-bordered table-hover table-striped">
+<table
+	class="table table-bordered table-hover table-striped ts-table-section">
 	<thead>
-		<tr>
+		<tr class="ts-row-section">
 			<th><a
 				href='<spring:url value="/table.html?properties=rankingPosition&order=${order}" />'><spring:message
 						code="table.poz" /></a></th>
@@ -90,3 +92,10 @@
 		</c:forEach>
 	</tbody>
 </table>
+
+
+<script>
+	$(document).ready(function() {
+		$(document).tableSection();
+	});
+</script>

@@ -286,7 +286,7 @@ public class MatchService {
 
 	public List<User> compareAndSortUsers() {
 		List<User> usersList = userService.findActiveAndDisqualifiedPlayers();
-		Comparator<User> comparator = Comparator.comparing(User::getWonMatches).thenComparing(User::getBalanceSets)
+		Comparator<User> comparator = Comparator.comparing(User::getBalanceMatches).thenComparing(User::getBalanceSets)
 				.thenComparing(User::getBalanceSmallPoints);
 		Collections.sort(usersList, comparator.reversed());
 		return usersList;

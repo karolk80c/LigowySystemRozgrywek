@@ -11,4 +11,9 @@ public class IndexController {
 		return "index";
 	}
 
+	@RequestMapping("/rules")
+	public String showRules() {
+		return "rules";
+	}
+
 }

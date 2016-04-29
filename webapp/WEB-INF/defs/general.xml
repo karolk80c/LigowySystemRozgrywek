@@ -25,6 +25,12 @@
 		<put-attribute name="body" value="/WEB-INF/jsp/reset-password.jsp" />
 		<put-attribute name="current" value="login" />
 	</definition>
+	
+	<definition name="rules" extends="common">
+		<put-attribute name="title" value="Regulamin" />
+		<put-attribute name="body" value="/WEB-INF/jsp/rules.jsp" />
+		<put-attribute name="current" value="rules" />
+	</definition>
 
 	<definition name="change-password" extends="common">
 		<put-attribute name="title" value="Przypomnij hasło" />

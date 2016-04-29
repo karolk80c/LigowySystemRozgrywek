@@ -3,26 +3,15 @@
 <%@ include file="../layout/taglib.jsp"%>
 
 <h1>
-	<b>Terminarz spotkan</b>
+	<b>Terminarz spotkań</b>
 </h1>
 
 <br>
 
-<script type="text/javascript">
-	$(document).ready(function() {
-		$('.nav-tabs a:first').tab('show');
-		$(".triggerRemove").click(function(e) {
-			e.preventDefault();
-			$("#modalRemove .removeBtn").attr("href", $(this).attr("href"));
-			$("#modalRemove").modal();
-		});
-	});
-</script>
-
 <security:authorize access="hasRole('ROLE_ADMIN')">
 	<a class="btn btn-lg btn-success"
 		href='<spring:url value="/timetable/addRound/${newNumber}.html" />'>Dodaj
-		kolejkę</a>
+		kolejke</a>
 	<br>
 	<br>
 </security:authorize>
@@ -50,9 +39,9 @@
 				<br>
 				<br>
 			</security:authorize>
-			<table class="table table-bordered table-hover table-striped">
+			<table class="table table-bordered table-hover table-striped ts-table-section">
 				<thead>
-					<tr>
+					<tr class="ts-row-section">
 						<th>Zawodnik</th>
 						<th>Wynik</th>
 						<th>Zawodnik</th>
@@ -86,7 +75,7 @@
 
 							<c:choose>
 								<c:when test="${principalName eq match.secondName }">
-									<<td style="color: red; font-size: 105%;"><b>${match.secondName}</b></td>
+									<td style="color: red; font-size: 105%;"><b>${match.secondName}</b></td>
 								</c:when>
 								<c:otherwise>
 									<td><a
@@ -129,4 +118,21 @@
 		</div>
 	</div>
 </div>
+
+<script type="text/javascript">
+	$(document).ready(function() {
+		$('.nav-tabs a:first').tab('show');
+		$(".triggerRemove").click(function(e) {
+			e.preventDefault();
+			$("#modalRemove .removeBtn").attr("href", $(this).attr("href"));
+			$("#modalRemove").modal();
+		});
+	});
+</script>
+<script>
+	$(document).ready(function() {
+		$(document).tableSection();
+	});
+</script>
+
 

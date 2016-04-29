@@ -11,6 +11,7 @@
 		pomyślnie. Oczekuj na potwierdzenie przez administratora na podany
 		adres email</div>
 </c:if>
+<h1>Rejestracja</h1>
 <br>
 <form:form commandName="user" cssClass="form-horizontal register-form">
 
