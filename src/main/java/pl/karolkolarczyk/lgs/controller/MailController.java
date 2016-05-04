@@ -41,11 +41,27 @@ public class MailController {
 	public String showEmailForm(Model model, Principal principal) {
 		User user = userService.findOne(principal.getName());
 		List<User> usersList = new ArrayList<>();
+		User userHelp = userRepository.findByFirstName("Pomoc");
+		User userDirector = userRepository.findByFirstName("Dyrektor");
 		if ("ROLE_ADMIN".equals(user.getRoles().get(0).getName())) {
-			usersList = userService.findActivePlayers();
+			if (userHelp != null) {
+				usersList.add(userHelp);
+			}
+			if (userDirector != null) {
+				usersList.add(userDirector);
+			}
+			usersList.addAll(userService.findActivePlayers());
 		} else {
-			usersList.add(userRepository.findByFirstName("Pomoc"));
-			usersList.add(userRepository.findByFirstName("Administrator"));
+			if (userHelp != null) {
+				usersList.add(userHelp);
+			}
+			if (userDirector != null) {
+				usersList.add(userDirector);
+			}
+			User userAdmin = userRepository.findByFirstName("Administrator");
+			if (userAdmin != null) {
+				usersList.add(userAdmin);
+			}
 		}
 		model.addAttribute("usersList", usersList);
 		return "email";

@@ -19,8 +19,10 @@
 
 <h1>
 	<b>Szczegoly meczu</b> ${match.firstName} vs ${match.secondName} <br>
-	<br>
 </h1>
+<a href="<spring:url value="/news/allMatches.html" />"
+		style="size: 2%; padding: 2%;">Przejdź do wszystkich ustalonych
+		meczy</a><br><br>
 <form:form class="form-horizontal" method="POST"
 	action="/ping-pong/matches/${id}/dataAndPlace.html"
 	cssClass="dateAndPlaceForm">

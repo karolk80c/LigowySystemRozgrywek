@@ -35,6 +35,7 @@ public class InitDatabaseService {
 
 	@PostConstruct
 	public void init() {
+
 		if (roleRepository.count() == 0 && userRepository.count() == 0) {
 			BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 			Role roleUser = new Role();
@@ -57,7 +58,7 @@ public class InitDatabaseService {
 
 			User userAdmin = new User();
 			userAdmin.setRoles(rolesList);
-			userAdmin.setEmailAdress("leaguegamesystem@gmail.com");
+			userAdmin.setEmailAdress("supertestowy@gmail.com");
 			userAdmin.setFirstName("Administrator");
 			userAdmin.setLastName("Serwisu");
 			userAdmin.setLogin("admin");
@@ -65,6 +66,17 @@ public class InitDatabaseService {
 			userAdmin.setEnabled(true);
 			userAdmin.setCreateDate(new Date());
 			userRepository.save(userAdmin);
+
+			User userDirector = new User();
+			userDirector.setRoles(rolesList);
+			userDirector.setEmailAdress("supertestowy@gmail.com");
+			userDirector.setFirstName("Dyrektor");
+			userDirector.setLastName("Serwisu");
+			userDirector.setLogin("director");
+			userDirector.setPassword(encoder.encode("p1nk-p0nk"));
+			userDirector.setEnabled(false);
+			userDirector.setCreateDate(new Date());
+			userRepository.save(userDirector);
 
 			User userHelp = new User();
 			userHelp.setRoles(rolesList);
@@ -81,7 +93,7 @@ public class InitDatabaseService {
 			List<Role> testUserRolesList = new ArrayList<Role>();
 			testUserRolesList.add(roleUser);
 
-			int howManyUserGenerate = 8;
+			int howManyUserGenerate = 11;
 
 			for (int i = 1; i <= howManyUserGenerate; i++) {
 				User userTest = new User();

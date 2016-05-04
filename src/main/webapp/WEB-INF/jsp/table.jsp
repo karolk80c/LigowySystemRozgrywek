@@ -2,25 +2,27 @@
 	pageEncoding="UTF-8"%>
 <%@ include file="../layout/taglib.jsp"%>
 
-
 <div class="alert alert-info">
 	<spring:message code="table.info" />
 </div>
 <h1>
 	<b><spring:message code="table.header" /> 2016</b> <br>
 </h1>
-<br>
-<table
-	class="table table-bordered table-hover table-striped ts-table-section">
+<table class="table table-bordered table-hover table-striped"
+	id="example">
 	<thead>
-		<tr class="ts-row-section">
-			<th><a
-				href='<spring:url value="/table.html?properties=rankingPosition&order=${order}" />'><spring:message
-						code="table.poz" /></a></th>
-			<th><a
+		<tr>
+			<th style="vertical-align: middle" rowspan="2"><a
+				href='<spring:url value="/table.html?properties=rankingPosition&order=${order}" />'>#</a></th>
+			<th style="vertical-align: middle" rowspan="2"><a
 				href='<spring:url value="/table.html?properties=firstName&order=${order}" />'><spring:message
 						code="table.user" /></a></th>
-			<th><spring:message code="table.match" /></th>
+			<th colspan="3"><spring:message code="table.match" /></th>
+			<th colspan="3"><spring:message code="table.sets" /></th>
+			<th colspan="3"><spring:message code="table.points" /></th>
+		</tr>
+
+		<tr>
 			<th><a
 				href='<spring:url value="/table.html?properties=wonMatches&order=${order}" />'><spring:message
 						code="table.win" /></a></th>
@@ -31,8 +33,9 @@
 				href='<spring:url value="/table.html?properties=balanceMatches&order=${order}" />'><spring:message
 						code="table.balance" /></a></th>
 			<th><a
-				href='<spring:url value="/table.html?properties=wonSets&order=${order}" />'><spring:message
-						code="table.sets" /> <spring:message code="table.win" /></a></th>
+				href='<spring:url value="/table.html?properties=wonSets&order=${order}" />'>
+					<spring:message code="table.win" />
+			</a></th>
 			<th><a
 				href='<spring:url value="/table.html?properties=lostSets&order=${order}" />'><spring:message
 						code="table.lost" /></a></th>
@@ -41,7 +44,7 @@
 						code="table.balance" /></a></th>
 			<th><a
 				href='<spring:url value="/table.html?properties=wonSmallPoints&order=${order}" />'><spring:message
-						code="table.points" /> <spring:message code="table.win" /></a></th>
+						code="table.win" /></a></th>
 			<th><a
 				href='<spring:url value="/table.html?properties=lostSmallPoints&order=${order}" />'><spring:message
 						code="table.lost" /></a></th>
@@ -75,17 +78,15 @@
 								</c:choose>
 							</c:otherwise>
 						</c:choose>
-
-						<td>${user.wonMatches + user.lostMatches}</td>
-						<td>${user.wonMatches}</td>
-						<td>${user.lostMatches }</td>
-						<td><b>${user.balanceMatches}</b></td>
-						<td>${user.wonSets }</td>
-						<td>${user.lostSets }</td>
-						<td><b>${user.balanceSets}</b></td>
-						<td>${user.wonSmallPoints}</td>
-						<td>${user.lostSmallPoints }</td>
-						<td><b>${user.balanceSmallPoints }</b></td>
+						<td class="success">${user.wonMatches}</td>
+						<td class="danger">${user.lostMatches }</td>
+						<td class="info"><b>${user.balanceMatches}</b></td>
+						<td class="success">${user.wonSets }</td>
+						<td class="danger">${user.lostSets }</td>
+						<td class="info"><b>${user.balanceSets}</b></td>
+						<td class="success">${user.wonSmallPoints}</td>
+						<td class="danger">${user.lostSmallPoints }</td>
+						<td class="info"><b>${user.balanceSmallPoints }</b></td>
 					</tr>
 				</c:if>
 			</c:forEach>
@@ -93,9 +94,38 @@
 	</tbody>
 </table>
 
-
 <script>
-	$(document).ready(function() {
-		$(document).tableSection();
-	});
+	$(document)
+			.ready(
+					function() {
+						$('#example')
+								.dataTable(
+										{
+											"scrollY" : "290px",
+											"scrollCollapse" : true,
+											"paging" : false,
+											"language" : {
+												processing : "Przetwarzanie...",
+												search : "Szukaj:",
+												lengthMenu : "Pokaż _MENU_ pozycji",
+												info : "",
+												infoEmpty : "Pozycji 0 z 0 dostępnych",
+												infoFiltered : "(filtrowanie spośród _MAX_ dostępnych pozycji)",
+												infoPostFix : "",
+												loadingRecords : "Wczytywanie...",
+												zeroRecords : "Nie znaleziono pasujących pozycji",
+												emptyTable : "Brak danych",
+												paginate : {
+													first : "Pierwsza",
+													previous : "Poprzednia",
+													next : "Następna",
+													last : "Ostatnia"
+												},
+												aria : {
+													sortAscending : ": aktywuj, by posortować kolumne rosnąco",
+													sortDescending : ": aktywuj, by posortować kolumne malejąco"
+												}
+											}
+										});
+					});
 </script>

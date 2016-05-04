@@ -41,4 +41,28 @@ public class NewsController {
 		return "news";
 	}
 
+	@RequestMapping("/allMatches")
+	public String showAllMatches(Model model, Principal principal) {
+		List<Match> allMatches = matchService.findAllIncoming();
+		if (principal != null) {
+			User principalUser = userService.findOne(principal.getName());
+			model.addAttribute("principalName", principalUser.getFullName());
+		}
+		model.addAttribute("allMatches", allMatches);
+
+		return "all-matches";
+	}
+
+	@RequestMapping("/allCompletedMatches")
+	public String showAllCompletedMatches(Model model, Principal principal) {
+		List<Match> allMatches = matchService.findAllCompleted();
+		if (principal != null) {
+			User principalUser = userService.findOne(principal.getName());
+			model.addAttribute("principalName", principalUser.getFullName());
+		}
+		model.addAttribute("allCompletedMatches", allMatches);
+
+		return "all-completed-matches";
+	}
+
 }

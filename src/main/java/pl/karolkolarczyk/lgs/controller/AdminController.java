@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import pl.karolkolarczyk.lgs.entity.Match;
 import pl.karolkolarczyk.lgs.entity.Season;
 import pl.karolkolarczyk.lgs.entity.User;
+import pl.karolkolarczyk.lgs.repository.MatchRepository;
 import pl.karolkolarczyk.lgs.service.DrawService;
 import pl.karolkolarczyk.lgs.service.MatchService;
 import pl.karolkolarczyk.lgs.service.RoundService;
@@ -34,6 +35,9 @@ public class AdminController {
 
 	@Autowired
 	private RoundService roundService;
+
+	@Autowired
+	MatchRepository matchRepository;
 
 	@Autowired
 	private MatchService matchService;
@@ -70,8 +74,11 @@ public class AdminController {
 
 	@RequestMapping("/admin-matches")
 	public String showAllMatches(Model model) {
-		List<Match> matches = matchService.findAll();
-		model.addAttribute("matches", matches);
+		List<Match> oneAccepted = matchRepository
+				.findByCompletedFalseAndFirstApprovedTrueOrCompletedFalseAndSecondApprovedTrue();
+		List<Match> noAccepted = matchRepository.findByFirstApprovedFalseAndSecondApprovedFalse();
+		model.addAttribute("oneAccepted", oneAccepted);
+		model.addAttribute("noAccepted", noAccepted);
 		return "admin-matches";
 	}
 

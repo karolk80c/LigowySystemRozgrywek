@@ -48,7 +48,6 @@ public class User {
 	@NotBlank(message = "To pole nie mo¿e byc puste.")
 	private String lastName;
 
-	@Column(nullable = false, unique = true)
 	@Email(message = "Nieprawid³owy adres email")
 	@NotBlank(message = "To pole nie mo¿e byc puste.")
 	@UniqueEmail(message = "Na podany adres zosta³ ju¿ zarejestrowany u¿ytkownik")

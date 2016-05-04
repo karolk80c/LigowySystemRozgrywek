@@ -2,6 +2,18 @@
 	pageEncoding="UTF-8"%>
 <%@ include file="../layout/taglib.jsp"%>
 
+<style>
+tr {
+	text-align: center;
+	vertical-align: middle;
+}
+
+tr th {
+	text-align: center;
+	vertical-align: middle;
+}
+</style>
+
 <h1 class="center">Panel administratora</h1>
 
 <br>
@@ -32,7 +44,7 @@
 				class="btn btn-info triggerRemove"> Wyczyść </a></td>
 		</tr>
 		<tr>
-			<td><h4>Wyczyść dane punktowe z wszystkich meczy </h4></td>
+			<td><h4>Wyczyść dane punktowe z wszystkich meczy</h4></td>
 			<td><a
 				href=" <spring:url value="/management/matches/clear.html" />"
 				class="btn btn-info triggerRemove"> Wyczyść </a></td>

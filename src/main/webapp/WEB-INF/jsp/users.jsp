@@ -2,10 +2,23 @@
 	pageEncoding="UTF-8"%>
 <%@ include file="../layout/taglib.jsp"%>
 
+<style>
+tr {
+	text-align: center;
+	vertical-align: middle;
+}
+
+tr th {
+	text-align: center;
+	vertical-align: middle;
+}
+</style>
+
 <div class="alert alert-info">Tylko aktywni użytkownicy są brani
 	pod uwagę podczas losowania spotkań do sezonu.</div>
 
-<table class="table table-bordered table-hover table-striped ts-table-section">
+<table
+	class="table table-bordered table-hover table-striped ts-table-section" id="example">
 	<thead>
 		<tr class="ts-row-section">
 			<th>Nazwa_Uzytkownika</th>
@@ -90,8 +103,39 @@
 		});
 	});
 </script>
+
 <script>
-	$(document).ready(function() {
-		$(document).tableSection();
-	});
+	$(document)
+			.ready(
+					function() {
+						$('#example')
+								.dataTable(
+										{
+											"scrollY" : "300px",
+											"scrollCollapse" : true,
+											"paging" : false,
+											"language" : {
+												processing : "Przetwarzanie...",
+												search : "Szukaj:",
+												lengthMenu : "Pokaż _MENU_ pozycji",
+												info : "",
+												infoEmpty : "Pozycji 0 z 0 dostępnych",
+												infoFiltered : "(filtrowanie spośród _MAX_ dostępnych pozycji)",
+												infoPostFix : "",
+												loadingRecords : "Wczytywanie...",
+												zeroRecords : "Nie znaleziono pasujących pozycji",
+												emptyTable : "Brak danych",
+												paginate : {
+													first : "Pierwsza",
+													previous : "Poprzednia",
+													next : "Następna",
+													last : "Ostatnia"
+												},
+												aria : {
+													sortAscending : ": aktywuj, by posortować kolumne rosnąco",
+													sortDescending : ": aktywuj, by posortować kolumne malejąco"
+												}
+											}
+										});
+					});
 </script>

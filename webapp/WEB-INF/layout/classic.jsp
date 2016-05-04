@@ -25,15 +25,6 @@
 	margin-bottom: 2%;
 }
 
-tr {
-	text-align: center;
-	vertical-align: middle;
-}
-
-tr th {
-	text-align: center;
-}
-
 .ts-row-fixed {
 	position: fixed;
 	/* top: 0; */
@@ -41,6 +32,21 @@ tr th {
 	z-index: 1020; /* 10 less than .navbar-fixed to prevent any overlap */
 	border-bottom: 1px solid #dddddd;
 	background-color: #ffffff;
+}
+
+.score-header {
+	width: 5%;
+	vertical-align: middle;
+	text-align: center;
+}
+
+.date-header {
+	vertical-align: middle;
+	text-align: center;
+}
+
+.principal {
+	background-color: #ff4d4d;
 }
 </style>
 
@@ -56,6 +62,12 @@ tr th {
 	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css">
 <script
 	src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+
+<!-- DataTables -->
+<link rel="stylesheet" type="text/css"
+	href="https://cdn.datatables.net/t/bs/jq-2.2.0,dt-1.10.11/datatables.min.css" />
+<script type="text/javascript"
+	src="https://cdn.datatables.net/t/bs/dt-1.10.11/datatables.min.js"></script>
 
 
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
@@ -106,6 +118,11 @@ tr th {
 									href='<spring:url value="/account.html" />'><spring:message
 											code="nav.account" /></a></li>
 							</security:authorize>
+							<security:authorize access="hasRole('ROLE_ADMIN')">
+								<li class="${current == 'admin-matches' ? 'active' : ' ' }"><a
+									href='<spring:url value="/admin-matches.html" />'><spring:message
+											code="nav.admin-matches" /></a></li>
+							</security:authorize>
 							<security:authorize access="hasRole('ROLE_USER')">
 								<li class="${current == 'user-matches' ? 'active' : ' ' }"><a
 									href='<spring:url value="/matches.html" />'><spring:message
@@ -138,7 +155,6 @@ tr th {
 				<!--/.container-fluid -->
 			</nav>
 			<tiles:insertAttribute name="body"></tiles:insertAttribute>
-
 			<br> <br>
 			<div class="footer">
 				<tiles:insertAttribute name="footer"></tiles:insertAttribute>

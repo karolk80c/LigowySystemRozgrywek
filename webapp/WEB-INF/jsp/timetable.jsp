@@ -1,7 +1,17 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ include file="../layout/taglib.jsp"%>
+<style>
+tr {
+	text-align: center;
+	vertical-align: middle;
+}
 
+tr th {
+	text-align: center;
+	vertical-align: middle;
+}
+</style>
 <h1>
 	<b>Terminarz spotkań</b>
 </h1>
@@ -19,8 +29,8 @@
 <!-- Nav tabs -->
 <ul class="nav nav-tabs">
 	<c:forEach items="${round}" var="round">
-		<li><a href="#round${round.id}" data-toggle="tab">Kolejka
-				${round.number }</a></li>
+		<li><a class="buttonClick" onClick="onClick()"
+			href="#round${round.id}" data-toggle="tab">Kolejka ${round.number }</a></li>
 	</c:forEach>
 </ul>
 
@@ -39,14 +49,13 @@
 				<br>
 				<br>
 			</security:authorize>
-			<table class="table table-bordered table-hover table-striped ts-table-section">
+			<table class="table table-bordered table-hover table-striped display">
 				<thead>
-					<tr class="ts-row-section">
-						<th>Zawodnik</th>
-						<th>Wynik</th>
-						<th>Zawodnik</th>
-						<th>Miejsce</th>
-						<th>Data</th>
+					<tr>
+						<th width="15%;">Zawodnik</th>
+						<th width="25%;">Wynik</th>
+						<th width="15%;">Zawodnik</th>
+						<th width="15%;">Data i miejsce</th>
 					</tr>
 				</thead>
 				<tbody>
@@ -83,12 +92,8 @@
 								</c:otherwise>
 							</c:choose>
 
-
-
-
-							<td>${match.matchPlace}</td>
-							<td><fmt:formatDate value="${match.matchDate}"
-									pattern="dd-MM-yyyy HH:mm" /></td>
+							<td><b><fmt:formatDate value="${match.matchDate}"
+									pattern="dd-MM-yyyy HH:mm" /></b> ${match.matchPlace}</td>
 						</tr>
 					</c:forEach>
 				</tbody>
@@ -128,11 +133,9 @@
 			$("#modalRemove").modal();
 		});
 	});
+
 </script>
-<script>
-	$(document).ready(function() {
-		$(document).tableSection();
-	});
-</script>
+
+
 
 

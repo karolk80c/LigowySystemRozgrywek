@@ -33,7 +33,7 @@ public class Match {
 	@OneToMany(mappedBy = "match", cascade = CascadeType.REMOVE)
 	private List<Set> sets;
 
-	@ManyToMany(cascade = CascadeType.ALL)
+	@ManyToMany(mappedBy = "matches", cascade = CascadeType.ALL)
 	private List<User> users;
 
 	@ManyToOne(fetch = FetchType.EAGER)

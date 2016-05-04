@@ -2,6 +2,18 @@
 	pageEncoding="UTF-8"%>
 <%@ include file="../layout/taglib.jsp"%>
 
+<style>
+tr {
+	text-align: center;
+	vertical-align: middle;
+}
+
+tr th {
+	text-align: center;
+	vertical-align: middle;
+}
+</style>
+
 <h1>
 	<b>Szczegoly meczu</b> ${match.firstName} vs ${match.secondName} <br>
 	<br>
@@ -11,9 +23,9 @@
 <table class="table table-bordered table-hover table-striped">
 	<thead>
 		<tr>
-			<th>Set</th>
-			<th>Zawodnik</th>
-			<th>Wynik</th>
+			<th style="width: 5%;">Set</th>
+			<th >Zawodnik</th>
+			<th style="width: 5%;">Wynik</th>
 			<th>Zawodnik</th>
 			<c:if
 				test="${match.firstApproved eq false && match.secondApproved eq false }">

@@ -16,6 +16,8 @@ public interface MatchRepository extends JpaRepository<Match, Integer> {
 
 	List<Match> findByRound(Round round);
 
+	List<Match> findByCompletedAndMatchDateAfter(boolean completed, Date date);
+
 	Page<Match> findByCompletedAndMatchDateAfter(boolean completed, Date date, Pageable pageable);
 
 	Page<Match> findByCompletedAndMatchDateNotNull(boolean completed, Pageable pageable);
@@ -25,5 +27,11 @@ public interface MatchRepository extends JpaRepository<Match, Integer> {
 
 	List<Match> findByCompletedFalseAndMatchDateAfterAndFirstNameOrCompletedFalseAndMatchDateAfterAndSecondNameOrderByMatchDateAsc(
 			Date after, String firstName, Date after2, String secondName);
+
+	List<Match> findByCompletedTrue();
+
+	List<Match> findByCompletedFalseAndFirstApprovedTrueOrCompletedFalseAndSecondApprovedTrue();
+
+	List<Match> findByFirstApprovedFalseAndSecondApprovedFalse();
 
 }

@@ -445,6 +445,17 @@ public class MatchService {
 	}
 
 	@Transactional
+	public List<Match> findAllIncoming() {
+		List<Match> matches = matchRepository.findByCompletedAndMatchDateAfter(false, new Date());
+		return matches;
+	}
+
+	@Transactional
+	public List<Match> findAllCompleted() {
+		return matchRepository.findByCompletedTrue();
+	}
+
+	@Transactional
 	public List<Match> findLatest() {
 		Pageable latestMatchesPage = new PageRequest(0, 10, Direction.DESC, "lastModificationDate");
 		Page<Match> latestMatches = matchRepository.findByCompletedAndMatchDateNotNull(true, latestMatchesPage);

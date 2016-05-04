@@ -246,11 +246,26 @@ public class UserService {
 		String contactNumber = request.getParameter("contactNumber");
 		User user = userRepository.findOne(principal.getName());
 		int count = 0;
+		List<Match> matches = user.getMatches();
 		if ((!firstName.trim().isEmpty()) && (!firstName.equals(user.getFirstName()))) {
+			for (Match match : matches) {
+				if (match.getFirstName().equals(user.getFullName())) {
+					match.setFirstName(firstName + " " + user.getLastName());
+				} else if (match.getSecondName().equals(user.getFullName())) {
+					match.setSecondName(firstName + " " + user.getLastName());
+				}
+			}
 			user.setFirstName(firstName);
 			count++;
 		}
 		if ((!lastName.trim().isEmpty()) && (!lastName.equals(user.getLastName()))) {
+			for (Match match : matches) {
+				if (match.getFirstName().equals(user.getFullName())) {
+					match.setFirstName(user.getFirstName() + " " + lastName);
+				} else if (match.getSecondName().equals(user.getFullName())) {
+					match.setSecondName(user.getFirstName() + " " + lastName);
+				}
+			}
 			user.setLastName(lastName);
 			count++;
 		}
@@ -263,7 +278,7 @@ public class UserService {
 		}
 	}
 
-	public String returnLoginByFullName(String firstName,String lastName) {
+	public String returnLoginByFullName(String firstName, String lastName) {
 		return userRepository.findByFirstNameAndLastName(firstName, lastName).getLogin();
 	}
 

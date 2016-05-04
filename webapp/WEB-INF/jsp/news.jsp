@@ -2,18 +2,31 @@
 	pageEncoding="UTF-8"%>
 <%@ include file="../layout/taglib.jsp"%>
 
-<div>
+<style>
+tr {
+	text-align: center;
+	vertical-align: middle;
+}
+
+tr th {
+	text-align: center;
+	vertical-align: middle;
+}
+</style>
+
+<div style="float: left; width: 49%; margin-right: 1%;">
 	<h1>
 		<b>Nadchodzące mecze</b>
 	</h1>
-	<br>
+	<a href="<spring:url value="/news/allMatches.html" />"
+		style="size: 2%; padding: 2%;">Przejdź do wszystkich ustalonych
+		meczy</a> <br><br>
 	<table class="table table-bordered table-hover table-striped">
 		<thead>
 			<tr>
-				<th>Zawodnik</th>
-				<th>Zawodnik</th>
-				<th>Miejsce</th>
-				<th>Data</th>
+				<th style="width: 25%;">Zawodnik</th>
+				<th style="width: 25%;">Zawodnik</th>
+				<th style="width: 50%;">Data i miejsce</th>
 			</tr>
 		</thead>
 		<tbody>
@@ -37,28 +50,28 @@
 								href='<spring:url value="/users/find/${match.secondName}.html" />'>${match.secondName}</a></td>
 						</c:otherwise>
 					</c:choose>
-					<td>${match.matchPlace}</td>
 					<td><b><fmt:formatDate value="${match.matchDate}"
-								pattern="dd.MM.yyyy HH:mm" /></b></td>
+								pattern="dd.MM.yyyy HH:mm" /></b> ${match.matchPlace}</td>
 				</tr>
 			</c:forEach>
 		</tbody>
 	</table>
 </div>
 
-<div>
+<div style="float: right; width: 49%;">
 	<h1>
 		<b>Ostatnio dodane wyniki</b>
 	</h1>
-	<br>
+	<a href="<spring:url value="/news/allCompletedMatches.html" />"
+		style="size: 2%; padding: 2%;">Przejdź do wszystkich zakończonych
+		meczy</a> <br><br>
 	<table class="table table-bordered table-hover table-striped">
 		<thead>
 			<tr>
 				<th>Zawodnik</th>
-				<th>Wynik</th>
+				<th class="score-header">Wynik</th>
 				<th>Zawodnik</th>
-				<th>Miejsce</th>
-				<th>Data</th>
+				<th>Data i miejsce</th>
 			</tr>
 		</thead>
 		<tbody>
@@ -73,10 +86,7 @@
 								href='<spring:url value="/users/find/${match.firstName}.html" />'>${match.firstName}</a></td>
 						</c:otherwise>
 					</c:choose>
-					<td><b>${match.firstPoints}:${match.secondPoints}</b>&nbsp;<c:forEach
-							var="set" items="${match.sets}">
-							(${set.firstPlayerScore}:${set.secondPlayerScore})
-							</c:forEach></td>
+					<td><b>${match.firstPoints}:${match.secondPoints}</b>&nbsp;</td>
 					<c:choose>
 						<c:when test="${match.secondName eq principalName }">
 							<td style="color: red; font-size: 105%;"><b>${match.secondName}</b></td>
@@ -86,11 +96,11 @@
 								href='<spring:url value="/users/find/${match.secondName}.html" />'>${match.secondName}</a></td>
 						</c:otherwise>
 					</c:choose>
-					<td>${match.matchPlace}</td>
 					<td><b><fmt:formatDate value="${match.matchDate}"
-								pattern="dd.MM.yyyy HH:mm" /></b></td>
+								pattern="dd.MM.yyyy HH:mm" /></b> ${match.matchPlace}</td>
 				</tr>
 			</c:forEach>
 		</tbody>
 	</table>
 </div>
+<p style="clear: both;"></p>
