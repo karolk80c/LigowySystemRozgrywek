@@ -14,6 +14,8 @@
 		<logout logout-url="/logout.html" />
 		<intercept-url pattern="/users/**" access="isAuthenticated()" />
 		<intercept-url pattern="/users**" access="hasRole('ROLE_ADMIN')" />
+		<intercept-url pattern="/admin-matches**" access="hasRole('ROLE_ADMIN')" />
+		<intercept-url pattern="/admin-matches/**" access="hasRole('ROLE_ADMIN')" />
 		<intercept-url pattern="/users/remove**" access="hasRole('ROLE_ADMIN')" />
 		<intercept-url pattern="/users/disqualifie**" access="hasRole('ROLE_ADMIN')" />
 		<intercept-url pattern="/management/**" access="hasRole('ROLE_ADMIN')" />

@@ -25,7 +25,7 @@ tr th {
 		<tr>
 			<th style="width: 5%;">Set</th>
 			<th >Zawodnik</th>
-			<th style="width: 5%;">Wynik</th>
+			<th style="width: 8%;">Wynik</th>
 			<th>Zawodnik</th>
 			<c:if
 				test="${match.firstApproved eq false && match.secondApproved eq false }">

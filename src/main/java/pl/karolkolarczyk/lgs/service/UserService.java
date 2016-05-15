@@ -61,6 +61,20 @@ public class UserService {
 		return usersWithoutAdmins;
 	}
 
+	private List<User> findDisqualifiedPlayers() {
+		List<User> users = userRepository.findAll();
+		List<User> disqualifiedUsers = new ArrayList<>();
+		for (User user : users) {
+			List<Role> roles = user.getRoles();
+			for (Role role : roles) {
+				if ("ROLE_DISQUALIFIED".equals(role.getName())) {
+					disqualifiedUsers.add(user);
+				}
+			}
+		}
+		return disqualifiedUsers;
+	}
+
 	public List<User> findActivePlayers() {
 		List<User> users = userRepository.findAll();
 		List<User> activeUsersWithoutAdmins = new ArrayList<>();
@@ -129,8 +143,6 @@ public class UserService {
 	public void disqualifie(String login) {
 		User disqualified = userRepository.findOne(login);
 		disqualified.setEnabled(false);
-		emailService.sendNotification(disqualified.getEmailAdress(), "Dyskwalifikacja",
-				"Zostałeś zdyskwalifikowany z turnieju.");
 		List<Role> rolesList = new ArrayList<>();
 		rolesList.add(roleRepository.findByName("ROLE_DISQUALIFIED"));
 		disqualified.setRoles(rolesList);
@@ -156,6 +168,8 @@ public class UserService {
 								"Twój przeciwnik: " + user1.getFullName() + " został zdyskwalifikowany z turnieju");
 					} else if (disqualified.getLogin().equals(user2.getLogin())) {
 						matchService.disqualifiedFromCompletedMatch(match, user1);
+						emailService.sendNotification(user1.getEmailAdress(), "Wiadomość dotycząca spotkania",
+								"Twój przeciwnik: " + user2.getFullName() + " został zdyskwalifikowany z turnieju");
 					}
 				}
 				match.setCompleted(true);
@@ -166,22 +180,19 @@ public class UserService {
 			updateDisqualifieUser();
 			matchService.updateUsersRanking();
 		}
+		emailService.sendNotification(disqualified.getEmailAdress(), "Dyskwalifikacja",
+				"Zostałeś zdyskwalifikowany z turnieju.");
 	}
 
-	private void updateDisqualifieUser() {
-		List<User> allUsers = userRepository.findAll();
-		int size = findActivePlayers().size();
-		for (User disqualified : allUsers) {
-			for (Role role : disqualified.getRoles()) {
-				if (("ROLE_DISQUALIFIED").equals(role.getName())) {
-					disqualified.setLostMatches(size);
-					disqualified.setLostSets(size * 4);
-					disqualified.setLostSmallPoints(size * 11 * 4);
-					disqualified.setWonMatches(0);
-					disqualified.setWonSets(0);
-					disqualified.setWonSmallPoints(0);
-				}
-			}
+	public void updateDisqualifieUser() {
+		for (User disqualified : findDisqualifiedPlayers()) {
+			int matchesSize = disqualified.getMatches().size();
+			disqualified.setLostMatches(matchesSize);
+			disqualified.setLostSets(matchesSize * 4);
+			disqualified.setLostSmallPoints(matchesSize * 44);
+			disqualified.setWonMatches(0);
+			disqualified.setWonSets(0);
+			disqualified.setWonSmallPoints(0);
 		}
 	}
 

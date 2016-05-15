@@ -15,9 +15,9 @@
 	id="example">
 	<thead>
 		<tr class="ts-row-section">
-			<th style="width: 15%;">Zawodnik</th>
-			<th class="score-header">Wynik</th>
-			<th style="width: 15%;">Zawodnik</th>
+			<th style="width: 21%;">Zawodnik</th>
+			<th class="score-header" style="width: 8%;">Wynik</th>
+			<th style="width: 21%;">Zawodnik</th>
 			<th style="width: 10%; text-align: center;">Szczegoly</th>
 			<th style="width: 10%; text-align: center;">Akceptacja</th>
 			<th class="date-header" style="width: 20%;">Data i miejsce</th>

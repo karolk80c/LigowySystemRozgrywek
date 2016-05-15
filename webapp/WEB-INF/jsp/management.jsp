@@ -83,7 +83,7 @@ tr th {
 		</div>
 	</div>
 	<div class="form-group">
-		<label for="content" class="col-sm-2 control-label">Wiadomosc</label>
+		<label for="content" class="col-sm-2 control-label">Wiadomość</label>
 		<div class="col-sm-10">
 			<textarea class="form-control" rows="4" name="content"></textarea>
 		</div>

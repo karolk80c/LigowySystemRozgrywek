@@ -35,7 +35,7 @@
 }
 
 .score-header {
-	width: 5%;
+	width: 8%;
 	vertical-align: middle;
 	text-align: center;
 }

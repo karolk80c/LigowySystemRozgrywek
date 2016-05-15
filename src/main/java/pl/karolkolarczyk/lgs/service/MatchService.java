@@ -66,6 +66,10 @@ public class MatchService {
 		return match;
 	}
 
+	public void disqualifieFromOneMatch(Match match, User first, User second) {
+
+	}
+
 	public void disqualifiedFromCompletedMatch(Match match, User second) {
 		boolean isTwoPlayerDisqualified = false;
 		List<Role> roles = second.getRoles();
@@ -467,6 +471,60 @@ public class MatchService {
 			matchesToReturn.add(match);
 		}
 		return matchesToReturn;
+	}
+
+	@Transactional
+	public void disqualifieOneUserFromMatch(String matchId, String fullName) {
+		String[] split = fullName.split(" ");
+		User user = userRepository.findByFirstNameAndLastName(split[0], split[1]);
+		Match match = findOne(Integer.valueOf(matchId));
+		match.setFirstApproved(true);
+		match.setSecondApproved(true);
+		match.setCompleted(true);
+		match.setMatchDate(new Date());
+		match.setMatchPlace("Mecz siê nie odby³");
+		List<User> users = match.getUsers();
+		User user1 = users.get(0);
+		User user2 = users.get(1);
+		if (match.getFirstName().equals(user.getFullName())) {
+			if (user1.getLogin().equals(user.getLogin())) {
+				user1.setLostMatches(user1.getLostMatches() + 1);
+				user1.setLostSets(user1.getLostSets() + 4);
+				user1.setLostSmallPoints(user1.getLostSmallPoints() + 44);
+				user2.setWonMatches(user2.getWonMatches() + 1);
+				user2.setWonSets(user2.getWonSets() + 4);
+				user2.setWonSmallPoints(user2.getWonSmallPoints() + 44);
+			} else {
+				user2.setLostMatches(user2.getLostMatches() + 1);
+				user2.setLostSets(user2.getLostSets() + 4);
+				user2.setLostSmallPoints(user2.getLostSmallPoints() + 44);
+				user1.setWonMatches(user1.getWonMatches() + 1);
+				user1.setWonSets(user1.getWonSets() + 4);
+				user1.setWonSmallPoints(user1.getWonSmallPoints() + 44);
+			}
+			match.setFirstPoints(0);
+			match.setSecondPoints(4);
+		} else {
+			if (user1.getLogin().equals(user.getLogin())) {
+				user1.setLostMatches(user1.getLostMatches() + 1);
+				user1.setLostSets(user1.getLostSets() + 4);
+				user1.setLostSmallPoints(user1.getLostSmallPoints() + 44);
+				user2.setWonMatches(user2.getWonMatches() + 1);
+				user2.setWonSets(user2.getWonSets() + 4);
+				user2.setWonSmallPoints(user2.getWonSmallPoints() + 44);
+			} else {
+				user2.setLostMatches(user2.getLostMatches() + 1);
+				user2.setLostSets(user2.getLostSets() + 4);
+				user2.setLostSmallPoints(user2.getLostSmallPoints() + 44);
+				user1.setWonMatches(user1.getWonMatches() + 1);
+				user1.setWonSets(user1.getWonSets() + 4);
+				user1.setWonSmallPoints(user1.getWonSmallPoints() + 44);
+			}
+			match.setFirstPoints(4);
+			match.setSecondPoints(0);
+		}
+		save(match);
+		updateUsersRanking();
 	}
 
 }

@@ -27,13 +27,16 @@ public class EmailService {
 		ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("Spring-mail.xml");
 		Mailer mailer = (Mailer) context.getBean("Mailer");
 		String emailTo = "<a href=mailto:" + sender.getEmailAdress() + ">" + sender.getEmailAdress() + "</a>";
-		content = content
-				.concat("<br><br> ----------------------------------------------------- <br><br>Wiadomoœæ wys³ana przez ligowy system rozgrywek ping-ponga.")
-				.concat("<br>Jeœli chcesz odpowiedzieæ na wiadomoœæ mo¿esz skontaktowaæ siê z nadawc¹: "
-						+ "<br>Imiê nazwisko: " + sender.getFirstName() + " " + sender.getLastName()
-						+ "<br>Adres email: " + emailTo + "<br>Numer kontaktowy: " + sender.getContactNumber() + "\n")
-				.concat("<br>Adres Url: " + siteUrl);
-		mailer.sendMail(sender.getEmailAdress(), recipient, topic, content);
+		StringBuilder sb = new StringBuilder(content);
+		sb.append("<br><br> ----------------------------------------------------- <br><br>Wiadomoœæ wys³ana "
+				+ "przez ligowy system rozgrywek ping-ponga."
+				+ "<br>Jeœli chcesz odpowiedzieæ na wiadomoœæ mo¿esz skontaktowaæ siê z nadawc¹:" + "<br>Imiê nazwisko:"
+				+ sender.getFirstName() + " " + sender.getLastName() + "<br>Adres email: " + emailTo);
+		if (sender.getContactNumber() != null && !sender.getContactNumber().trim().isEmpty()) {
+			sb.append("<br>Numer kontaktowy: " + sender.getContactNumber() + "\n");
+		}
+		sb.append("<br>Adres Url: " + siteUrl);
+		mailer.sendMail(sender.getEmailAdress(), recipient, topic, sb.toString());
 		context.close();
 	}
 

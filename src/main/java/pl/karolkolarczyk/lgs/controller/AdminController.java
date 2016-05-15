@@ -15,6 +15,7 @@ import pl.karolkolarczyk.lgs.entity.Match;
 import pl.karolkolarczyk.lgs.entity.Season;
 import pl.karolkolarczyk.lgs.entity.User;
 import pl.karolkolarczyk.lgs.repository.MatchRepository;
+import pl.karolkolarczyk.lgs.repository.UserRepository;
 import pl.karolkolarczyk.lgs.service.DrawService;
 import pl.karolkolarczyk.lgs.service.MatchService;
 import pl.karolkolarczyk.lgs.service.RoundService;
@@ -41,6 +42,9 @@ public class AdminController {
 
 	@Autowired
 	private MatchService matchService;
+
+	@Autowired
+	private UserRepository userRepository;
 
 	@RequestMapping("/users/update/{login}")
 	public String updateRole(@PathVariable String login) {
@@ -80,6 +84,25 @@ public class AdminController {
 		model.addAttribute("oneAccepted", oneAccepted);
 		model.addAttribute("noAccepted", noAccepted);
 		return "admin-matches";
+	}
+
+	@RequestMapping("/admin-matches/disqualifie/{matchId}/{fullName}")
+	public String disqualifieOneUserFromMatch(@PathVariable String matchId, @PathVariable String fullName) {
+		matchService.disqualifieOneUserFromMatch(matchId, fullName);
+		return "redirect:/admin-matches.html";
+	}
+
+
+	@RequestMapping("/admin-matches/accept/{matchId}/{fullName}")
+	public String acceptScoreFromOneAccepted(@PathVariable String matchId, @PathVariable String fullName) {
+		String[] split = fullName.split(" ");
+		User user = userRepository.findByFirstNameAndLastName(split[0], split[1]);
+		Match match = matchService.findOne(Integer.valueOf(matchId));
+		match.setFirstApproved(true);
+		match.setSecondApproved(true);
+		matchRepository.save(match);
+		matchService.approve(Integer.valueOf(matchId), user);
+		return "redirect:/admin-matches.html";
 	}
 
 	@RequestMapping("/management/users/clear")
