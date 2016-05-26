@@ -20,12 +20,18 @@
 		<put-attribute name="current" value="login" />
 	</definition>
 
+	<definition name="photo" extends="common">
+		<put-attribute name="title" value="Fotografie" />
+		<put-attribute name="body" value="/WEB-INF/jsp/photo.jsp" />
+		<put-attribute name="current" value="photo" />
+	</definition>
+
 	<definition name="reset-password" extends="common">
 		<put-attribute name="title" value="Przypomnij hasło" />
 		<put-attribute name="body" value="/WEB-INF/jsp/reset-password.jsp" />
 		<put-attribute name="current" value="login" />
 	</definition>
-	
+
 	<definition name="rules" extends="common">
 		<put-attribute name="title" value="Regulamin" />
 		<put-attribute name="body" value="/WEB-INF/jsp/rules.jsp" />
@@ -128,16 +134,17 @@
 		<put-attribute name="body" value="/WEB-INF/jsp/news.jsp" />
 		<put-attribute name="current" value="news" />
 	</definition>
-	
+
 	<definition name="all-matches" extends="common">
 		<put-attribute name="title" value="Wszystkie mecze" />
 		<put-attribute name="body" value="/WEB-INF/jsp/all-matches.jsp" />
 		<put-attribute name="current" value="news" />
 	</definition>
-		
+
 	<definition name="all-completed-matches" extends="common">
 		<put-attribute name="title" value="Wszystkie mecze" />
-		<put-attribute name="body" value="/WEB-INF/jsp/all-completed-matches.jsp" />
+		<put-attribute name="body"
+			value="/WEB-INF/jsp/all-completed-matches.jsp" />
 		<put-attribute name="current" value="news" />
 	</definition>
 

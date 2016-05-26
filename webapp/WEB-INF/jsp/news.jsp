@@ -20,8 +20,10 @@ tr th {
 	</h1>
 	<a href="<spring:url value="/news/allMatches.html" />"
 		style="size: 2%; padding: 2%;">Przejdź do wszystkich ustalonych
-		meczy</a> <br><br>
-	<table class="table table-bordered table-hover table-striped">
+		meczy</a> <br>
+	<br>
+	<table class="table table-bordered table-hover table-striped"
+		id="example">
 		<thead>
 			<tr>
 				<th style="width: 25%;">Zawodnik</th>
@@ -51,7 +53,7 @@ tr th {
 						</c:otherwise>
 					</c:choose>
 					<td><b><fmt:formatDate value="${match.matchDate}"
-								pattern="dd.MM.yyyy HH:mm" /></b> ${match.matchPlace}</td>
+								pattern="dd.MM.yyyy HH:mm" /></b> <br>${match.matchPlace}</td>
 				</tr>
 			</c:forEach>
 		</tbody>
@@ -64,8 +66,10 @@ tr th {
 	</h1>
 	<a href="<spring:url value="/news/allCompletedMatches.html" />"
 		style="size: 2%; padding: 2%;">Przejdź do wszystkich zakończonych
-		meczy</a> <br><br>
-	<table class="table table-bordered table-hover table-striped">
+		meczy</a> <br>
+	<br>
+	<table class="table table-bordered table-hover table-striped"
+		id="example">
 		<thead>
 			<tr>
 				<th>Zawodnik</th>
@@ -97,10 +101,36 @@ tr th {
 						</c:otherwise>
 					</c:choose>
 					<td><b><fmt:formatDate value="${match.matchDate}"
-								pattern="dd.MM.yyyy HH:mm" /></b> ${match.matchPlace}</td>
+								pattern="dd.MM.yyyy HH:mm" /></b><br> ${match.matchPlace}</td>
 				</tr>
 			</c:forEach>
 		</tbody>
 	</table>
 </div>
 <p style="clear: both;"></p>
+
+<script>
+	$(document)
+			.ready(
+					function() {
+						$('table#example')
+								.dataTable(
+										{
+											"paging" : false,
+											"scrollY" : "280px",
+											"scrollCollapse" : true,
+											"language" : {
+												processing : "Przetwarzanie...",
+												search : "Szukaj:",
+												lengthMenu : "Pokaż _MENU_ pozycji",
+												info : "",
+												infoEmpty : "Pozycji 0 z 0 dostępnych",
+												infoFiltered : "(filtrowanie spośród _MAX_ dostępnych pozycji)",
+												infoPostFix : "",
+												loadingRecords : "Wczytywanie...",
+												zeroRecords : "Nie znaleziono pasujących pozycji",
+												emptyTable : "Brak danych",
+											}
+										});
+					});
+</script>

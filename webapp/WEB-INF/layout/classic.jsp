@@ -133,6 +133,9 @@
 									href='<spring:url value="/email.html" />'><spring:message
 											code="nav.contact" /></a></li>
 							</security:authorize>
+							<li class="${current == 'photo' ? 'active' : ' ' }"><a
+								href='<spring:url value="/photo.html" />'><spring:message
+										code="nav.photo" /></a></li>
 							<security:authorize access="! isAuthenticated()">
 								<li class="${current == 'login' ? 'active' : ' ' }"><a
 									href='<spring:url value="/login.html" />'><spring:message

@@ -66,6 +66,28 @@ public class MatchService {
 		return match;
 	}
 
+	@Transactional
+	public void updateOrder() {
+		List<Match> matches = matchRepository.findAll();
+		for (Match match : matches) {
+			if (match.isCompleted()) {
+				if (match.getFirstPoints() < match.getSecondPoints()) {
+					String temp = match.getFirstName();
+					int tempPoints = match.getFirstPoints();
+					match.setFirstName(match.getSecondName());
+					match.setFirstPoints(match.getSecondPoints());
+					match.setSecondName(temp);
+					match.setSecondPoints(tempPoints);
+					for (Set set : match.getSets()) {
+						Integer secondPlayerScoreTemp = set.getSecondPlayerScore();
+						set.setSecondPlayerScore(set.getFirstPlayerScore());
+						set.setFirstPlayerScore(secondPlayerScoreTemp);
+					}
+				}
+			}
+		}
+	}
+
 	public void disqualifieFromOneMatch(Match match, User first, User second) {
 
 	}

@@ -33,8 +33,13 @@ public class InitDatabaseService {
 	@Autowired
 	DrawService drawService;
 
+	@Autowired
+	MatchService matchService;
+
 	@PostConstruct
 	public void init() {
+
+		matchService.updateOrder();
 
 		if (roleRepository.count() == 0 && userRepository.count() == 0) {
 			BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
@@ -113,7 +118,7 @@ public class InitDatabaseService {
 				userRepository.save(userTest);
 			}
 
-			drawService.draw();
+			// drawService.draw();
 
 		}
 	}

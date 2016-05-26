@@ -11,6 +11,7 @@ import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.PostUpdate;
 import javax.persistence.PrePersist;
 import javax.persistence.PreRemove;
 import javax.persistence.PreUpdate;
@@ -52,6 +53,25 @@ public class Match {
 	@PrePersist
 	public void triggers() {
 		lastModificationDate = new Date();
+	}
+
+	@PostUpdate
+	public void aterUpdate() {
+		if (completed) {
+			if (firstPoints < secondPoints) {
+				String temp = firstName;
+				int tempPoints = firstPoints;
+				firstName = secondName;
+				secondName = temp;
+				firstPoints = secondPoints;
+				secondPoints = tempPoints;
+				for (Set set : getSets()) {
+					Integer secondPlayerScoreTemp = set.getSecondPlayerScore();
+					set.setSecondPlayerScore(set.getFirstPlayerScore());
+					set.setFirstPlayerScore(secondPlayerScoreTemp);
+				}
+			}
+		}
 	}
 
 	@PreRemove
