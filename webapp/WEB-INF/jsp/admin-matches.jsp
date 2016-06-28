@@ -58,7 +58,7 @@ tr th {
 				<th>Zawodnik</th>
 				<th class="score-header">Wynik</th>
 				<th>Zawodnik</th>
-				<th>Data i miejsce</th>
+				<th>Akcja</th>
 			</tr>
 		</thead>
 		<tbody>
@@ -75,9 +75,9 @@ tr th {
 						href='<spring:url value="/admin-matches/disqualifie/${match.id}/${match.secondName}.html" />'
 						class="btn btn-xs btn-danger triggerRemove">Dyskwalifikuj</a></td>
 
-					<td style="vertical-align: middle; baseline; text-align: center;"><b><fmt:formatDate
-								value="${match.matchDate}" pattern="dd.MM.yyyy HH:mm" /></b>
-						${match.matchPlace}</td>
+					<td style="vertical-align: middle; baseline; text-align: center;"><a
+						href='<spring:url value="/admin-matches/disqualifie/${match.id}.html" />'
+						class="btn btn-xs btn-danger triggerRemove">Unieważnij spotkanie</a></td>
 				</tr>
 			</c:forEach>
 		</tbody>

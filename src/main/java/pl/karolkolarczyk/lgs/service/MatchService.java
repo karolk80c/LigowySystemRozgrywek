@@ -510,6 +510,8 @@ public class MatchService {
 		User user2 = users.get(1);
 		if (match.getFirstName().equals(user.getFullName())) {
 			if (user1.getLogin().equals(user.getLogin())) {
+				emailService.sendNotification(user2.getEmailAdress(), "Uniewa¿nienie spotkania",
+						"Twoje przeciwnik: " + user1.getFullName() + " zosta³ zdyskwalifikowany z meczu");
 				user1.setLostMatches(user1.getLostMatches() + 1);
 				user1.setLostSets(user1.getLostSets() + 4);
 				user1.setLostSmallPoints(user1.getLostSmallPoints() + 44);
@@ -517,6 +519,8 @@ public class MatchService {
 				user2.setWonSets(user2.getWonSets() + 4);
 				user2.setWonSmallPoints(user2.getWonSmallPoints() + 44);
 			} else {
+				emailService.sendNotification(user1.getEmailAdress(), "Uniewa¿nienie spotkania",
+						"Twoje przeciwnik: " + user2.getFullName() + " zosta³ zdyskwalifikowany z meczu");
 				user2.setLostMatches(user2.getLostMatches() + 1);
 				user2.setLostSets(user2.getLostSets() + 4);
 				user2.setLostSmallPoints(user2.getLostSmallPoints() + 44);
@@ -528,6 +532,8 @@ public class MatchService {
 			match.setSecondPoints(4);
 		} else {
 			if (user1.getLogin().equals(user.getLogin())) {
+				emailService.sendNotification(user2.getEmailAdress(), "Uniewa¿nienie spotkania",
+						"Twoje przeciwnik: " + user1.getFullName() + " zosta³ zdyskwalifikowany z meczu");
 				user1.setLostMatches(user1.getLostMatches() + 1);
 				user1.setLostSets(user1.getLostSets() + 4);
 				user1.setLostSmallPoints(user1.getLostSmallPoints() + 44);
@@ -535,6 +541,8 @@ public class MatchService {
 				user2.setWonSets(user2.getWonSets() + 4);
 				user2.setWonSmallPoints(user2.getWonSmallPoints() + 44);
 			} else {
+				emailService.sendNotification(user1.getEmailAdress(), "Uniewa¿nienie spotkania",
+						"Twoje przeciwnik: " + user2.getFullName() + " zosta³ zdyskwalifikowany z meczu");
 				user2.setLostMatches(user2.getLostMatches() + 1);
 				user2.setLostSets(user2.getLostSets() + 4);
 				user2.setLostSmallPoints(user2.getLostSmallPoints() + 44);
@@ -547,6 +555,39 @@ public class MatchService {
 		}
 		save(match);
 		updateUsersRanking();
+	}
+
+	@Transactional
+	public void disqualifieTwoUserFromMatch(String matchId) {
+		Match match = findOne(Integer.valueOf(matchId));
+		List<User> users = match.getUsers();
+		for (User user : users) {
+			user.setLostMatches(user.getLostMatches() + 1);
+			user.setLostSets(user.getLostSets() + 4);
+			user.setLostSmallPoints(user.getLostSmallPoints() + 44);
+		}
+		emailService.sendNotification(users.get(0).getEmailAdress(), "Uniewa¿nienie spotkania",
+				"Twoje spotkanie z " + users.get(1).getFullName() + " zosta³o uniewa¿nione");
+		emailService.sendNotification(users.get(1).getEmailAdress(), "Uniewa¿nienie spotkania",
+				"Twoje spotkanie z " + users.get(0).getFullName() + " zosta³o uniewa¿nione");
+		match.setFirstApproved(true);
+		match.setSecondApproved(true);
+		match.setFirstPoints(-4);
+		match.setSecondPoints(-4);
+		List<Set> sets = new ArrayList<>();
+		for (int i = 0; i < 4; i++) {
+			Set set = new Set();
+			set.setFirstPlayerScore(-11);
+			set.setSecondPlayerScore(-11);
+			set.setMatch(match);
+			setRepository.save(set);
+			sets.add(set);
+		}
+		match.setSets(sets);
+		match.setCompleted(true);
+		match.setMatchDate(new Date());
+
+		match.setMatchPlace("Mecz siê nie odby³");
 	}
 
 }

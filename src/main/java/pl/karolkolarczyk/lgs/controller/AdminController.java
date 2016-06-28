@@ -92,6 +92,12 @@ public class AdminController {
 		return "redirect:/admin-matches.html";
 	}
 
+	@RequestMapping("/admin-matches/disqualifie/{matchId}")
+	public String disqualifieTwoUserFromMatch(@PathVariable String matchId) {
+		matchService.disqualifieTwoUserFromMatch(matchId);
+		return "redirect:/admin-matches.html";
+	}
+
 
 	@RequestMapping("/admin-matches/accept/{matchId}/{fullName}")
 	public String acceptScoreFromOneAccepted(@PathVariable String matchId, @PathVariable String fullName) {
